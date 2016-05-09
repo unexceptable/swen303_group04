@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if products %}
+	{% for product in products %}		
+		<a href="/product/{{ product.pk }}" style="text-decoration: none">
+	    <div class="product clean">
+			<h2>{{ product.name }}</h2>
+			<h3>price: {{ product.price }}</h2>
+			<hr>
+			<pre>{{ product.description }}</pre>
+	    </div>
+	    </a>
+	{%endfor%}
+{% else %}
+	<div class="alert alert-danger" role="alert">
+	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	    <span class="sr-only">Error:</span>
+	    No matches found.
+	</div>
+{% endif %}
+    
+{% endblock %}

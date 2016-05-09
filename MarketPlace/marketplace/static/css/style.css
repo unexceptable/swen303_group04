@@ -1,0 +1,260 @@
+
+p {
+	font-family: sans-serif;
+}
+
+#header {
+	margin-top: 30px;
+}
+
+#logo a{
+	text-decoration: none;
+}
+
+#menu {
+	min-height: 25px;
+	border-color: #91a23c;
+}
+
+#menu a:hover{
+	font-weight: bold;
+}
+
+#navbar{
+	padding-left: 5px;
+}
+
+#search_form{
+	margin-right: 0px;
+	padding-right: 0px;
+}
+
+#search_group{
+	min-width: 280px;
+}
+
+#search_input{
+	width: 100%;
+	min-width: 250px;
+	border-color: #91a23c;
+	border-width: 1px;
+}
+
+#search_button{
+	background-color: #91a23c;
+	font-weight: bold;
+}
+
+#search_button:hover{
+	background-color: #76823C;
+}
+
+#search_extra{
+	background-color: #91a23c;
+	font-weight: bold;
+	height: 34px;
+}
+
+#search_extra:hover{
+	background-color: #76823C;
+}
+
+.italics p{
+	font-style: italic;
+}
+
+.jumbotron{
+	padding-top: 0px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color: rgba(255, 255, 255, 0);
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+}
+
+.jumbotron h1{
+    color: #91a23c;
+    font-size: 30px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    clear: both;
+    text-transform: capitalise;
+}
+
+.jumbotron h2{
+    color: #5A5A5A;
+    font-size: 20px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    clear: left;
+    font-weight: bold;
+    text-transform: capitalise;
+}
+
+.jumbotron p{
+	font-size: 15px;
+}
+
+.jumbotron a {
+    text-decoration: none;
+    color: #91a23c;
+    margin: 0px;
+    padding: 0px;
+}
+
+.jumbotron img{
+	float: right;
+	text-align: right;
+	margin-left: 30px;
+}
+
+#navbar_refine{
+	padding-left: 5px;
+	margin-top: 35px;
+}
+
+#refine_form{
+	margin-right: 0px;
+	padding-right: 0px;
+}
+
+#refine_group{
+	min-width: 350px;
+}
+
+#refine_input{
+	width: 100%;
+	min-width: 250px;
+	border-color: #91a23c;
+	border-width: 1px;
+}
+
+#refine_button{
+	background-color: #91a23c;
+	font-weight: bold;
+}
+
+#refine_button:hover{
+	background-color: #76823C;
+}
+
+#refine_extra{
+	background-color: #91a23c;
+	font-weight: bold;
+	height: 34px;
+}
+
+#refine_extra:hover{
+	background-color: #76823C;
+}
+
+hr{
+	border-top: 3px solid #91a23c;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+
+.result {
+	border-radius: 10px;
+	border: 1px solid #91a23c;
+	padding: 10px 30px;
+	min-width:250px;
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+
+.result h2 {
+	font-size: 25px;
+}
+
+.result h3 {
+	font-size: 20px;
+}
+
+.result textarea{
+	resize: none;
+	height: 200px;
+	width: 100%;
+	border-radius: 5px;
+	border: 1px solid #91a23c;
+	margin-bottom: 15px;
+}
+
+.result hr{
+	border-top: 1px solid #91a23c;
+}
+
+.clean:hover{
+	background-color: rgba(145, 162, 60, 0.30);
+}
+
+.clean pre{
+	background-color: rgba(245, 245, 245, 0.25);
+}
+
+.clean h2{
+    color: #5A5A5A;
+    font-size: 30px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    clear: both;
+    text-transform: capitalise;
+}
+
+.clean h3{
+    color: #7D7D7D;
+    font-size: 20px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    clear: left;
+    font-weight: bold;
+    text-transform: capitalise;
+}
+
+.large_search {
+	margin-top: 50px;
+	padding-top: 20px;
+}
+
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+
+.footer_buffer{
+	height: 300px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: auto;
+  background-color: #91a23c;
+  padding-top: 20px;
+  padding-bottom: 30px;
+}
+
+.row{
+	max-width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+
+.row a{
+
+	color: #fff;
+}
+
+.row p{
+	margin: 0px;
+}

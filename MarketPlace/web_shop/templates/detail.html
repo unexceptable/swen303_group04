@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<div class="result">
+		<a href="/letters/{{ id }}/edit" style="text-decoration: none">
+			<button class="btn btn-default" id="refine_button" style="float: right;">edit</button>
+		</a>
+	    {{ results|safe}}
+	    <hr>
+	    <textarea readonly>{{ results }}</textarea>
+    </div>  
+{% endblock %}
