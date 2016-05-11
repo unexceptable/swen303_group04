@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from forms import SearchForm
 from models import Product
 from django.db.models import Q
+from django.contrib.auth import authenticate, login
 
 
 def index(request):
@@ -43,3 +44,23 @@ def product_detail(request, p_id):
             request, '404.html',
             {'errorMessage':
                 'The product with the id ' + p_id + ' does not exist'})
+
+def signin_process(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            # Redirect to home
+            return redirect("/")
+        else:
+            # Return a 'disabled account' error message
+            context = {'feedback': 'Disabled account'}
+            template = loader.get_template("feedback.html")
+            return HttpResponse(template.render(context))
+    else:
+        # Return an 'invalid login' error message.
+        context = {'feedback': 'Invalid account'}
+        template = loader.get_template("feedback.html")
+        return HttpResponse(template.render(context))

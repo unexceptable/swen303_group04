@@ -14,10 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url
+from django.contrib.auth import views as auth_views
 from web_shop import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^search[/]$', views.search, name='search'),
     url(r'^product/(?P<p_id>\w+)[/]$', views.product_detail),
+    url('signin_process', views.signin_process),
+    url(r'^signin/$', auth_views.login, {'template_name': 'signin.html'}),
 ]
