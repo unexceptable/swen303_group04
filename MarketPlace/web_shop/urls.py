@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^product/(?P<p_id>\w+)[/]$', views.product_detail),
     url('signin_process', views.signin_process),
     url(r'^signin/$', auth_views.login, {'template_name': 'signin.html'}),
+    url(r'^category/(?P<category>\w+)[/]$', views.category_view),
 ]
