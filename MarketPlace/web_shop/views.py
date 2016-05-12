@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
-from forms import SearchForm
-from models import Product
+from web_shop.forms import SearchForm
+from .models import Product, Category
 from django.db.models import Q
 from django.contrib.auth import authenticate, login
 
@@ -64,3 +64,26 @@ def signin_process(request):
         context = {'feedback': 'Invalid account'}
         template = loader.get_template("feedback.html")
         return HttpResponse(template.render(context))
+
+
+def category_view(request, category):
+    try:
+        print(category)
+        c = Category.objects.get(category=category)
+        #print(help(c.product_set.))
+        product_list = c.product_set.all()
+        #print("product list: "+ product_list)
+        print ("here?")
+        context = {
+            'category': c,
+            'product_list': product_list
+        }
+
+        template = loader.get_template("category_view.html")
+
+        return HttpResponse(template.render(context))
+    except Category.DoesNotExist:
+        return render(
+            request, '404.html',
+            {'errorMessage':
+                'That category does not exist'})
