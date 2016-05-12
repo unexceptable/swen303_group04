@@ -155,7 +155,7 @@ hr{
 }
 
 
-.result {
+.product {
 	border-radius: 10px;
 	border: 1px solid #91a23c;
 	padding: 10px 30px;
@@ -164,15 +164,15 @@ hr{
 	margin-bottom: 30px;
 }
 
-.result h2 {
+.product h2 {
 	font-size: 25px;
 }
 
-.result h3 {
+.product h3 {
 	font-size: 20px;
 }
 
-.result textarea{
+.product textarea{
 	resize: none;
 	height: 200px;
 	width: 100%;
@@ -181,7 +181,7 @@ hr{
 	margin-bottom: 15px;
 }
 
-.result hr{
+.product hr{
 	border-top: 1px solid #91a23c;
 }
 
