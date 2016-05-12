@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
-from web_shop.forms import SearchForm
+from web_shop.forms import SearchForm, LoginForm
 from .models import Product, Category
 from django.db.models import Q
 from django.contrib.auth import authenticate, login
@@ -45,35 +45,45 @@ def product_detail(request, p_id):
             {'errorMessage':
                 'The product with the id ' + p_id + ' does not exist'})
 
-def signin_process(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            # Redirect to home
-            return redirect("/")
-        else:
-            # Return a 'disabled account' error message
-            context = {'feedback': 'Disabled account'}
-            template = loader.get_template("feedback.html")
-            return HttpResponse(template.render(context))
+
+def signin(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = LoginForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    # Redirect to home
+                    return redirect("/")
+                else:
+                    # Return a 'disabled account' error message
+                    context = {'feedback': 'Disabled account'}
+                    template = loader.get_template("feedback.html")
+                    return HttpResponse(template.render(context))
+            else:
+                # Return an 'invalid login' error message.
+                context = {'feedback': 'Invalid account'}
+                template = loader.get_template("feedback.html")
+                return HttpResponse(template.render(context))
+
+    # if a GET (or any other method) we'll create a blank form
     else:
-        # Return an 'invalid login' error message.
-        context = {'feedback': 'Invalid account'}
-        template = loader.get_template("feedback.html")
-        return HttpResponse(template.render(context))
+        form = LoginForm()
+
+    return render(request, 'login.html', {'form': form})
 
 
 def category_view(request, category):
     try:
-        print(category)
         c = Category.objects.get(category=category)
-        #print(help(c.product_set.))
         product_list = c.product_set.all()
-        #print("product list: "+ product_list)
-        print ("here?")
         context = {
             'category': c,
             'product_list': product_list
