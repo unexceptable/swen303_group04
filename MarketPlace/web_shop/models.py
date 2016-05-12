@@ -14,5 +14,12 @@ class Product(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self):
+        return self.name
+
+
 class Category(models.Model):
     category = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.category
