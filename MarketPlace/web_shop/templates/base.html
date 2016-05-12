@@ -41,9 +41,14 @@
                         </div>
                       </form>
                     <ul class="nav navbar-nav navbar-right">
-                      <li><a href="/">home</a></li>
-                      <li><a href="/login">sign in</a></li>
-                      <li><a href="/">cart</a></li>
+                      {% if username %}
+                        <li><a href="/editdetails/">Hi {{ username }}</a></li>
+                        <li><a href="/logout/">logout</a></li>
+                      {% else %}
+                        <li><a href="/register/">sign up</a></li>
+                        <li><a href="/login/">log in</a></li>
+                        <li><a href="/">cart</a></li>
+                      {% endif %}
                     </ul>
                   </div><!--/.nav-collapse -->
                 </div><!--/.container-fluid -->

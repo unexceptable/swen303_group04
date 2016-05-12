@@ -4,11 +4,15 @@ from django.shortcuts import render, redirect
 from web_shop.forms import SearchForm, LoginForm
 from .models import Product, Category
 from django.db.models import Q
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 def index(request):
-    return render(request, "index.html")
+    context = {
+        'username': request.user.username,
+    }
+    template = loader.get_template("index.html")
+    return HttpResponse(template.render(context))
 
 
 def search(request):
@@ -22,6 +26,7 @@ def search(request):
     products = Product.objects.filter(
         Q(name__contains=search) | Q(desciption__contains=search))
     context = {
+        'username': request.user.username,
         'search': form.data["search"],
         'products': products,
     }
@@ -35,6 +40,7 @@ def product_detail(request, p_id):
     try:
         product = Product.objects.get(pk=p_id)
         context = {
+            'username': request.user.username,
             'product': product
         }
         template = loader.get_template("detail.html")
@@ -42,8 +48,10 @@ def product_detail(request, p_id):
     except Product.DoesNotExist:
         return render(
             request, '404.html',
-            {'errorMessage':
-                'The product with the id ' + p_id + ' does not exist'})
+            {
+                'username': request.user.username,
+                'errorMessage':
+                    'The product with the id ' + p_id + ' does not exist'})
 
 
 def signin(request):
@@ -64,12 +72,16 @@ def signin(request):
                     return redirect("/")
                 else:
                     # Return a 'disabled account' error message
-                    context = {'feedback': 'Disabled account'}
+                    context = {
+                        'username': request.user.username,
+                        'feedback': 'Disabled account'}
                     template = loader.get_template("feedback.html")
                     return HttpResponse(template.render(context))
             else:
                 # Return an 'invalid login' error message.
-                context = {'feedback': 'Invalid account'}
+                context = {
+                    'username': request.user.username,
+                    'feedback': 'Invalid account'}
                 template = loader.get_template("feedback.html")
                 return HttpResponse(template.render(context))
 
@@ -77,7 +89,9 @@ def signin(request):
     else:
         form = LoginForm()
 
-    return render(request, 'login.html', {'form': form})
+    return render(
+        request, 'login.html',
+        {'username': request.user.username, 'form': form})
 
 
 def category_view(request, category):
@@ -97,3 +111,9 @@ def category_view(request, category):
             request, '404.html',
             {'errorMessage':
                 'That category does not exist'})
+
+
+def logoutUser(request):
+    logout(request)
+    # Redirect to home
+    return redirect("/")

@@ -1,4 +1,6 @@
 from django import forms
+from registration.forms import RegistrationFormUniqueEmail
+from registration.forms import RegistrationFormTermsOfService
 
 
 class ProductForm(forms.Form):
@@ -17,3 +19,10 @@ class LoginForm(forms.Form):
     username = forms.CharField(label='Username', required=True)
     password = forms.CharField(
         label='Password', required=True, widget=forms.PasswordInput())
+
+
+class CustomRegistrationForm(
+        RegistrationFormUniqueEmail,
+        RegistrationFormTermsOfService,
+        forms.Form):
+    pass

@@ -14,6 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url
+from forms import CustomRegistrationForm
+from registration.backends.simple.views import RegistrationView
 from web_shop import views
 
 urlpatterns = [
@@ -21,5 +23,8 @@ urlpatterns = [
     url(r'^search[/]$', views.search, name='search'),
     url(r'^product/(?P<p_id>\w+)[/]$', views.product_detail),
     url(r'^category/(?P<category>\w+)[/]$', views.category_view),
-    url('login', views.signin),
+    url(r'^login/$', views.signin),
+    url(r'^logout/$', views.logoutUser),
+    url(r'^register/$', RegistrationView.as_view(
+        form_class=CustomRegistrationForm), name='registrationr'),
 ]
