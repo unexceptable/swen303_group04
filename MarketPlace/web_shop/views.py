@@ -1,14 +1,18 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
-from web_shop.forms import SearchForm
+from web_shop.forms import SearchForm, LoginForm
 from .models import Product, Category
 from django.db.models import Q
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 def index(request):
-    return render(request, "index.html")
+    context = {
+        'username': request.user.username,
+    }
+    template = loader.get_template("index.html")
+    return HttpResponse(template.render(context))
 
 
 def search(request):
@@ -22,6 +26,7 @@ def search(request):
     products = Product.objects.filter(
         Q(name__contains=search) | Q(desciption__contains=search))
     context = {
+        'username': request.user.username,
         'search': form.data["search"],
         'products': products,
     }
@@ -35,6 +40,7 @@ def product_detail(request, p_id):
     try:
         product = Product.objects.get(pk=p_id)
         context = {
+            'username': request.user.username,
             'product': product
         }
         template = loader.get_template("detail.html")
@@ -42,38 +48,56 @@ def product_detail(request, p_id):
     except Product.DoesNotExist:
         return render(
             request, '404.html',
-            {'errorMessage':
-                'The product with the id ' + p_id + ' does not exist'})
+            {
+                'username': request.user.username,
+                'errorMessage':
+                    'The product with the id ' + p_id + ' does not exist'})
 
-def signin_process(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            # Redirect to home
-            return redirect("/")
-        else:
-            # Return a 'disabled account' error message
-            context = {'feedback': 'Disabled account'}
-            template = loader.get_template("feedback.html")
-            return HttpResponse(template.render(context))
+
+def signin(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = LoginForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    # Redirect to home
+                    return redirect("/")
+                else:
+                    # Return a 'disabled account' error message
+                    context = {
+                        'username': request.user.username,
+                        'feedback': 'Disabled account'}
+                    template = loader.get_template("feedback.html")
+                    return HttpResponse(template.render(context))
+            else:
+                # Return an 'invalid login' error message.
+                context = {
+                    'username': request.user.username,
+                    'feedback': 'Invalid account'}
+                template = loader.get_template("feedback.html")
+                return HttpResponse(template.render(context))
+
+    # if a GET (or any other method) we'll create a blank form
     else:
-        # Return an 'invalid login' error message.
-        context = {'feedback': 'Invalid account'}
-        template = loader.get_template("feedback.html")
-        return HttpResponse(template.render(context))
+        form = LoginForm()
+
+    return render(
+        request, 'login.html',
+        {'username': request.user.username, 'form': form})
 
 
 def category_view(request, category):
     try:
-        print(category)
         c = Category.objects.get(category=category)
-        #print(help(c.product_set.))
         product_list = c.product_set.all()
-        #print("product list: "+ product_list)
-        print ("here?")
         context = {
             'category': c,
             'product_list': product_list
@@ -87,3 +111,9 @@ def category_view(request, category):
             request, '404.html',
             {'errorMessage':
                 'That category does not exist'})
+
+
+def logoutUser(request):
+    logout(request)
+    # Redirect to home
+    return redirect("/")
