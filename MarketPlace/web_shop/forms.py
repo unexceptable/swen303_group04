@@ -17,12 +17,27 @@ class SearchForm(forms.Form):
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username', required=True)
-    password = forms.CharField(
-        label='Password', required=True, widget=forms.PasswordInput())
+    password = forms.CharField(label='Password', required=True, widget=forms.PasswordInput())
 
 
-class CustomRegistrationForm(
-        RegistrationFormUniqueEmail,
-        RegistrationFormTermsOfService,
-        forms.Form):
+class CustomRegistrationForm(RegistrationFormUniqueEmail, RegistrationFormTermsOfService):
     pass
+
+class EditCredentialsForm(forms.Form):
+    firstName = forms.CharField(label='First Name')
+    lastName = forms.CharField(label='Last Name')
+    email = forms.EmailField(label='Email', required=True)
+
+    oldPass = forms.CharField(label='Current Password', required=True, widget=forms.PasswordInput())
+
+    newPass = forms.CharField(label='New Password', required=False, widget=forms.PasswordInput())
+    retypeNewPass = forms.CharField(label='Retype New Password', required=False, widget=forms.PasswordInput())
+
+    def clean(self):
+        password1 = self.cleaned_data.get('newPass')
+        password2 = self.cleaned_data.get('retypeNewPass')
+
+        if (password1) and (password1 != password2):
+            raise forms.ValidationError("New password don't match")
+
+        return self.cleaned_data
