@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^product/(?P<p_id>\w+)[/]$', views.product_detail),
     url(r'^category/(?P<category>\w+)[/]$', views.category_view),
     url(r'^login/$', views.signin),
-    url(r'^logout/$', views.logoutUser),
-    url(r'^register/$', RegistrationView.as_view(
-        form_class=CustomRegistrationForm), name='registrationr'),
+    url(r'^logout/$', views.logout_user),
+    url(r'^register/$', RegistrationView.as_view(form_class=CustomRegistrationForm), name='registrationr'),
+    url(r'^editdetails/$', views.edit_details),
 ]

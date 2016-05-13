@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
-from web_shop.forms import SearchForm, LoginForm
+from web_shop.forms import SearchForm, LoginForm, EditCredentialsForm
 from .models import Product, Category
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
@@ -113,7 +113,61 @@ def category_view(request, category):
                 'That category does not exist'})
 
 
-def logoutUser(request):
+def logout_user(request):
     logout(request)
     # Redirect to home
     return redirect("/")
+
+def edit_details(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = EditCredentialsForm(request.POST)
+        if form.is_valid():
+            if request.user.check_password(request.POST['oldPass']):
+                firstName = request.POST['firstName']
+                lastName = request.POST['lastName']
+                email = request.POST['email']
+                newPass = request.POST['newPass']
+
+                request.user.first_name = firstName
+                request.user.last_name = lastName
+                request.user.email = email
+                if newPass:
+                    request.user.set_password(newPass)
+
+                request.user.save()
+
+                if newPass:
+                    # auto re-login
+                    user = authenticate(username=request.user.username, password=newPass)
+                    login(request, user)
+
+                # Redirect to home
+                return redirect("/")
+            else:
+                # Return an error message.
+                context = {
+                    'username': request.user.username,
+                    'feedback': 'Invalid current password'}
+                template = loader.get_template("feedback.html")
+                return HttpResponse(template.render(context))
+
+        else:
+            # Return an error message.
+            context = {
+                'username': request.user.username,
+                'feedback': 'Either new password does not match with retyped or invalid email'}
+            template = loader.get_template("feedback.html")
+            return HttpResponse(template.render(context))
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = EditCredentialsForm(initial={
+            'firstName': request.user.first_name,
+            'lastName': request.user.last_name,
+            'email': request.user.email,
+            })
+
+        return render(
+            request, 'edit_details.html',
+            {'username': request.user.username, 'form': form})
