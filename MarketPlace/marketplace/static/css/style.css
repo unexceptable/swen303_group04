@@ -108,68 +108,22 @@ p {
 	margin-left: 30px;
 }
 
-#navbar_refine{
-	padding-left: 5px;
-	margin-top: 35px;
-}
-
-#refine_form{
-	margin-right: 0px;
-	padding-right: 0px;
-}
-
-#refine_group{
-	min-width: 350px;
-}
-
-#refine_input{
-	width: 100%;
-	min-width: 250px;
-	border-color: #91a23c;
-	border-width: 1px;
-}
-
-#refine_button{
-	background-color: #91a23c;
-	font-weight: bold;
-}
-
-#refine_button:hover{
-	background-color: #76823C;
-}
-
-#refine_extra{
-	background-color: #91a23c;
-	font-weight: bold;
-	height: 34px;
-}
-
-#refine_extra:hover{
-	background-color: #76823C;
-}
-
-hr{
-	border-top: 3px solid #91a23c;
-	margin-top: 30px;
-	margin-bottom: 30px;
-}
-
 
 .product {
-	border-radius: 10px;
-	border: 1px solid #91a23c;
+	border-radius: 2px;
+	border: 1px solid #ccc;
 	padding: 10px 30px;
-	min-width:250px;
-	margin-top: 20px;
-	margin-bottom: 30px;
+	margin: 20px;
 }
 
 .product h2 {
 	font-size: 25px;
+    color: #333;
 }
 
 .product h3 {
 	font-size: 20px;
+    color: #333;
 }
 
 .product textarea{
@@ -185,37 +139,60 @@ hr{
 	border-top: 1px solid #91a23c;
 }
 
-.clean:hover{
-	background-color: rgba(145, 162, 60, 0.30);
+
+.product_list {
+    max-width: 300px;
+    max-width: 300px;
+    padding: 0px;
+    padding: 10px;
+    opacity: 0.8;
 }
 
-.clean pre{
-	background-color: rgba(245, 245, 245, 0.25);
+.product_list p {
+    color: #333;
+    margin: 0px;
 }
 
-.clean h2{
-    color: #5A5A5A;
-    font-size: 30px;
-    font-weight: normal;
-    margin-bottom: 10px;
-    clear: both;
-    text-transform: capitalise;
+.product_list:hover{
+	opacity: 1
 }
 
-.clean h3{
-    color: #7D7D7D;
-    font-size: 20px;
-    font-weight: normal;
-    margin-bottom: 10px;
-    clear: left;
-    font-weight: bold;
-    text-transform: capitalise;
+.list_border{    
+    border-radius: 2px;
+    border: 1px solid #ccc;
 }
 
-.large_search {
-	margin-top: 50px;
-	padding-top: 20px;
+.list_image{
+    display: block;
+    width: 100%;
 }
+
+.list_info{
+    border-bottom: 1px solid #ccc;
+    display: block;
+    width: 100%;
+    color: #333;
+    margin: 0px;
+}
+
+.list_centered{    
+    padding-right: auto;
+    padding-left: auto;
+}
+
+.list_name{
+    text-align: left;
+    padding-top: 5px;
+    padding-left: 5px;
+    margin: 0px;
+}
+
+.list_price{
+    text-align: right;
+    padding-right: 5px;
+    margin: 0px;
+}
+
 
 
 
@@ -243,19 +220,19 @@ body {
   padding-bottom: 30px;
 }
 
-.row{
+.centered_footer{
 	max-width: 1000px;
 	margin-right: auto;
 	margin-left: auto;
 	text-align: center;
 }
 
-.row a{
+.centered_footer a{
 
 	color: #fff;
 }
 
-.row p{
+.centered_footer p{
 	margin: 0px;
 }
 

@@ -24,7 +24,8 @@ def search(request):
     search = form.data['search']
     # This is an AWFUL search... but at least something to start with.
     products = Product.objects.filter(
-        Q(name__contains=search) | Q(desciption__contains=search))
+        Q(name__contains=search) | Q(description__contains=search),
+        visible=True)
     context = {
         'username': request.user.username,
         'search': form.data["search"],
@@ -39,9 +40,15 @@ def product_detail(request, p_id):
 
     try:
         product = Product.objects.get(pk=p_id)
+        if not product.visible:
+            raise Product.DoesNotExist
+
+        images = product.image_set.all()
+
         context = {
             'username': request.user.username,
-            'product': product
+            'product': product,
+            'images': images,
         }
         template = loader.get_template("detail.html")
         return HttpResponse(template.render(context))
