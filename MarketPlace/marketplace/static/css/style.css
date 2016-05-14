@@ -13,7 +13,7 @@ p {
 
 #menu {
 	min-height: 25px;
-	border-color: #91a23c;
+	border-color: #1976D2;
 }
 
 #menu a:hover{
@@ -27,6 +27,7 @@ p {
 #search_form{
 	margin-right: 0px;
 	padding-right: 0px;
+  padding-top: 10px;
 }
 
 #search_group{
@@ -36,17 +37,17 @@ p {
 #search_input{
 	width: 100%;
 	min-width: 250px;
-	border-color: #91a23c;
+	border-color: #1976D2;
 	border-width: 1px;
 }
 
 #search_button{
-	background-color: #91a23c;
+	background-color: #B0BEC5;
 	font-weight: bold;
 }
 
 #search_button:hover{
-	background-color: #76823C;
+	background-color: #BBDEFB;
 }
 
 #search_extra{
@@ -57,6 +58,10 @@ p {
 
 #search_extra:hover{
 	background-color: #76823C;
+}
+
+#nav_buttons{
+  padding-top: 10px;
 }
 
 .italics p{
