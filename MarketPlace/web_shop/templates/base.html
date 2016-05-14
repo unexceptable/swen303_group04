@@ -42,9 +42,11 @@
                       </form>
                     <ul class="nav navbar-nav navbar-right">
                       {% if username %}
+                        <li><a href="/category/all/">Products</a></li>
                         <li><a href="/editdetails/">Hi {{ username }}</a></li>
                         <li><a href="/logout/">logout</a></li>
                       {% else %}
+                        <li><a href="/category/all/">Products</a></li>
                         <li><a href="/register/">sign up</a></li>
                         <li><a href="/login/">log in</a></li>
                         <li><a href="/">cart</a></li>
