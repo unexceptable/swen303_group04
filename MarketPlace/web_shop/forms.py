@@ -15,6 +15,11 @@ class SearchForm(forms.Form):
     search = forms.CharField(required=True)
 
 
+class CartForm(forms.Form):
+    quantity = forms.IntegerField(initial=1, required=False)
+    update = forms.BooleanField(required=False, initial=True)
+
+
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username', required=True)
     password = forms.CharField(label='Password', required=True, widget=forms.PasswordInput())

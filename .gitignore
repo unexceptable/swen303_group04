@@ -64,3 +64,4 @@ target/
 
 *~
 *.sqlite3
+MarketPlace/marketplace/media/

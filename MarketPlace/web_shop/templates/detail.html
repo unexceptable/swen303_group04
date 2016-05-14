@@ -8,5 +8,28 @@
 		<p>{{ product.description }}</p>
 
 		<h4>Category: {{ product.category }}</h4>
+        {% if in_cart %}
+        <form action="/product/{{ product.pk }}/cart" method="post">
+            {% csrf_token %}          
+            <label for="id_quantity">Quantity:</label>
+            <input id="id_quantity" name="quantity" type="number" value="{{ in_cart }}">
+            <input id="id_update" name="update" type="hidden" value="true">
+            <input type="submit" value="Update">
+        </form>      
+        <form action="/product/{{ product.pk }}/cart" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Remove from cart">
+        </form>
+        {% else %}
+        <form action="/product/{{ product.pk }}/cart" method="post">
+          {% csrf_token %}
+          {{ form.quantity.label_tag }}
+          {{ form.quantity }}
+          <input type="submit" value="Add to cart">
+        </form>
+        {% endif %}
     </div>  
+{% endblock %}
+
+{% block scripts %}
 {% endblock %}
