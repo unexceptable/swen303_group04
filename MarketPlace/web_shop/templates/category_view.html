@@ -5,13 +5,28 @@
 {% if category == 'all' %}
 	<h1>viewing all categories</h1>
 	<ul>
-	{% for c in  categories%}
-			<li><a href="/category/{{ c.category }}/">{{ c.name }}</a></li>
-	{% endfor %}
+	<div class="row list_centered">
+		{% for c in  categories%}
+			<a href="/category/{{ c.category }}/" class="category_link">
+				<div class="col-xs-6 col-md-3 col-lg-4 category_view">
+				<div class="list_border">
+					<img src="/media/{{ c.main_image }}">
+					<h3>{{ c.name }}</h3>
+				</div>
+			  </div>
+			</a>
+		{% endfor %}
 	</ul>
 {% elif product_list %}
+<div class"row">
+	<h5 class="col-lg-1">Categories: </h5>
+	<ol class="breadcrumb col-lg-11">
+	  <li><a href="/category/all/">All</a></li>
+	  <li class="active">{{ category }}</li>
+	</ol>
+</div>
 	<div class="row list_centered">
-    {% for product in product_list %}       
+    {% for product in product_list %}
         <a href="/product/{{ product.pk }}" style="text-decoration: none">
             <div class="product_list col-md-3">
             <div class="list_border">

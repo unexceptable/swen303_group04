@@ -43,6 +43,7 @@ class Product(models.Model):
 class Category(models.Model):
     category = models.CharField(max_length=100)
     name = models.CharField(max_length=100, default='all')
+    main_image = models.ImageField(storage=fs, default='/media/hat.jpg')
 
     def __str__(self):
         return self.category
