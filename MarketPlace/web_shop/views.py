@@ -173,54 +173,59 @@ def logout_user(request):
 
 
 def edit_details(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = EditCredentialsForm(request.POST)
-        if form.is_valid():
-            if request.user.check_password(request.POST['oldPass']):
-                firstName = request.POST['firstName']
-                lastName = request.POST['lastName']
-                email = request.POST['email']
-                newPass = request.POST['newPass']
+    #Check login
+    if(request.user.is_authenticated):
+        # if this is a POST request we need to process the form data
+        if request.method == 'POST':
+            # create a form instance and populate it with data from the request:
+            form = EditCredentialsForm(request.POST)
+            if form.is_valid():
+                if request.user.check_password(request.POST['oldPass']):
+                    firstName = request.POST['firstName']
+                    lastName = request.POST['lastName']
+                    email = request.POST['email']
+                    newPass = request.POST['newPass']
 
-                request.user.first_name = firstName
-                request.user.last_name = lastName
-                request.user.email = email
-                if newPass:
-                    request.user.set_password(newPass)
+                    request.user.first_name = firstName
+                    request.user.last_name = lastName
+                    request.user.email = email
+                    if newPass:
+                        request.user.set_password(newPass)
 
-                request.user.save()
+                    request.user.save()
 
-                if newPass:
-                    # auto re-login
-                    user = authenticate(username=request.user.username, password=newPass)
-                    login(request, user)
+                    if newPass:
+                        # auto re-login
+                        user = authenticate(username=request.user.username, password=newPass)
+                        login(request, user)
 
-                # Redirect to home
-                return redirect("/")
+                    # Redirect to home
+                    return redirect("/")
+                else:
+                    # Return an error message.
+                    context = {
+                        'feedback': 'Invalid current password'}
+                    return render(request, "feedback.html", context)
+
             else:
                 # Return an error message.
                 context = {
-                    'feedback': 'Invalid current password'}
+                    'feedback': 'Either new password does not match with retyped or invalid email'}
                 return render(request, "feedback.html", context)
-
+        # if a GET (or any other method) we'll create a blank form
         else:
-            # Return an error message.
-            context = {
-                'feedback': 'Either new password does not match with retyped or invalid email'}
-            return render(request, "feedback.html", context)
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = EditCredentialsForm(initial={
-            'firstName': request.user.first_name,
-            'lastName': request.user.last_name,
-            'email': request.user.email,
-            })
+            form = EditCredentialsForm(initial={
+                'firstName': request.user.first_name,
+                'lastName': request.user.last_name,
+                'email': request.user.email,
+                })
 
-        return render(
-            request, 'edit_details.html',
-            {'username': request.user.username, 'form': form})
+            return render(
+                request, 'edit_details.html',
+                {'form': form})
+    else:
+        # Redirect to home
+        return redirect("/")
 
 
 def cart(request):
