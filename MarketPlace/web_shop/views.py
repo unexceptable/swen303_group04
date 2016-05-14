@@ -94,17 +94,25 @@ def signin(request):
         {'username': request.user.username, 'form': form})
 
 
-def category_view(request, category):
+def category_view(request, category_name):
     try:
-        c = Category.objects.get(category=category)
-        product_list = c.product_set.all()
-        context = {
-            'category': c,
-            'product_list': product_list
-        }
+        #print(type(category))
+        if(category_name=='all'):
+            category_list = Category.objects.all()
+            context = {
+                'category': category_name,
+                'categories': category_list,
+            }
+        #    return render(request, 'category_view.html', context})
+        else:
+            c = Category.objects.get(category=category_name)
+            product_list = c.product_set.all()
+            context = {
+                'category': c,
+                'product_list': product_list
+            }
 
         template = loader.get_template("category_view.html")
-
         return HttpResponse(template.render(context))
     except Category.DoesNotExist:
         return render(
