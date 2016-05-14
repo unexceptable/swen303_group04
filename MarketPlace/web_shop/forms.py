@@ -26,9 +26,9 @@ class CustomRegistrationForm(RegistrationFormUniqueEmail, RegistrationFormTermsO
 class EditCredentialsForm(forms.Form):
     firstName = forms.CharField(label='First Name')
     lastName = forms.CharField(label='Last Name')
-    email = forms.EmailField(label='Email', required=True)
+    email = forms.EmailField(label='Email*', required=True)
 
-    oldPass = forms.CharField(label='Current Password', required=True, widget=forms.PasswordInput())
+    oldPass = forms.CharField(label='Current Password*', required=True, widget=forms.PasswordInput())
 
     newPass = forms.CharField(label='New Password', required=False, widget=forms.PasswordInput())
     retypeNewPass = forms.CharField(label='Retype New Password', required=False, widget=forms.PasswordInput())
