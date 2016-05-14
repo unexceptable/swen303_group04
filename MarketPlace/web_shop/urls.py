@@ -22,9 +22,13 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^search[/]$', views.search, name='search'),
     url(r'^product/(?P<p_id>\w+)[/]$', views.product_detail),
+    url(r'^product/(?P<p_id>\w+)/cart$', views.product_cart),
     url(r'^category/(?P<category_name>\w+)[/]$', views.category_view),
     url(r'^login/$', views.signin),
     url(r'^logout/$', views.logout_user),
     url(r'^register/$', RegistrationView.as_view(form_class=CustomRegistrationForm), name='registrationr'),
     url(r'^editdetails/$', views.edit_details),
+    url(r'^cart[/]$', views.cart),
+    url(r'^cart/(?P<p_id>\w+)/remove$', views.cart_remove),
+
 ]

@@ -193,6 +193,22 @@ p {
     margin: 0px;
 }
 
+.cart{
+    max-width: 700px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.cart th, td{
+    padding: 5px;
+}
+
+.cart h4{
+    text-align: center;
+    margin-top: 30px;
+}
+
+
 
 
 

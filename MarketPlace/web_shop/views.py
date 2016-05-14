@@ -1,18 +1,17 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
-from web_shop.forms import SearchForm, LoginForm, EditCredentialsForm
+from web_shop.forms import (
+    SearchForm, LoginForm, EditCredentialsForm, CartForm)
 from .models import Product, Category
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
+from cart.cart import Cart
 
 
 def index(request):
-    context = {
-        'username': request.user.username,
-    }
-    template = loader.get_template("index.html")
-    return HttpResponse(template.render(context))
+    print request.user.username
+    return render(request, "index.html")
 
 
 def search(request):
@@ -27,12 +26,10 @@ def search(request):
         Q(name__contains=search) | Q(description__contains=search),
         visible=True)
     context = {
-        'username': request.user.username,
         'search': form.data["search"],
         'products': products,
     }
-    template = loader.get_template("products.html")
-    return HttpResponse(template.render(context))
+    return render(request, "products.html", context)
 
 
 def product_detail(request, p_id):
@@ -43,15 +40,24 @@ def product_detail(request, p_id):
         if not product.visible:
             raise Product.DoesNotExist
 
+        form = CartForm()
+
         images = product.image_set.all()
+
+        in_cart = 0
+        cart = Cart(request)
+        for item in cart:
+            if item.product.pk == product.pk:
+                in_cart = item.quantity
 
         context = {
             'username': request.user.username,
             'product': product,
             'images': images,
+            'in_cart': in_cart,
+            'form': form,
         }
-        template = loader.get_template("detail.html")
-        return HttpResponse(template.render(context))
+        return render(request, "detail.html", context)
     except Product.DoesNotExist:
         return render(
             request, '404.html',
@@ -59,6 +65,43 @@ def product_detail(request, p_id):
                 'username': request.user.username,
                 'errorMessage':
                     'The product with the id ' + p_id + ' does not exist'})
+
+
+def product_cart(request, p_id):
+    if request.method != 'POST':
+        return redirect("/product/%s" % p_id)
+    try:
+        product = Product.objects.get(pk=p_id)
+        if not product.visible:
+            raise Product.DoesNotExist
+    except Product.DoesNotExist:
+        return render(
+            request, '404.html',
+            {
+                'username': request.user.username,
+                'errorMessage':
+                    'The product with the id ' + p_id + ' does not exist'})
+
+    in_cart = False
+    cart = Cart(request)
+    for item in cart:
+        print item.product.name
+        if item.product.pk == product.pk:
+            in_cart = True
+
+    form = CartForm(request.POST)
+    if form.is_valid():
+        if in_cart:
+            if form.data.get('update'):
+                cart.update(product, form.data['quantity'], product.price)
+            else:
+                print("removing!")
+                cart.remove(product)
+        else:
+                print("adding!")
+                cart.add(product, product.price, form.data['quantity'])
+
+    return redirect("/product/%s" % product.pk)
 
 
 def signin(request):
@@ -80,17 +123,13 @@ def signin(request):
                 else:
                     # Return a 'disabled account' error message
                     context = {
-                        'username': request.user.username,
                         'feedback': 'Disabled account'}
-                    template = loader.get_template("feedback.html")
-                    return HttpResponse(template.render(context))
+                    return render(request, "feedback.html", context)
             else:
                 # Return an 'invalid login' error message.
                 context = {
-                    'username': request.user.username,
                     'feedback': 'Invalid account'}
-                template = loader.get_template("feedback.html")
-                return HttpResponse(template.render(context))
+                return render(request, "feedback.html", context)
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -119,8 +158,7 @@ def category_view(request, category_name):
                 'product_list': product_list
             }
 
-        template = loader.get_template("category_view.html")
-        return HttpResponse(template.render(context))
+        return render(request, "category_view.html", context)
     except Category.DoesNotExist:
         return render(
             request, '404.html',
@@ -132,6 +170,7 @@ def logout_user(request):
     logout(request)
     # Redirect to home
     return redirect("/")
+
 
 def edit_details(request):
     # if this is a POST request we need to process the form data
@@ -163,18 +202,14 @@ def edit_details(request):
             else:
                 # Return an error message.
                 context = {
-                    'username': request.user.username,
                     'feedback': 'Invalid current password'}
-                template = loader.get_template("feedback.html")
-                return HttpResponse(template.render(context))
+                return render(request, "feedback.html", context)
 
         else:
             # Return an error message.
             context = {
-                'username': request.user.username,
                 'feedback': 'Either new password does not match with retyped or invalid email'}
-            template = loader.get_template("feedback.html")
-            return HttpResponse(template.render(context))
+            return render(request, "feedback.html", context)
     # if a GET (or any other method) we'll create a blank form
     else:
         form = EditCredentialsForm(initial={
@@ -186,3 +221,15 @@ def edit_details(request):
         return render(
             request, 'edit_details.html',
             {'username': request.user.username, 'form': form})
+
+
+def cart(request):
+    cart = Cart(request)
+    return render(request, 'cart.html', dict(cart=cart))
+
+
+def cart_remove(request, p_id):
+    product = Product.objects.get(pk=p_id)
+    cart = Cart(request)
+    cart.remove(product)
+    return render(request, 'cart.html', dict(cart=cart))
