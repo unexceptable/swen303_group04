@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if product_list %}
+
+{% if category == 'all' %}
+	<h1>viewing all categories</h1>
+	<ul>
+	{% for c in  categories%}
+			<li><a href="/category/{{ c.category }}/">{{ c.name }}</a></li>
+	{% endfor %}
+	</ul>
+{% elif product_list %}
 	{% for p in product_list %}
 		<a href="/product/{{ p.pk }}" style="text-decoration: none">
 	    <div class="product clean">
