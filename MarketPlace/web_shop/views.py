@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from cart.cart import Cart
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 def index(request):
     category_list = Category.objects.all()
@@ -299,13 +299,9 @@ def chat(request):
                 # if the form isn't valid (empty basically) redirect to home.
                 return redirect("/")
 
-            chat = form.data['chat']
-            history = ChatHistory.objects.filter(
-                (Q(origin__contains=chat) & Q(to__contains=request.user.username)) | (Q(origin__contains=request.user.username) & Q(to__contains=chat)) )
             context = {
                 'user': form.data["chat"],
-                'history': history,
-                'form' : MessageForm(initial={'to': chat})
+                'form' : MessageForm(initial={'to': form.data["chat"]})
             }
             return render(request, "chat.html", context)
         #Process data sent
@@ -316,7 +312,7 @@ def chat(request):
                     ChatHistory.objects.create(origin=request.user.username, to= request.POST['to'], message=request.POST['message'])
                     return HttpResponseRedirect("?chat="+request.POST["to"])
                 else:
-                    # if the form isn't valid (empty basically) redirect to home.
+                    # if user does not exist
                     return redirect("/")
             else:
                 # if the form isn't valid (empty basically) redirect to home.
@@ -324,3 +320,14 @@ def chat(request):
     else:
         # Redirect to home
         return redirect("/")
+
+def chat_reload(request):
+    form = ChatForm(request.GET)
+    chat = form.data['chat']
+    history = ChatHistory.objects.filter(
+        (Q(origin__contains=chat) & Q(to__contains=request.user.username)) | (Q(origin__contains=request.user.username) & Q(to__contains=chat)) )
+    context = {
+        'user': form.data["chat"],
+        'history': history,
+    }
+    return render(request, "conversation.html", context)

@@ -9,16 +9,23 @@
 			}
 			return true;
 		}
+
+		function refreshPage() {
+			$.ajax({
+				url:'/chat-reload?chat={{user}}',
+				dataType: 'html',
+				success: function(data) {$('#output_box').html(data);},
+				complete: function() {window.setTimeout(refreshPage, 1000);}
+			});
+		}
+		window.setTimeout(refreshPage, 1000);
+		
 	</script>
 	<h1>Chat history with {{ user }}</h1>
-  {% if history %}
-    {% for entry in history %}
-      {% if entry.origin == request.user.username %}
-        <p><strong>You: {{entry.message}}</strong></p>
-      {% else %}
-        <p>{{ user }} : {{entry.message}}</p>
-      {% endif %}
-    {% endfor %}
+
+		<div id="output_box">
+		</div>
+
 		<table>
       <form name = 'form' method='post' action=''>
         {% csrf_token %}
@@ -26,11 +33,5 @@
         <td><input type="submit" onclick="return notEmpty()" value="Send"/></td>
       </form>
     </table>
-  {% else %}
-    <div class="alert alert-danger" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <span class="sr-only">Error:</span>
-        No matches found.
-    </div>
-  {% endif %}
+
 {% endblock %}
