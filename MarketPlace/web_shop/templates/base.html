@@ -43,11 +43,12 @@
                     <ul class="nav navbar-nav navbar-right" id="nav_buttons">
                       {% if request.user.username %}
                         <li><a href="/category/all/">Products</a></li>
+                        <li><a href="/cart">Cart{% if cart.count %}({{ cart.count }}){% endif %}</a></li>
                         <li><a href="/editdetails/">Hi {{ request.user.username }}</a></li>
                         <li><button class="btn btn-default btn-sm" href="/logout/" role="button">Logout</a></li>
                         <li><a class="glyphicon glyphicon-shopping-cart" href="/cart">Cart{% if cart.count %}({{ cart.count }}){% endif %}</a></li>
-                      {% else %}
                         <li><a href="/category/all/">Products</a></li>
+                        <li><a href="/cart">Cart{% if cart.count %}({{ cart.count }}){% endif %}</a></li>
                         <li><a href="/register/">Sign up</a></li>
                         <li><button class="btn btn-default btn-sm" href="/login/" role="button">Log in</a></li>
                         <li><a class="glyphicon glyphicon-shopping-cart" href="/cart">Cart{% if cart.count %}({{ cart.count }}){% endif %}</a></li>
@@ -69,7 +70,13 @@
         <footer class="footer">
             <div class="row centered_footer">
                 <div class="col-md-3">
-                  <p><a href="/">Home</a></p>
+                  {% if request.user.username %}
+                    <p><form action="/chat" method="get">
+                      <label>Chat</label>
+                      <input type="text" name="chat" placeholder="username">
+                    </form></p>
+                  {% endif %}
+                  <p><a href="/">home</a></p>
                 </div>
                 <div class="col-md-3">
                   <p><a href="/">store stuff</a></p>

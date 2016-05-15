@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<script type="text/javascript">
+		function notEmpty(){
+			var text = document.forms['form'].message.value.trim();
+			if(text === "" || text === null) {
+				return false;
+			}
+			return true;
+		}
+	</script>
+	<h1>Chat history with {{ user }}</h1>
+  {% if history %}
+    {% for entry in history %}
+      {% if entry.origin == request.user.username %}
+        <p><strong>You: {{entry.message}}</strong></p>
+      {% else %}
+        <p>{{ user }} : {{entry.message}}</p>
+      {% endif %}
+    {% endfor %}
+		<table>
+      <form name = 'form' method='post' action=''>
+        {% csrf_token %}
+        {{ form }}
+        <td><input type="submit" onclick="return notEmpty()" value="Send"/></td>
+      </form>
+    </table>
+  {% else %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        No matches found.
+    </div>
+  {% endif %}
+{% endblock %}

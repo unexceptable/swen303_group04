@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
-
+from django.contrib.auth.models import User
 
 fs = FileSystemStorage()
 
@@ -68,3 +68,8 @@ class Image(models.Model):
     def _img(self):
         return '<img width="300" src="/media/%s">' % self.image
     _img.allow_tags = True
+
+class ChatHistory(models.Model):
+    origin = models.CharField(max_length=30)
+    to = models.CharField(max_length=30)
+    message = models.TextField()
