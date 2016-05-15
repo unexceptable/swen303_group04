@@ -46,3 +46,6 @@ class EditCredentialsForm(forms.Form):
             raise forms.ValidationError("New password don't match")
 
         return self.cleaned_data
+
+class ChatForm(forms.Form):
+    chat = forms.CharField(required=True)

@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^cart[/]$', views.cart),
     url(r'^cart/(?P<p_id>\w+)/remove$', views.cart_remove),
 
+    url(r'^chat[/]$', views.chat, name='chat'),
 ]

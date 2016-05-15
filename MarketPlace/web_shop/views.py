@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
 from web_shop.forms import (
-    SearchForm, LoginForm, EditCredentialsForm, CartForm)
-from .models import Product, Category
+    SearchForm, LoginForm, EditCredentialsForm, CartForm, ChatForm)
+from .models import Product, Category, ChatHistory
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from cart.cart import Cart
 
 
@@ -220,7 +221,7 @@ def edit_details(request):
 
         return render(
             request, 'edit_details.html',
-            {'username': request.user.username, 'form': form})
+            {'form': form})
 
 
 def cart(request):
@@ -233,3 +234,19 @@ def cart_remove(request, p_id):
     cart = Cart(request)
     cart.remove(product)
     return render(request, 'cart.html', dict(cart=cart))
+
+
+def chat(request):
+    form = ChatForm(request.GET)
+    if not form.is_valid():
+        # if the form isn't valid (empty basically) redirect to home.
+        return redirect("/")
+
+    chat = form.data['chat']
+    history = ChatHistory.objects.filter(
+        (Q(origin__contains=chat) & Q(to__contains=request.user.username)) | (Q(origin__contains=request.user.username) & Q(to__contains=chat)) )
+    context = {
+        'user': form.data["chat"],
+        'history': history,
+    }
+    return render(request, "chat.html", context)
