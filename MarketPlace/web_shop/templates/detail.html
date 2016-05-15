@@ -12,7 +12,7 @@
         <form action="/product/{{ product.pk }}/cart" method="post">
             {% csrf_token %}          
             <label for="id_quantity">Quantity:</label>
-            <input id="id_quantity" name="quantity" type="number" value="{{ in_cart }}">
+            <input id="id_quantity" min="0" name="quantity" type="number" value="{{ in_cart }}">
             <input id="id_update" name="update" type="hidden" value="true">
             <input type="submit" value="Update">
         </form>      

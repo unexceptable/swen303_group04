@@ -16,7 +16,7 @@ class SearchForm(forms.Form):
 
 
 class CartForm(forms.Form):
-    quantity = forms.IntegerField(initial=1, required=False)
+    quantity = forms.IntegerField(initial=1, required=False, min_value=0)
     update = forms.BooleanField(required=False, initial=True)
 
 
