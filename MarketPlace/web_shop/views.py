@@ -290,32 +290,37 @@ def cart_update(request, p_id):
     return redirect("/cart")
 
 def chat(request):
-    # if this is a GET request we need to show chat history
-    if request.method == 'GET':
-        form = ChatForm(request.GET)
-        if not form.is_valid():
-            # if the form isn't valid (empty basically) redirect to home.
-            return redirect("/")
+    #Check login
+    if request.user.is_authenticated:
+        # if this is a GET request we need to show chat history
+        if request.method == 'GET':
+            form = ChatForm(request.GET)
+            if not form.is_valid():
+                # if the form isn't valid (empty basically) redirect to home.
+                return redirect("/")
 
-        chat = form.data['chat']
-        history = ChatHistory.objects.filter(
-            (Q(origin__contains=chat) & Q(to__contains=request.user.username)) | (Q(origin__contains=request.user.username) & Q(to__contains=chat)) )
-        context = {
-            'user': form.data["chat"],
-            'history': history,
-            'form' : MessageForm(initial={'to': chat})
-        }
-        return render(request, "chat.html", context)
-    #Process data sent
-    else:
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            if User.objects.filter(username=request.POST['to']).exists():
-                ChatHistory.objects.create(origin=request.user.username, to= request.POST['to'], message=request.POST['message'])
-                return HttpResponseRedirect("?chat="+request.POST["to"])
+            chat = form.data['chat']
+            history = ChatHistory.objects.filter(
+                (Q(origin__contains=chat) & Q(to__contains=request.user.username)) | (Q(origin__contains=request.user.username) & Q(to__contains=chat)) )
+            context = {
+                'user': form.data["chat"],
+                'history': history,
+                'form' : MessageForm(initial={'to': chat})
+            }
+            return render(request, "chat.html", context)
+        #Process data sent
+        else:
+            form = MessageForm(request.POST)
+            if form.is_valid():
+                if User.objects.filter(username=request.POST['to']).exists():
+                    ChatHistory.objects.create(origin=request.user.username, to= request.POST['to'], message=request.POST['message'])
+                    return HttpResponseRedirect("?chat="+request.POST["to"])
+                else:
+                    # if the form isn't valid (empty basically) redirect to home.
+                    return redirect("/")
             else:
                 # if the form isn't valid (empty basically) redirect to home.
                 return redirect("/")
-        else:
-            # if the form isn't valid (empty basically) redirect to home.
-            return redirect("/")
+    else:
+        # Redirect to home
+        return redirect("/")
