@@ -44,12 +44,12 @@
                       {% if request.user.username %}
                         <li><a href="/category/all/">Products</a></li>
                         <li><a href="/editdetails/">Hi {{ request.user.username }}</a></li>
-                        <li><a class="btn btn-default" href="/logout/" role="button">Logout</a></li>
+                        <li><a class="btn btn-sm" href="/logout/" role="button">Logout</a></li>
                         <li><a class="glyphicon glyphicon-shopping-cart" href="/cart">Cart{% if cart.count %}({{ cart.count }}){% endif %}</a></li>
                       {% else %}
                         <li><a href="/category/all/">Products</a></li>
                         <li><a href="/register/">Sign up</a></li>
-                        <li><a class="btn btn-default" href="/login/" role="button">Log in</a></li>
+                        <li><a class="btn btn-sm" href="/login/" role="button">Log in</a></li>
                         <li><a class="glyphicon glyphicon-shopping-cart" href="/cart">Cart{% if cart.count %}({{ cart.count }}){% endif %}</a></li>
                       {% endif %}
                     </ul>
