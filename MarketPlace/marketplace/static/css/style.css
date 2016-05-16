@@ -302,5 +302,8 @@ body {
 }
 
 .btn-sm{
-  margin-top: 10px;
+}
+
+#login-link{
+    padding-top: 10px;
 }

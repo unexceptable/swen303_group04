@@ -1,5 +1,5 @@
 import datetime
-from cart import models
+from . import models
 
 CART_ID = 'CART-ID'
 
