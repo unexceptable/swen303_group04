@@ -3,20 +3,21 @@
 {% block content %}
 
 {% if category == 'all' %}
-	<h1>viewing all categories</h1>
-	<ul>
-	<div class="row list_centered">
-		{% for c in  categories%}
-			<a href="/category/{{ c.category }}/" class="category_link">
-				<div class="col-xs-6 col-md-3 col-lg-4 category_view">
-				<div class="list_border">
-					<img src="/media/{{ c.main_image }}">
-					<h3>{{ c.name }}</h3>
-				</div>
-			  </div>
-			</a>
-		{% endfor %}
-	</ul>
+<h2 id="category_title"> Categories </h2>
+<ul>
+  <div class="row list_centered category_item">
+    {% for c in  categories%}
+      <a href="/category/{{ c.category }}/" class="category_link">
+        <div class="col-xs-6 col-md-4 col-lg-2 category_view">
+        <div class="list_border">
+          <img src="/media/{{ c.main_image }}" width="100%">
+          <h3>{{ c.name }}</h3>
+        </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</ul>
 {% elif product_list %}
 <div class"row">
 	<h5 class="col-lg-1">Categories: </h5>
