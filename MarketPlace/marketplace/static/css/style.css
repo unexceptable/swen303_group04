@@ -224,6 +224,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  background-color: #5A5A5A;
 }
 
 .footer_buffer{
@@ -282,4 +283,8 @@ body {
 .category_link {
 	text-decoration: none;
 	text-align: center;
+}
+
+.container{
+  background-color: #fff;
 }
