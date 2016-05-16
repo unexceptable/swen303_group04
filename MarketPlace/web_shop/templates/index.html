@@ -64,12 +64,12 @@
 
   <h2 id="category_title"> Categories </h2>
   <ul>
-    <div class="row list_centered">
+    <div class="row list_centered category_item">
   		{% for c in  categories%}
   			<a href="/category/{{ c.category }}/" class="category_link">
   				<div class="col-xs-6 col-md-3 col-lg-4 category_view">
   				<div class="list_border">
-  					<img src="/media/{{ c.main_image }}">
+  					<img src="/media/{{ c.main_image }}" width="100%">
   					<h3>{{ c.name }}</h3>
   				</div>
   			  </div>

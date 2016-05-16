@@ -282,12 +282,17 @@ body {
   height: 500px;
 }
 
+.category_item {
+	position: relative;
+}
+
 .category_view {
 	padding-top: 15px;
 	padding-right: 40px;
 }
 
 .category_link {
+	position: relative;
 	text-decoration: none;
 	text-align: center;
 }
