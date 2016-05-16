@@ -236,7 +236,7 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: auto;
-  background-color: #91a23c;
+  background-color: #1976D2;
   padding-top: 20px;
   padding-bottom: 30px;
 }
@@ -250,7 +250,7 @@ body {
 
 .centered_footer a{
 
-	color: #91a23c;
+	color: #fff;
 }
 
 .centered_footer p{
