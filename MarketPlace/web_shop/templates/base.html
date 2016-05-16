@@ -44,7 +44,7 @@
                       {% if request.user.username %}
                         <li><a href="/category/all/">Products</a></li>
                         <li><a href="/editdetails/">Hi {{ request.user.username }}</a></li>
-                        <li><a href="/logout/">Logout</a></li>
+                        <li><a class="btn btn-default" href="/logout/" role="button">Logout</a></li>
                         <li><a href="/cart">Cart{% if cart.count %}({{ cart.count }}){% endif %}</a></li>
                       {% else %}
                         <li><a href="/category/all/">Products</a></li>
