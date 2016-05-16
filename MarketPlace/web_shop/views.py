@@ -10,8 +10,10 @@ from cart.cart import Cart
 
 
 def index(request):
+    category_list = Category.objects.all()
     context = {
         'cart': Cart(request),
+        'categories': category_list,
     }
     return render(request, "index.html", context)
 

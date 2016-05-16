@@ -64,6 +64,11 @@ p {
   padding-top: 10px;
 }
 
+#category_title{
+	font-family: "Times New Roman";
+	text-align: center;
+	border: 1px solid #ccc;
+}
 .italics p{
 	font-style: italic;
 }
@@ -277,6 +282,7 @@ body {
 
 .category_view {
 	padding-top: 15px;
+	padding-right: 40px;
 }
 
 .category_link {
