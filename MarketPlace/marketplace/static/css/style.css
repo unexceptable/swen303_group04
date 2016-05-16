@@ -5,6 +5,7 @@ p {
 
 #header {
 	margin-top: 30px;
+  padding-bottom: 40px;
 }
 
 #logo a{
@@ -224,6 +225,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  background-color: #f6f6f6;
 }
 
 .footer_buffer{
@@ -236,7 +238,7 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: auto;
-  background-color: #91a23c;
+  background-color: #1976D2;
   padding-top: 20px;
   padding-bottom: 30px;
 }
@@ -282,4 +284,12 @@ body {
 .category_link {
 	text-decoration: none;
 	text-align: center;
+}
+
+.container{
+  background-color: #fff;
+}
+
+.btn-sm{
+  margin-top: 10px;
 }
