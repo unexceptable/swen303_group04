@@ -289,3 +289,7 @@ body {
 .container{
   background-color: #fff;
 }
+
+.btn-sm{
+  padding-top: 10px;
+}
