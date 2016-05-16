@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, Image
+from .models import Product, Category, Image, ChatHistory
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -7,6 +7,8 @@ class ProductAdmin(admin.ModelAdmin):
         'name', '_thumb', 'description', 'category',
         'price', 'visible', 'added_on',)
 
+class ChatHistoryAdmin(admin.ModelAdmin):
+    list_display = ('origin', 'to', 'message')
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('_img', 'description')
@@ -15,3 +17,4 @@ class ImageAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category)
 admin.site.register(Image, ImageAdmin)
+admin.site.register(ChatHistory, ChatHistoryAdmin)
