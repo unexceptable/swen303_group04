@@ -437,3 +437,33 @@ def edit_address(request):
     else:
         # Redirect to home
         return redirect("/")
+
+def listusers(request):
+    #Check login
+    if request.user.is_authenticated() and request.user.is_superuser:
+        #process selected
+        if request.method=="POST":
+            entries = request.POST.getlist('selected')
+            if 'Enable' in request.POST:
+                for username in entries:
+                    user = User.objects.get(username=username)
+                    if not user.is_active:
+                        user.is_active = True
+                        user.save()
+
+            elif 'Disable' in request.POST:
+                for username in entries:
+                    user = User.objects.get(username=username)
+                    if user.is_active:
+                        user.is_active = False
+                        user.save()
+
+        #show users
+        context = {
+            'heading': ('','Username','First Name','Last Name', 'Email', 'Active'),
+            'users': User.objects.filter(is_superuser=False)
+        }
+        return render(request, "all_users.html", context)
+
+    else:
+        return redirect("/")

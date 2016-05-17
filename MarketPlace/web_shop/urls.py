@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^cart/(?P<p_id>\w+)/update$', views.cart_update),
     url(r'^chat[/]$', views.chat, name='chat'),
     url(r'^chat-reload[/]$', views.chat_reload, name='chat-reload'),
+    url(r'^listusers/$', views.listusers),
 ]
