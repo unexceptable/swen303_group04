@@ -14,17 +14,19 @@
 			$.ajax({
 				url:'/chat-reload?chat={{user}}',
 				dataType: 'html',
-				success: function(data) {$('#output_box').html(data);},
+				success: function(data) {$('.output_box').html(data);},
 				complete: function() {window.setTimeout(refreshPage, 1000);}
 			});
 		}
 		window.setTimeout(refreshPage, 1000);
-		
+
 	</script>
 	<h1>Chat history with {{ user }}</h1>
-
-		<div id="output_box">
+	<div class="panel panel-default">
+		<div class="panel-heading">Conversation</div>
+		<div class="panel-body output_box">
 		</div>
+	</div>
 
 		<table>
       <form name = 'form' method='post' action=''>
