@@ -1,15 +1,18 @@
 
 p {
-	font-family: "Times New Roman";
+	font-family: sans-serif;
+}
+
+.container{
+  background-color: #fff;
+}
+
+.container-fluid{
+  max-width: 1100px;
 }
 
 #header {
-	margin-top: 30px;
-  padding-bottom: 40px;
-}
-
-#logo a{
-	text-decoration: none;
+  margin-bottom: 10px;
 }
 
 #menu {
@@ -18,7 +21,8 @@ p {
 }
 
 #menu a:hover{
-	font-weight: bold;
+	text-decoration: underline;
+    color: #777;
 }
 
 #navbar{
@@ -65,14 +69,55 @@ p {
   padding-top: 10px;
 }
 
+.menu-divider{
+   margin-left: 10px;
+   margin-right: 5px;
+   margin-top: 5px;
+   border-left: 1px solid #ccc;
+   height: 40px;
+                   
+}
+
+.dropdown-menu>li>p{
+    padding: 3px 20px;
+    font-weight: 800;
+    margin: 0px;
+}
+
+#login-link{
+    padding-top: 10px;
+}
+
+.badge{
+    margin-bottom: 10px;
+    margin-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 6px;
+}
+
+
+#logo a{
+    text-decoration: none;
+}
+
+#logo a:hover{
+    text-decoration: none;
+    color: #337ab7;
+}
+
+
+
 #category_title{
-	font-family: "Times New Roman";
+	font-family: sans-serif;
 	text-align: center;
 	border: 1px solid #ccc;
 }
+
+
 .italics p{
 	font-style: italic;
 }
+
 
 .jumbotron{
 	padding-top: 0px;
@@ -119,7 +164,36 @@ p {
 	margin-left: 30px;
 }
 
+/* Login Form: */
+#login-form {
+    max-width: 200px;
+    margin: auto;
+    padding-left: auto;
+}
 
+#login-form label{
+    display: block;
+    padding: 5px;
+    margin-left: auto;
+}
+
+#login-form input{
+    display: block;
+    padding: 5px;
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#login-form input[type="submit"]{
+    width: 80px;
+    margin-top: 30px;
+}
+
+
+
+
+/*Product Detail Page:*/
 .product {
 	border-radius: 2px;
 	border: 1px solid #ccc;
@@ -150,6 +224,8 @@ p {
 	border-top: 1px solid #91a23c;
 }
 
+
+/*Product List Page:*/
 
 .product_list {
     max-width: 300px;
@@ -204,6 +280,8 @@ p {
     margin: 0px;
 }
 
+
+/* Cart Page:*/
 .cart{
     max-width: 700px;
     margin-right: auto;
@@ -222,7 +300,7 @@ p {
 
 
 
-
+/* Footer: */
 html {
   position: relative;
   min-height: 100%;
@@ -264,6 +342,7 @@ body {
 	margin: 0px;
 }
 
+
 /*STUFF FOR CAROUSEL*/
 .carousel{
 	height: 500px;
@@ -282,6 +361,8 @@ body {
   height: 500px;
 }
 
+
+/* Category stuff: */
 .category_item {
 	position: relative;
 }
@@ -295,15 +376,4 @@ body {
 	position: relative;
 	text-decoration: none;
 	text-align: center;
-}
-
-.container{
-  background-color: #fff;
-}
-
-.btn-sm{
-}
-
-#login-link{
-    padding-top: 10px;
 }
