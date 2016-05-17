@@ -304,8 +304,13 @@ def chat(request):
         if request.method == 'GET':
             form = ChatForm(request.GET)
             if not form.is_valid():
-                # if the form isn't valid (empty basically) redirect to home.
-                return redirect("/")
+                # Return an error message.
+                context = {
+                    'heading': 'Error',
+                    'feedback': 'Cannot be empty',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
 
             context = {
                 'user': form.data["chat"],
@@ -323,8 +328,13 @@ def chat(request):
                     # if user does not exist
                     return redirect("/")
             else:
-                # if the form isn't valid (empty basically) redirect to home.
-                return redirect("/")
+                # Return an error message.
+                context = {
+                    'heading': 'Error',
+                    'feedback': 'Cannot be empty',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
     else:
         # Redirect to home
         return redirect("/")
@@ -416,8 +426,13 @@ def edit_address(request):
                     }
                     return render(request, "feedback.html", context)
             else:
-                # Redirect to home
-                return redirect("/")
+                # Return an error message.
+                context = {
+                    'heading': 'Error',
+                    'feedback': 'All fields must be filled and postcode must be between 1000 to 9999 (inclusive)',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
 
     else:
         # Redirect to home

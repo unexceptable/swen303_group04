@@ -73,3 +73,15 @@ class ChatHistory(models.Model):
     origin = models.CharField(max_length=30)
     to = models.CharField(max_length=30)
     message = models.TextField()
+
+class Address(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    number_street = models.CharField(max_length=92)
+    suburb = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    region = models.CharField(max_length=30)
+    country = models.CharField(max_length=30)
+    postcode = models.IntegerField()

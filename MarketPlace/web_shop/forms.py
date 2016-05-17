@@ -53,3 +53,19 @@ class ChatForm(forms.Form):
 class MessageForm(forms.Form):
     to = forms.CharField(widget=forms.HiddenInput())
     message = forms.CharField(widget=forms.Textarea, required=True)
+
+class AddressForm(forms.Form):
+    number_street = forms.CharField(label='House number and street name', required=True)
+    suburb = forms.CharField(required=True)
+    city = forms.CharField(required=True)
+    region = forms.CharField(required=True)
+    country = forms.CharField(required=True)
+    postcode = forms.IntegerField()
+
+    def clean(self):
+        postcode = self.cleaned_data.get('postcode')
+
+        if postcode < 1000 or postcode > 9999:
+            raise forms.ValidationError("Postcode out of range")
+
+        return self.cleaned_data
