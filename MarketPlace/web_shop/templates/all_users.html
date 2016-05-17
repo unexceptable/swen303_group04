@@ -2,8 +2,8 @@
 {% block title %}"All Users"{% endblock %}
 {% block content %}
   <form method='post' action=''>
-    <input type="submit" value="Enable"/>
-    <input type="submit" value="Disable"/>
+    <input type="submit" name="Enable" value="Enable"/>
+    <input type="submit" name="Disable" value="Disable"/>
     {% csrf_token %}
     <div class="table-responsive">
     <table class="table table-hover table-striped">
@@ -14,7 +14,7 @@
     </tr>
       {% for entry in users %}
         <tr>
-          <td><input type="checkbox" value="{{entry.username}}"></td>
+          <td><input type="checkbox" name="selected" value="{{entry.username}}"></td>
           <td>{{entry.username}}</td>
           <td>{{entry.first_name}}</td>
           <td>{{entry.last_name}}</td>
@@ -24,7 +24,7 @@
       {% endfor %}
     </table>
     </div>
-    <input type="submit" value="Enable"/>
-    <input type="submit" value="Disable"/>
+    <input type="submit" name="Enable" value="Enable"/>
+    <input type="submit" name="Disable" value="Disable"/>
   </form>
 {% endblock %}
