@@ -437,3 +437,15 @@ def edit_address(request):
     else:
         # Redirect to home
         return redirect("/")
+
+def listusers(request):
+    #Check login
+    if request.user.is_authenticated():
+        if request.method=="GET":
+            context = {
+                'heading': ('','Username','First Name','Last Name', 'Email', 'Active'),
+                'users': User.objects.filter(is_superuser=False)
+            }
+            return render(request, "all_users.html", context)
+    else:
+        return redirect("/")

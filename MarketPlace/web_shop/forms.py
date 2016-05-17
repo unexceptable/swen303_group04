@@ -2,7 +2,6 @@ from django import forms
 from registration.forms import RegistrationFormUniqueEmail
 from registration.forms import RegistrationFormTermsOfService
 
-
 class ProductForm(forms.Form):
     # need to check that the name is only spaces or alpha-num or spaces
     name = forms.CharField(max_length=100, required=True)

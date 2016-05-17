@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}"All Users"{% endblock %}
+{% block content %}
+  <form method='post' action=''>
+    <input type="submit" value="Enable"/>
+    <input type="submit" value="Disable"/>
+    {% csrf_token %}
+    <div class="table-responsive">
+    <table class="table table-hover table-striped">
+    <tr>
+      {% for entry in heading %}
+        <th>{{ entry }}</th>
+      {% endfor %}
+    </tr>
+      {% for entry in users %}
+        <tr>
+          <td><input type="checkbox" value="{{entry.username}}"></td>
+          <td>{{entry.username}}</td>
+          <td>{{entry.first_name}}</td>
+          <td>{{entry.last_name}}</td>
+          <td>{{entry.email}}</td>
+          <td>{{entry.is_active}}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    </div>
+    <input type="submit" value="Enable"/>
+    <input type="submit" value="Disable"/>
+  </form>
+{% endblock %}
