@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
 from web_shop.forms import (
-    SearchForm, LoginForm, EditCredentialsForm, CartForm, ChatForm, MessageForm)
-from .models import Product, Category, ChatHistory
+    SearchForm, LoginForm, EditCredentialsForm, CartForm, ChatForm, MessageForm, AddressForm)
+from .models import Product, Category, ChatHistory, Address
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -133,6 +133,7 @@ def signin(request):
                 else:
                     # Return a 'disabled account' error message
                     context = {
+                        'heading': 'Error',
                         'feedback': 'Disabled account',
                         'cart': Cart(request),
                     }
@@ -140,6 +141,7 @@ def signin(request):
             else:
                 # Return an 'invalid login' error message.
                 context = {
+                    'heading': 'Error',
                     'feedback': 'Invalid account',
                     'cart': Cart(request),
                 }
@@ -196,7 +198,7 @@ def logout_user(request):
 
 def edit_details(request):
     #Check login
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         # if this is a POST request we need to process the form data
         if request.method == 'POST':
             # create a form instance and populate it with data from the request:
@@ -221,11 +223,17 @@ def edit_details(request):
                         user = authenticate(username=request.user.username, password=newPass)
                         login(request, user)
 
-                    # Redirect to home
-                    return redirect("/")
+                    # Return ok.
+                    context = {
+                        'heading': 'Success',
+                        'feedback': 'Credentials updated',
+                        'cart': Cart(request),
+                    }
+                    return render(request, "feedback.html", context)
                 else:
                     # Return an error message.
                     context = {
+                        'heading': 'Error',
                         'feedback': 'Invalid current password',
                         'cart': Cart(request),
                     }
@@ -234,8 +242,8 @@ def edit_details(request):
             else:
                 # Return an error message.
                 context = {
-                    'feedback':
-                        'Either new password does not match with retyped or invalid email',
+                    'heading': 'Error',
+                    'feedback': 'Either new password does not match with retyped or invalid email',
                     'cart': Cart(request),
                 }
                 return render(request, "feedback.html", context)
@@ -291,7 +299,7 @@ def cart_update(request, p_id):
 
 def chat(request):
     #Check login
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         # if this is a GET request we need to show chat history
         if request.method == 'GET':
             form = ChatForm(request.GET)
@@ -325,9 +333,92 @@ def chat_reload(request):
     form = ChatForm(request.GET)
     chat = form.data['chat']
     history = ChatHistory.objects.filter(
-        (Q(origin__contains=chat) & Q(to__contains=request.user.username)) | (Q(origin__contains=request.user.username) & Q(to__contains=chat)) )
+        (Q(origin__exact=chat) & Q(to__exact=request.user.username)) | (Q(origin__exact=request.user.username) & Q(to__exact=chat)) )
     context = {
         'user': form.data["chat"],
         'history': history,
     }
     return render(request, "conversation.html", context)
+
+def edit_address(request):
+    #Check login
+    if request.user.is_authenticated():
+        # if this is a GET request we need to pre-fill AddressForm
+        if request.method == 'GET':
+
+            #in DB
+            try:
+                entry = Address.objects.get(user=request.user)
+                form = AddressForm(initial={
+                'number_street':entry.number_street,
+                'suburb':entry.suburb,
+                'city':entry.city,
+                'region':entry.region,
+                'country':entry.country,
+                'postcode':entry.postcode,
+                })
+                context = {'form': form}
+                return render(request, "edit_address.html", context)
+            #not in DB
+            except Address.DoesNotExist:
+                context = {'form': AddressForm()}
+                return render(request, "edit_address.html", context)
+
+        #Process data sent
+        else:
+            form = AddressForm(request.POST)
+            if form.is_valid():
+                #in DB
+                try:
+                    entry = Address.objects.get(user=request.user)
+                    entry.number_street=form.cleaned_data['number_street']
+                    entry.suburb=form.cleaned_data['suburb']
+                    entry.city=form.cleaned_data['city']
+                    entry.region=form.cleaned_data['region']
+                    entry.country=form.cleaned_data['country']
+                    entry.postcode=form.cleaned_data['postcode']
+                    entry.save()
+
+                    # Return ok.
+                    context = {
+                        'heading': 'Success',
+                        'feedback': 'Your new billing address is '+
+                                form.cleaned_data['number_street']+', '+
+                                form.cleaned_data['suburb']+' '+
+                                form.cleaned_data['city']+', '+
+                                form.cleaned_data['country']+' '+
+                                request.POST['postcode'],
+                        'cart': Cart(request),
+                    }
+                    return render(request, "feedback.html", context)
+                #not in DB
+                except Address.DoesNotExist:
+                    Address.objects.create(
+                    user=request.user,
+                    number_street=form.cleaned_data['number_street'],
+                    suburb=form.cleaned_data['suburb'],
+                    city=form.cleaned_data['city'],
+                    region=form.cleaned_data['region'],
+                    country=form.cleaned_data['country'],
+                    postcode=form.cleaned_data['postcode'],
+                    )
+
+                    # Return ok.
+                    context = {
+                        'heading': 'Success',
+                        'feedback': 'Your new billing address is '+
+                                form.cleaned_data['number_street']+', '+
+                                form.cleaned_data['suburb']+' '+
+                                form.cleaned_data['city']+', '+
+                                form.cleaned_data['country']+' '+
+                                request.POST['postcode'],
+                        'cart': Cart(request),
+                    }
+                    return render(request, "feedback.html", context)
+            else:
+                # Redirect to home
+                return redirect("/")
+
+    else:
+        # Redirect to home
+        return redirect("/")

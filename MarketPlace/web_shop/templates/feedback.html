@@ -7,11 +7,11 @@
 {% block content %}
 
   <div class="jumbotron">
-  		<h1>Error</h1>
-	    <div class="italics">
-        {% if feedback %}
+  	<h1>{{ heading }}</h1>
+	  <div class="italics">
+      {% if feedback %}
         <p>{{ feedback }}</p>
-        {% endif %}
+      {% endif %}
 		</div>
   </div>
 

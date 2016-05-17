@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^logout/$', views.logout_user),
     url(r'^register/$', RegistrationView.as_view(form_class=CustomRegistrationForm), name='registrationr'),
     url(r'^editdetails/$', views.edit_details),
+    url(r'^editaddress/$', views.edit_address),
     url(r'^cart[/]$', views.cart_view),
     url(r'^cart/(?P<p_id>\w+)/update$', views.cart_update),
     url(r'^chat[/]$', views.chat, name='chat'),
