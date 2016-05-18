@@ -71,10 +71,6 @@ p {
 	border: 1px solid #ccc;
 }
 
-#sortbar{
-  width: 50px;
-}
-
 .italics p{
 	font-style: italic;
 }

@@ -4,18 +4,21 @@
 {% if products %}
 
     <div class="panel panel-default">
-        <div class="container-fluid" id="sortbar">
+        <div class="panel-body">
             <form role="form">
                 <div class="form-group">
                     <label for="sort">Sort by:</label>
                     <select class="form-control">
-                        <option>Name</option>
-                        <option>Price</option>
-                        <option>Category</option>
+                        <option>Name In Order</option>
+                        <option>Name Reverse Order</option>
+                        <option>Lowest Price</option>
+                        <option>Highest Price</option>
+                        <option>Category In Order</option>
+                        <option>Category Reverse Order</option>
                     </select>
                 </div>  
             </form>
-        </div>        
+        </div>       
     </div>  
 
     <div class="row list_centered">
