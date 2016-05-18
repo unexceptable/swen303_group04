@@ -2,6 +2,13 @@
 
 {% block content %}
 {% if products %}
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            This is where the filters and such will be
+        </div>
+    </div>  
+
     <div class="row list_centered">
     {% for product in products %}       
         <a href="/product/{{ product.pk }}" style="text-decoration: none">
