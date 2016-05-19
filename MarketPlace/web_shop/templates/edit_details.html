@@ -1,11 +1,34 @@
 {% extends "base.html" %}
 {% block title %}"Update profile"{% endblock %}
 {% block content %}
-<table>
+<div id="edit-details-form">
   <form method='post' action=''>
     {% csrf_token %}
-    {{ form }}
-    <td><input type="submit" value="Update details"/></td>
+    	<div class="form-group">
+    		{{ form.firstName.label_tag }}
+    		{{ form.firstName }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.lastName.label_tag }}
+    		{{ form.lastName }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.email.label_tag }}
+    		{{ form.email }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.oldPass.label_tag }}
+    		{{ form.oldPass }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.newPass.label_tag }}
+    		{{ form.newPass }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.retypeNewPass.label_tag }}
+    		{{ form.retypeNewPass }}
+    	</div>
+    <input class="btn btn-default" type="submit" value="Update Details">
   </form>
-</table>
+</div>
 {% endblock %}

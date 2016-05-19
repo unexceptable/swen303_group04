@@ -45,7 +45,7 @@
                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Hi {{ request.user.username }}
                        <span class="caret"></span></a>
                        <ul class="dropdown-menu">
-                         <li>
+                  <!--        <li>
                            {% if request.user.is_superuser %}
                              <form action="/chat" method="get">
                                <input type="text" name="chat" placeholder="chat with user: username"/>
@@ -54,16 +54,16 @@
                             <li><a href="/listsales/">Your Sales Orders</a></li>
                             <li><a href="/chat?chat=admin">Chat with customer support</a></li>
                            {% endif %}
-                         </li>
+                         </li>  -->                        
+                         {% if request.user.is_superuser %}                         
+                         <li id="admin_actions"><p>Admin actions:</p></li>
+                         <li><a href="/listusers/">All Users</a></li>
+                         <li><a href="/listsales/">All Sales Orders</a></li>
+                         <li role="separator" class="divider"></li>
+                         {% endif %}
                          <li><a href="/editdetails/">Edit Credentials</a></li>
                          <li><a href="/editaddress/">Edit Billing Address</a></li>
                          <li><a href="/logout/">Logout</a></li>
-                         {% if request.user.is_superuser %}
-                         <li role="separator" class="divider"></li>
-                         <li><p>admin actions:</p></li>
-                         <li><a href="/listusers/">All Users</a></li>
-                         <li><a href="/listsales/">All Sales Orders</a></li>
-                         {% endif %}
                        </ul>
                    </li>
                    <li class="menu-divider"></li>
