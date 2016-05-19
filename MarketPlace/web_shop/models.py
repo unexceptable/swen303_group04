@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+
 
 fs = FileSystemStorage()
 
@@ -69,6 +71,7 @@ class Image(models.Model):
         return '<img width="300" src="/media/%s">' % self.image
     _img.allow_tags = True
 
+
 class ChatHistory(models.Model):
     origin = models.CharField(max_length=30)
     to = models.CharField(max_length=30)
@@ -79,9 +82,77 @@ class Address(models.Model):
         User,
         on_delete=models.CASCADE,
     )
+    # will make sense with more than one address:
+    default = models.BooleanField(default=True)
+
     number_street = models.CharField(max_length=92)
     suburb = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
     region = models.CharField(max_length=30)
     country = models.CharField(max_length=30)
     postcode = models.IntegerField()
+
+
+class SalesOrder(models.Model):
+    buyer = models.ForeignKey(User)
+    address = models.ForeignKey(Address)
+    created_on = models.DateTimeField(default=timezone.now)
+
+    STATUSES = (
+        ('new', 'New Order'),
+        ('shipped', 'Order Shipped'),
+        ('completed', 'Order Completed'),
+        ('cancelled', 'Order Canelled'),
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUSES,
+        default='new')
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(SalesOrder)
+    quantity = models.PositiveIntegerField()
+    unit_price = models.DecimalField(max_digits=18, decimal_places=2)
+    # product as generic relation
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+
+    def __unicode__(self):
+        return u'%d units of %s' % (self.quantity, self.product.__class__.__name__)
+
+    def total_price(self):
+        return self.quantity * self.unit_price
+    total_price = property(total_price)
+
+    # product
+    def get_product(self):
+        return self.content_type.get_object_for_this_type(pk=self.object_id)
+
+    def set_product(self, product):
+        self.content_type = ContentType.objects.get_for_model(type(product))
+        self.object_id = product.pk
+
+    product = property(get_product, set_product)
+
+
+class WishList(models.Model):
+    user = models.ForeignKey(User)
+
+
+class WishListItem(models.Model):
+    wishlist = models.ForeignKey(WishList)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+
+    def __unicode__(self):
+        return self.product.__class__.__name__
+
+    def get_product(self):
+        return self.content_type.get_object_for_this_type(pk=self.object_id)
+
+    def set_product(self, product):
+        self.content_type = ContentType.objects.get_for_model(type(product))
+        self.object_id = product.pk
+
+    product = property(get_product, set_product)

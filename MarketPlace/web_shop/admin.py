@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Product, Category, Image, ChatHistory, Address
+from .models import (
+	Product, Category, Image, ChatHistory,
+	Address, SalesOrder, OrderItem, WishList,
+	WishListItem)
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -16,9 +19,19 @@ class ImageAdmin(admin.ModelAdmin):
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('user', 'number_street','suburb', 'city','region', 'country', 'postcode')
 
+class SalesOrderAdmin(admin.ModelAdmin):
+    list_display = ('buyer', 'created_on',)
+
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'quantity', 'unit_price', 'product')
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(ChatHistory, ChatHistoryAdmin)
 admin.site.register(Address, AddressAdmin)
+admin.site.register(SalesOrder, SalesOrderAdmin)
+admin.site.register(OrderItem, OrderItemAdmin)
+admin.site.register(WishList)
+admin.site.register(WishListItem)
+

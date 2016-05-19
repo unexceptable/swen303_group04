@@ -433,3 +433,41 @@ body {
 	margin: 10px;
 	height:48px;
 }
+
+/* Checkout Stuff */
+
+.address-list {
+    padding: 10px;
+    margin: 10px;
+    opacity: 0.8;
+    background-color: #D2D2D2;
+    border-radius: 5px;
+}
+
+.selected-address{
+  background-color: #A2D652;
+}
+
+.select-address{
+  padding: 20px;
+}
+
+#add-address{
+  background-color: #A2D652;  
+  padding: 15px;
+  margin: 15px;
+  border-radius: 5px;
+  max-width: 45px;
+  color: #333;
+}
+
+
+.address-list p {
+    color: #000;
+    margin: 0px;
+}
+
+.address-list:hover{
+  opacity: 1
+}
+

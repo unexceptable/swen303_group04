@@ -2,8 +2,11 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect
 from web_shop.forms import (
-    SearchForm, LoginForm, EditCredentialsForm, CartForm, ChatForm, MessageForm, AddressForm)
-from .models import Product, Category, ChatHistory, Address
+    SearchForm, LoginForm, EditCredentialsForm, CartForm,
+    ChatForm, MessageForm, AddressForm)
+from .models import (
+    Product, Category, ChatHistory, Address, SalesOrder,
+    OrderItem)
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -467,3 +470,45 @@ def listusers(request):
 
     else:
         return redirect("/")
+
+
+def checkout(request):
+    if request.method == 'GET':
+        cart = Cart(request)
+        addresses = request.user.address_set.all()
+        try:
+            default = request.user.address_set.get(default=True)
+        except Address.DoesNotExist:
+            default = None        
+
+        context = {
+            'cart': cart,
+            'addresses': addresses,
+            'default': default,
+        }
+
+        return render(request, 'checkout.html', context)
+    if request.method == 'POST':
+        print request.POST
+        address_id = request.POST.get('address', None)
+
+        if not address_id:
+            return redirect("/")
+
+        try:
+            address = request.user.address_set.get(pk=address_id)
+        except Address.DoesNotExist:
+            return redirect("/") 
+
+        cart = Cart(request)
+
+        order = SalesOrder(buyer=request.user, address=address)
+        order.save()
+
+        for item in cart:
+            order_item = OrderItem(
+                order=order, quantity=item.quantity,
+                unit_price=item.unit_price, product=item.product)
+            order_item.save()
+
+        return render(request, 'checkedout.html')
