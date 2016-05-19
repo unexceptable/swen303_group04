@@ -71,10 +71,6 @@ p {
 	border: 1px solid #ccc;
 }
 
-.panel-default{
-  background-color: #9E9E9E;
-}
-
 .italics p{
 	font-style: italic;
 }
