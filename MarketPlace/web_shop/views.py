@@ -464,7 +464,8 @@ def listusers(request):
         #show users
         context = {
             'heading': ('','Username','First Name','Last Name', 'Email', 'Active'),
-            'users': User.objects.filter(is_superuser=False)
+            'users': User.objects.filter(is_superuser=False),
+            'cart': Cart(request),
         }
         return render(request, "all_users.html", context)
 
@@ -479,7 +480,7 @@ def checkout(request):
         try:
             default = request.user.address_set.get(default=True)
         except Address.DoesNotExist:
-            default = None        
+            default = None
 
         context = {
             'cart': cart,
@@ -498,7 +499,7 @@ def checkout(request):
         try:
             address = request.user.address_set.get(pk=address_id)
         except Address.DoesNotExist:
-            return redirect("/") 
+            return redirect("/")
 
         cart = Cart(request)
 
@@ -512,3 +513,129 @@ def checkout(request):
             order_item.save()
 
         return render(request, 'checkedout.html')
+
+def listsales(request):
+    #Check login superuser
+    if request.user.is_authenticated() and request.user.is_superuser:
+        #process selected
+        if request.method=="POST":
+            entries = request.POST.getlist('selected')
+            if 'New' in request.POST:
+                for uid in entries:
+                    sale = SalesOrder.objects.get(pk=uid)
+                    if not sale.status == 'new':
+                        sale.status = 'new'
+                        sale.save()
+
+            elif 'Shipped' in request.POST:
+                for uid in entries:
+                    sale = SalesOrder.objects.get(pk=uid)
+                    if not sale.status == 'shipped':
+                        sale.status = 'shipped'
+                        sale.save()
+
+            elif 'Completed' in request.POST:
+                for uid in entries:
+                    sale = SalesOrder.objects.get(pk=uid)
+                    if not sale.status == 'completed':
+                        sale.status = 'completed'
+                        sale.save()
+
+            elif 'Cancelled' in request.POST:
+                for uid in entries:
+                    sale = SalesOrder.objects.get(pk=uid)
+                    if not sale.status == 'cancelled':
+                        sale.status = 'cancelled'
+                        sale.save()
+
+        #show sales
+        context = {
+            'heading': ('','ID','Buyer','Address','Order Date', 'Status'),
+            'sales': SalesOrder.objects.all(),
+            'cart': Cart(request),
+        }
+        return render(request, "all_sales.html", context)
+
+    #Check login standard user
+    elif request.user.is_authenticated() and not request.user.is_superuser:
+        #show sales
+        context = {
+            'heading': ('Sales Order ID','Buyer','Address','Order Date', 'Status'),
+            'sales': SalesOrder.objects.filter(buyer=request.user),
+            'cart': Cart(request),
+        }
+        return render(request, "all_sales.html", context)
+
+    #Redirect to home
+    else:
+        return redirect("/")
+
+def sales_details(request, s_id):
+    #Check login superuser
+    if request.user.is_authenticated() and request.user.is_superuser:
+        try:
+            sale = SalesOrder.objects.get(pk=s_id)
+            #process selected
+            if request.method=="POST":
+                if 'New' in request.POST:
+                    if not sale.status == 'new':
+                        sale.status = 'new'
+                        sale.save()
+
+                elif 'Shipped' in request.POST:
+                    if not sale.status == 'shipped':
+                        sale.status = 'shipped'
+                        sale.save()
+
+                elif 'Completed' in request.POST:
+                    if not sale.status == 'completed':
+                        sale.status = 'completed'
+                        sale.save()
+
+                elif 'Cancelled' in request.POST:
+                    if not sale.status == 'cancelled':
+                        sale.status = 'cancelled'
+                        sale.save()
+
+        except SalesOrder.DoesNotExist:
+            print 'HEREEEEEEEEEEEEEEEEE44444444444444444444'
+            # Return an error message.
+            context = {
+                'heading': 'Error',
+                'feedback': 'This sale does not exist',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+
+        #show orders
+        context = {
+            'heading': ('Product','Quantity','Price','Type','Total'),
+            'sale': sale,
+            'items': OrderItem.objects.filter(order=SalesOrder.objects.get(pk=s_id)),
+            'cart': Cart(request),
+        }
+        return render(request, "sales_details.html", context)
+
+    #Check login standard user
+    elif request.user.is_authenticated() and not request.user.is_superuser:
+        try:
+            #show orders
+            context = {
+                'heading': ('Product','Quantity','Price','Type','Total'),
+                'sale': SalesOrder.objects.get(pk=s_id, buyer=request.user),
+                'items': OrderItem.objects.filter(order=SalesOrder.objects.get(pk=s_id)),
+                'cart': Cart(request),
+            }
+            return render(request, "sales_details.html", context)
+        except SalesOrder.DoesNotExist:
+            # Return an error message.
+            context = {
+                'heading': 'Error',
+                'feedback': 'This sale does not exist',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+
+    #Redirect to home
+    else:
+        return redirect("/")

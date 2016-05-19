@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}"All Sales Orders"{% endblock %}
+{% block content %}
+  {% if request.user.is_superuser %}
+    {% if sales%}
+    <form method='post' action=''>
+      <input type="submit" name="New" value="New"/>
+      <input type="submit" name="Shipped" value="Shipped"/>
+      <input type="submit" name="Completed" value="Completed"/>
+      <input type="submit" name="Cancelled" value="Cancelled"/>
+      {% csrf_token %}
+      <div class="table-responsive">
+      <table class="table table-hover table-striped">
+      <tr>
+        {% for entry in heading %}
+          <th>{{ entry }}</th>
+        {% endfor %}
+      </tr>
+        {% for entry in sales %}
+          <tr>
+            <td><input type="checkbox" name="selected" value="{{entry.pk}}"></td>
+            <td><a href="/sales-details/{{entry.pk}}">{{entry.pk}}</a></td>
+            <td>{{entry.buyer}}</td>
+            <td>{{entry.address}}</td>
+            <td>{{entry.created_on}}</td>
+            <td>{{entry.status}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      </div>
+      <input type="submit" name="New" value="New"/>
+      <input type="submit" name="Shipped" value="Shipped"/>
+      <input type="submit" name="Completed" value="Completed"/>
+      <input type="submit" name="Cancelled" value="Cancelled"/>
+    </form>
+    {% else %}
+      <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          No matches found.
+      </div>
+    {% endif %}
+  {% else %}
+    {% if sales%}
+      <div class="table-responsive">
+      <table class="table table-hover table-striped">
+      <tr>
+        {% for entry in heading %}
+          <th>{{ entry }}</th>
+        {% endfor %}
+      </tr>
+        {% for entry in sales %}
+          <tr>
+            <td><a href="/sales-details/{{entry.pk}}">{{entry.pk}}</a></td>
+            <td>{{entry.buyer}}</td>
+            <td>{{entry.address}}</td>
+            <td>{{entry.created_on}}</td>
+            <td>{{entry.status}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      </div>
+      {% else %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            No matches found.
+        </div>
+      {% endif %}
+    {% endif %}
+{% endblock %}

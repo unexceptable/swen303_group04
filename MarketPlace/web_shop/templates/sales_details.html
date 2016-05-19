@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}"All Sales Orders"{% endblock %}
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-heading">Sales Order Details</div>
+    <div class="panel-body">
+      <p class="bg-primary"><strong>Buyer</strong></p>
+      <p>{{sale.buyer}}</p>
+      <p class="bg-primary"><strong>Address</strong></p>
+      <p>{{sale.address}}</p>
+      <p class="bg-primary"><strong>Sale Date</strong></p>
+      <p>{{sale.created_on}}</p>
+      <p class="bg-primary"><strong>Status</strong></p>
+      <p>{{sale.status}}</p>
+    </div>
+  </div>
+
+  {% if request.user.is_superuser %}
+    {% if items%}
+    <form method='post' action=''>
+      <input type="submit" name="New" value="New"/>
+      <input type="submit" name="Shipped" value="Shipped"/>
+      <input type="submit" name="Completed" value="Completed"/>
+      <input type="submit" name="Cancelled" value="Cancelled"/>
+      {% csrf_token %}
+      <div class="table-responsive">
+      <table class="table table-hover table-striped">
+      <tr>
+        {% for entry in heading %}
+          <th>{{ entry }}</th>
+        {% endfor %}
+      </tr>
+        {% for entry in items %}
+          <tr>
+            <td><a href="/product/{{entry.product.pk}}">{{entry.product}}</a></td>
+            <td>{{entry.quantity}}</td>
+            <td>{{entry.unit_price}}</td>
+            <td>{{entry.content_type}}</td>
+            <td>{{entry.total_price}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      </div>
+      <input type="submit" name="New" value="New"/>
+      <input type="submit" name="Shipped" value="Shipped"/>
+      <input type="submit" name="Completed" value="Completed"/>
+      <input type="submit" name="Cancelled" value="Cancelled"/>
+    </form>
+    {% else %}
+      <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          No items ordered.
+      </div>
+    {% endif %}
+  {% else %}
+    {% if items %}
+      <div class="table-responsive">
+      <table class="table table-hover table-striped">
+      <tr>
+        {% for entry in heading %}
+          <th>{{ entry }}</th>
+        {% endfor %}
+      </tr>
+      {% for entry in items %}
+        <tr>
+          <td><a href="/product/{{entry.product.pk}}">{{entry.product}}</a></td>
+          <td>{{entry.quantity}}</td>
+          <td>{{entry.unit_price}}</td>
+          <td>{{entry.content_type}}</td>
+          <td>{{entry.total_price}}</td>
+        </tr>
+      {% endfor %}
+      </table>
+      </div>
+      {% else %}
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            No items ordered.
+        </div>
+      {% endif %}
+    {% endif %}
+{% endblock %}

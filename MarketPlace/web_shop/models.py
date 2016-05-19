@@ -92,6 +92,9 @@ class Address(models.Model):
     country = models.CharField(max_length=30)
     postcode = models.IntegerField()
 
+    def __unicode__(self):
+        return self.number_street+' '+self.suburb+', '+self.city+' '+self.region+', '+self.country+' '+str(self.postcode)
+
 
 class SalesOrder(models.Model):
     buyer = models.ForeignKey(User)
@@ -102,7 +105,7 @@ class SalesOrder(models.Model):
         ('new', 'New Order'),
         ('shipped', 'Order Shipped'),
         ('completed', 'Order Completed'),
-        ('cancelled', 'Order Canelled'),
+        ('cancelled', 'Order Cancelled'),
     )
     status = models.CharField(
         max_length=20,
