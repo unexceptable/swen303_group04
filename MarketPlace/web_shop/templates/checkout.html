@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block title %} Market Place {% endblock %}
+
+{% block content %}
+
+  <div class="jumbotron">    
+    <h2>Checkout</h2>
+    <p>Please double check and confirm your order:</p>
+
+    <div class="cart">
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th></th>
+                <th></th>
+                <th>Total Price</th>
+            </tr>
+            {% for item in cart %}
+            <tr>
+                <td><a href="/product/{{ item.product.pk }}" style="text-decoration: none">{{ item.product.name }}</a></td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.total_price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h4>Total Cost: {{ cart.summary }}</h4>
+    </div>
+    <div class="select-address row">
+        <h2>Your Saved Addresses:</h2>
+        {% if addresses %}
+            {% for address in addresses %}
+            {% if address.pk == default.pk %}
+            <div class="address-list col-md-4 selected-address">
+            {% else %}
+            <div class="address-list col-md-4">
+            {% endif %}        
+                <p>{{ address.number_street }}</p>
+                <p>{{ address.suburb }}</p>
+                <p>{{ address.city }}</p>
+                <p>{{ address.region }}</p>
+                <p>{{ address.country }}</p>
+                <p>{{ address.postcode }}</p>
+                <input name="address" type="hidden" value="{{ address.pk }}">
+            </div>
+            {% endfor %}
+        {% else %}
+        <p>Please Add an address.</p>
+        {% endif %}
+        <a href="/editaddress/">      
+            <div id="add-address" class="col-md-4">
+                <span class="glyphicon glyphicon-plus"></span>
+            </div>
+        </a>
+
+    </div>
+    <div class="checkout-button">
+        <form action="/cart/checkout/" method="post">
+            {% csrf_token %}          
+            <input name="address" type="hidden" value="{{ default.pk }}">
+            <input type="submit" value="Confirm Order">
+        </form> 
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(".address-list").click(function(){
+        $(".selected-address").removeClass("selected-address");     
+        $(this).addClass("selected-address");
+        val = $(".selected-address :input").val();
+        console.log(val)
+        $("#checkout_address").val(val)
+    });
+</script>
+{% endblock %}

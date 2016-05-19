@@ -42,6 +42,17 @@
 
         <h4>Total Cost: {{ cart.summary }}</h4>
     </div>
+
+    <div class="checkout-button">
+        {% if request.user.username %}
+        <form action="/cart/checkout/" method="get">
+            {% csrf_token %}          
+            <input type="submit" value="Checkout">
+        </form>
+        {% else %}
+        <p>Please log in to checkout.</p>
+        {% endif %}
+    </div>
   </div>
 
 {% endblock %}
