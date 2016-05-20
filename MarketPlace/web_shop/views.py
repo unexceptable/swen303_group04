@@ -3,7 +3,7 @@ from django.template import loader
 from django.shortcuts import render, redirect
 from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
-    ChatForm, MessageForm, AddressForm, ContactForm)
+    ChatForm, MessageForm, AddressForm, DisplayTypeForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact)
@@ -174,12 +174,27 @@ def category_view(request, category_name):
             }
         #    return render(request, 'category_view.html', context})
         else:
+            #form = DisplayTypeForm(request.POST)
+            display_type = 'box'
+            if request.method == "POST":
+                display_type = request.POST['view']
+            # Have Django validate the form for you
+                #if form.is_valid():
+                # The "display_type" key is now guaranteed to exist and
+                # guaranteed to be "displaybox" or "locationbox"
+                    #data = form.cleaned_data
+
+                    #display_type = data["display_type"]
+                    # display_type = request.POST["display_type"]
+
             c = Category.objects.get(category=category_name)
             product_list = c.product_set.all()
             context = {
                 'category': c,
                 'product_list': product_list,
                 'cart': Cart(request),
+                #'form': form,
+                'display_type': display_type
             }
 
         return render(request, "category_view.html", context)

@@ -3,118 +3,152 @@
 {% block content %}
 
 {% if category == 'all' %}
-<h2 id="category_title"> Categories </h2>
-<ul>
-  <div class="row list_centered category_item">
-    {% for c in  categories%}
-      <a href="/category/{{ c.category }}/" class="category_link">
-        <div class="col-xs-6 col-md-4 col-lg-2 category_view">
-        <div class="list_border">
-          <img src="/media/{{ c.main_image }}" width="100%">
-          <h3>{{ c.name }}</h3>
-        </div>
-        </div>
-      </a>
-    {% endfor %}
-  </div>
-</ul>
+  <h2 id="category_title"> Categories </h2>
+  <ul>
+    <div class="row list_centered category_item">
+      {% for c in  categories%}
+        <a href="/category/{{ c.category }}/" class="category_link">
+          <div class="col-xs-6 col-md-4 col-lg-2 category_view">
+          <div class="list_border">
+            <img src="/media/{{ c.main_image }}" width="100%">
+            <h3>{{ c.name }}</h3>
+          </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </ul>
 {% elif product_list %}
 
-<div class="row">
-  <!-- Filter bar -->
-  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 products_col_left">
-    <div>
-      <h3>Filters</h3>
-    </div>
-    <div>
-      <p>Price</p>
-    </div>
-    <div>
-      <p>Category</p>
-    </div>
-    <div>
-      <div class="row">
-        <button>Clear</button>
-        <button>Apply</button>
+  <div class="row">
+    <!-- Filter bar -->
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 products_col_left">
+      <div>
+        <h3>Filters</h3>
       </div>
-    </div>
-
-  </div>
-
-  <!-- sorting bar and products -->
-  <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 products_col_right">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section_right">
-      <div class="row" id="current_cat">
-          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><h4>Category: </h4></div>
-        	<div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-            <ol class="breadcrumb">
-        	     <li><a href="/category/all/">All</a></li>
-        	    <li class="active">{{ category }}</li>
-        	  </ol>
-          </div>
+      <div>
+        <p>Price</p>
+      </div>
+      <div>
+        <p>Category</p>
+      </div>
+      <div>
+        <div class="row">
+          <button>Clear</button>
+          <button>Apply</button>
         </div>
+      </div>
+
     </div>
 
-    <!--sorting bar -->
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section_right">
-      <ul class="sorting_bar">
-        <li>
-          <div class="section">
-            <div class="section_title">
-              <p>View mode</p>
-            </div>
-            <div class="section_body">
-              <a href="/">placeholder</a>
-            </div>
-          </div>
-        </li>
-        <li class="divider"><div></div></li>
-        <li>
-          <div class="section">
-            <div class="section_title">
-              <p>Sort By</p>
-            </div>
-            <div class="section_body">
-              <a href="/">placeholder</a>
-            </div>
-          </div>
-        </li>
-        <li class="divider"><div></div></li>
-        <li>
-          <div class="section">
-            <div class="section_title">
-              <p>Items per page</p>
-            </div>
-            <div class="section_body">
-              <a href="/">placeholder</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <!-- sorting bar and products -->
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 products_col_right">
 
-    <!-- products -->
-  	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section_right">
-      <div class="row">
-        {% for product in product_list %}
-            <a href="/product/{{ product.pk }}" style="text-decoration: none">
-                <div class="product_list col-md-3 col-sm-6 col-xs-12">
-                <div class="list_border">
-                     <div class="list_info">
-                        <div class="list_name"><p>{{ product.name }}</p></div>
-                        <div class="list_price"><p>$ {{ product.price }}</p></div>
+      <!-- breadcrumb -->
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="navigation">
+        <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li><a href="/category/all/">All Categories</a></li>
+          <li class="active">{{ category }}</li>
+        </ol>
+      </div>
+
+      <!--sorting bar -->
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section_right">
+        <ul class="sorting_bar">
+          <li>
+            <!-- view type -->
+            <div class="section">
+              <div class="section_title">
+                <p>View mode</p>
+              </div>
+              <div class="section_body">
+                <form action="" method="post">
+                  {% csrf_token %}
+                  <div class="input-group">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" name="view" value="box">
+                        <span class="glyphicon glyphicon-th"></span>
+                      </button>
+                      <button class="btn btn-default" name="view" value="details">
+                        <span class="glyphicon glyphicon-align-justify"></span>
+                      </button>
+                      <button class="btn btn-default" name="view" value="mix">
+                        <span class="glyphicon glyphicon-list"></span>
+                      </button>
+                    </span>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </li>
+          <li class="divider"><div></div></li>
+          <li>
+            <div class="section">
+              <div class="section_title">
+                <p>Sort By</p>
+              </div>
+              <div class="section_body">
+                <a href="/">placeholder</a>
+              </div>
+            </div>
+          </li>
+          <li class="divider"><div></div></li>
+          <li>
+            <div class="section">
+              <div class="section_title">
+                <p>Items per page</p>
+              </div>
+              <div class="section_body">
+                <a href="/">placeholder</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- products -->
+    	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section_right">
+        <div class="row">
+          {% if display_type == 'box' %}
+            {% for product in product_list %}
+                <a href="/product/{{ product.pk }}" style="text-decoration: none">
+                    <div class="product_list col-md-3 col-sm-6 col-xs-12">
+                    <div class="list_border">
+                         <div class="list_info">
+                            <div class="list_name"><p>{{ product.name }}</p></div>
+                            <div class="list_price"><p>$ {{ product.price }}</p></div>
+                        </div>
+                        <div class="list_image">
+                             <img width="100%" src="/media/{{ product.thumbnail }}">
+                         </div>
                     </div>
-                    <div class="list_image">
-                         <img width="100%" src="/media/{{ product.thumbnail }}">
-                     </div>
-                </div>
-                </div>
-            </a>
-        {%endfor%}
+                    </div>
+                </a>
+            {% endfor %}
+          {% elif display_type == 'details' %}
+            <h3>Details view</h3>
+            {% for product in product_list %}
+                <a href="/product/{{ product.pk }}" style="text-decoration: none">
+
+                    <div class="list_border">
+                         <div class="list_info">
+                            <div class="list_name"><p>{{ product.name }}</p></div>
+                            <div class="list_price"><p>$ {{ product.price }}</p></div>
+                        </div>
+                        <div class="list_image">
+                             <img width="100%" src="/media/{{ product.thumbnail }}">
+                         </div>
+                    </div>s
+                </a>
+            {% endfor %}
+          {% elif display_type == 'mix' %}
+            <h3>Mix view</h3>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
-</div>
 {% else %}
 	<div class="alert alert-danger" role="alert">
 	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>

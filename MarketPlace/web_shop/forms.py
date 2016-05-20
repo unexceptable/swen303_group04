@@ -69,6 +69,7 @@ class AddressForm(forms.Form):
 
         return self.cleaned_data
 
+
 class ContactForm(forms.Form):
 	subject = forms.CharField(required=True)
 	types = (
@@ -81,4 +82,7 @@ class ContactForm(forms.Form):
 	message_type = forms.CharField(label='Type',widget=forms.Select(choices=types))
 	message = forms.CharField(widget=forms.Textarea, required=True)
 	email = forms.EmailField(required=True)
-	
+
+
+class DisplayTypeForm(forms.Form):
+    display_type = forms.ChoiceField(widget=forms.RadioSelect, choices=(("box", "Box"), ("details", "Details"), ("mix", "Mix")))
