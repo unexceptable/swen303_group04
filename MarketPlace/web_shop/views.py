@@ -53,6 +53,7 @@ def search(request):
             products=products.order_by('name')
 
         context.update({'products':products})
+        context.update({'sort_type':sort_type})
 
     return render(request, "products.html", context)
 
