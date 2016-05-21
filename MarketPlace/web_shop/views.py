@@ -47,9 +47,11 @@ def search(request):
         if sort_type:
             if sort_type=='A-Z':
                 products=products.order_by('name')
-            elif sort_type=='Z-A'
+            elif sort_type=='Z-A':
                 products=products.order_by('-name')
-                
+        else:
+            products=products.ordery_by('name')
+
         context.update({'products':products})
 
     return render(request, "products.html", context)
