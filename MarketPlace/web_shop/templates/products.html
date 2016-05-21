@@ -5,7 +5,7 @@
 
     <div class="panel panel-default" id="sort_search">
         <div class="panel-body">
-            <form action="" method="GET">
+            <form action="?search={{search}}" method="GET">
                 <div class="form-group">
                     <label for="sort">Sort by:</label>
                     <select class="form-control" name="sort_type">
@@ -45,22 +45,4 @@
     </div>
 {% endif %}
     
-{% endblock %}
-
-{% block scripts %}
-<script type="text/javascript">
-    $(document).ready(function() { 
-    $('form').each(function(){
-        $(this).ajaxForm(function() { 
-            alert("IT WORKS!");
-        });
-    });
-    $('#myButton').click(function() {
-        $('form').each(function(){
-            $(this).ajaxSubmit();
-        });
-        return false; 
-    });
-});
-</script>
 {% endblock %}
