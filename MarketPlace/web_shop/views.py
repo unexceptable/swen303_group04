@@ -49,8 +49,12 @@ def search(request):
                 products=products.order_by('name')
             elif sort_type=='Z-A':
                 products=products.order_by('-name')
+            elif sort_type=="Lowest Price":
+                products=products.order_by('price')
+            elif sort_type=="Highest Price":
+                products=products.order_by('-price')
         else:
-            products=products.order_by('name')
+            products=products.order_by('name')        
 
         context.update({'products':products})
         context.update({'sort_type':sort_type})
