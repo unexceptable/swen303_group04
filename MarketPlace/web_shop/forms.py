@@ -78,7 +78,7 @@ class ContactForm(forms.Form):
 				('phishing', 'Report a phishing incident'),
 				('general', 'Report general issue'),
 			)
-	message_type = forms.CharField(widget=forms.Select(choices=types))
-	message = forms.CharField(label='Type', widget=forms.Textarea, required=True)
+	message_type = forms.CharField(label='Type',widget=forms.Select(choices=types))
+	message = forms.CharField(widget=forms.Textarea, required=True)
 	email = forms.EmailField(required=True)
 	

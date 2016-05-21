@@ -175,3 +175,8 @@ class Contact(models.Model):
         default='general')
 	message = models.TextField()
 	email = models.EmailField()
+	statuses = (('open','Open'),('close','Closed'))
+	status = models.CharField(
+		max_length=6,
+        choices=statuses,
+        default='open')

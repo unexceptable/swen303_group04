@@ -646,14 +646,14 @@ def contact(request):
         # if this is a GET request we need to pre-fill ContactForm
         form = ContactForm(initial={
             'email':request.user.email,
-            'subject': 'general'
+            'message_type': 'general'
             })
         context = {'form': form}
         return render(request, "contact.html", context)
 
     #not logged in
     elif (not request.user.is_authenticated() and request.method == 'GET'):
-        context = {'form': ContactForm(initial={'subject': 'general'})}
+        context = {'form': ContactForm(initial={'message_type': 'general'})}
         return render(request, "contact.html", context)
     
     #process data sent
@@ -665,6 +665,7 @@ def contact(request):
             message_type=form.cleaned_data['message_type'],
             message=form.cleaned_data['message'],
             email=form.cleaned_data['email'],
+            status = 'open',
             )
 
             # Return ok.
