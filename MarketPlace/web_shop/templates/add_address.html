@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}"Add billing address"{% endblock %}
+{% block content %}
+<div id="edit-address-form">
+  <form method='post' action=''>
+    {% csrf_token %}
+      {% if request.user.is_superuser %}
+        <div class="form-group">
+          {{ form.username.label_tag }}
+          {{ form.username }}
+        </div>
+      {% endif %}
+    	<div class="form-group">
+    		{{ form.number_street.label_tag }}
+    		{{ form.number_street }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.suburb.label_tag }}
+    		{{ form.suburb }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.city.label_tag }}
+    		{{ form.city }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.region.label_tag }}
+    		{{ form.region }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.country.label_tag }}
+    		{{ form.country }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.postcode.label_tag }}
+    		{{ form.postcode }}
+    	</div>
+    <input class="btn btn-default" type="submit" value="Add Address">
+  </form>
+</div>
+{% endblock %}
