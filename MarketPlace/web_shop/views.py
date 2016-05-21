@@ -727,7 +727,6 @@ def sales_details(request, s_id):
                         sale.save()
 
         except SalesOrder.DoesNotExist:
-            print 'HEREEEEEEEEEEEEEEEEE44444444444444444444'
             # Return an error message.
             context = {
                 'heading': 'Error',
@@ -781,10 +780,10 @@ def contact(request):
         return render(request, "contact.html", context)
 
     #not logged in
-    elif (not request.user.is_authenticated() and request.method == 'GET'):
+    elif not request.user.is_authenticated() and request.method == 'GET':
         context = {'form': ContactForm(initial={'message_type': 'general'})}
         return render(request, "contact.html", context)
-    
+
     #process data sent
     elif request.method == 'POST':
         form = ContactForm(request.POST)
@@ -817,7 +816,6 @@ def contact(request):
     else:
         # Redirect to home
         return redirect("/")
-
 
 def wishlist(request):
     if not request.user.is_authenticated():
@@ -867,3 +865,35 @@ def wishlist_cart(request, p_id):
         return redirect("/cart")
     except (WishList.DoesNotExist, Product.DoesNotExist): 
         return redirect("/wishlist")
+
+
+def listcontacts(request):
+    #Check login
+    if request.user.is_authenticated() and request.user.is_superuser:
+        #process selected
+        if request.method=="POST":
+            entries = request.POST.getlist('selected')
+            if 'Open' in request.POST:
+                for uid in entries:
+                    entry = Contact.objects.get(pk=uid)
+                    if entry.status == 'close':
+                        entry.status = 'open'
+                        entry.save()
+
+            elif 'Close' in request.POST:
+                for uid in entries:
+                    entry = Contact.objects.get(pk=uid)
+                    if entry.status == 'open':
+                        entry.status = 'close'
+                        entry.save()
+
+        #show users
+        context = {
+            'heading': ('','Subject','Type','Message', 'Email', 'Status'),
+            'contacts': Contact.objects.all(),
+            'cart': Cart(request),
+        }
+        return render(request, "all_contacts.html", context)
+
+    else:
+        return redirect("/")
