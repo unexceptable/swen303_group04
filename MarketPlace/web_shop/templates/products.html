@@ -14,7 +14,7 @@
                         <option value="Lowest Price">Lowest Price</option>
                         <option value="Highest Price">Highest Price</option>
                     </select>
-                    <input type="submit">
+                    <input class="submit_search" type="submit">
                 </div>  
             </form>
         </div>       
@@ -45,4 +45,22 @@
     </div>
 {% endif %}
     
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function() { 
+    $('form').each(function(){
+        $(this).ajaxForm(function() { 
+            alert("IT WORKS!");
+        });
+    });
+    $('#myButton').click(function() {
+        $('form').each(function(){
+            $(this).ajaxSubmit();
+        });
+        return false; 
+    });
+});
+</script>
 {% endblock %}
