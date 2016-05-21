@@ -244,11 +244,13 @@ p {
 .product h2 {
 	font-size: 25px;
     color: #333;
+    font-weight: bolder;
 }
 
 .product h3 {
 	font-size: 20px;
     color: #333;
+    font-weight: bolder;
 }
 
 .product textarea{
@@ -286,7 +288,7 @@ p {
 
 .list_border{
     border-radius: 2px;
-    border: 1px solid #ccc;
+    border: 1px solid #808080;
 }
 
 .list_image{
@@ -469,6 +471,7 @@ body {
 	position: relative;
 	text-decoration: none;
 	text-align: center;
+  font-family: initial;
 }
 
 .sorting_bar {
