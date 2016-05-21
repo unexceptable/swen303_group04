@@ -641,48 +641,48 @@ def sales_details(request, s_id):
         return redirect("/")
 
 def contact(request):
-	#Check login
+    #Check login
     if request.user.is_authenticated() and request.method == 'GET':
         # if this is a GET request we need to pre-fill ContactForm
-		form = ContactForm(initial={
-			'email':request.user.email,
-			'subject': 'general'
-			})
-		context = {'form': form}
-		return render(request, "contact.html", context)
+        form = ContactForm(initial={
+            'email':request.user.email,
+            'subject': 'general'
+            })
+        context = {'form': form}
+        return render(request, "contact.html", context)
 
-	#not logged in
-	elif (not request.user.is_authenticated() and request.method == 'GET'):
-		context = {'form': ContactForm(initial={'subject': 'general'})}
-		return render(request, "contact.html", context)
-	
-	#process data sent
-	elif request.method == 'POST':
-		form = ContactForm(request.POST)
-		if form.is_valid():
-			Contact.objects.create(
-			subject=form.cleaned_data['subject'],
-			message_type=form.cleaned_data['message_type'],
-			message=form.cleaned_data['message'],
-			email=form.cleaned_data['email'],
-			)
+    #not logged in
+    elif (not request.user.is_authenticated() and request.method == 'GET'):
+        context = {'form': ContactForm(initial={'subject': 'general'})}
+        return render(request, "contact.html", context)
+    
+    #process data sent
+    elif request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            Contact.objects.create(
+            subject=form.cleaned_data['subject'],
+            message_type=form.cleaned_data['message_type'],
+            message=form.cleaned_data['message'],
+            email=form.cleaned_data['email'],
+            )
 
-			# Return ok.
-			context = {
-				'heading': 'Enquiry sent',
-				'feedback': 'We will contact you in the email  '+
-						form.cleaned_data['email']+'. Check your inbox',
-				'cart': Cart(request),
-			}
-			return render(request, "feedback.html", context)
-		else:
-			# Return an error message.
-			context = {
-				'heading': 'Error',
-				'feedback': 'All fields are required and a valid email must be supplied',
-				'cart': Cart(request),
-			}
-			return render(request, "feedback.html", context)
+            # Return ok.
+            context = {
+                'heading': 'Enquiry sent',
+                'feedback': 'We will contact you in the email  '+
+                        form.cleaned_data['email']+'. Check your inbox',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+        else:
+            # Return an error message.
+            context = {
+                'heading': 'Error',
+                'feedback': 'All fields are required and a valid email must be supplied',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
 
     else:
         # Redirect to home
