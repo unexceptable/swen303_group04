@@ -9,6 +9,7 @@
         {% bootstrap_css %}
         {% bootstrap_javascript %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         {% block stylesheets %}
         {% endblock %}
     </head>
@@ -45,6 +46,7 @@
                <ul class="nav navbar-nav navbar-right" id="nav_buttons">
                  {% if request.user.username %}
                    <li><a href="/category/all/">Products</a></li>
+                   <li><a href="/contact/">Contact/Complain</a></li>
                    <li class="dropdown">
                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Hi {{ request.user.username }}
                        <span class="caret"></span></a>
@@ -85,8 +87,8 @@
                  {% else %}
                    <li><a href="/category/all/">Products</a></li>
                    <li><a href="/register/">Sign up</a></li>
-                   <li><a href="/login/" id="login-link"><button class="btn btn-default btn-sm" role="button">Log in</button></a></li>
                    <li><a href="/contact/">Contact/Complain</a></li>
+                   <li><a href="/login/" id="login-link"><button class="btn btn-default btn-sm" role="button">Log in</button></a></li>                   
                    <li class="menu-divider"></li>
                    <li><a class="glyphicon glyphicon-shopping-cart" href="/cart">Cart{% if cart.count %}<span class="badge">{{ cart.count }}</span>{% endif %}</a></li>
                  {% endif %}
@@ -108,22 +110,19 @@
 
         <footer class="footer">
             <div class="row centered_footer">
+                <div class="col-md-3"></div>
                 <div class="col-md-3">
-                  <p><a href="/">home</a></p>
+                  <p><u>About</u></p>
+                  <p><a href="/">Home</a></p>
+                  <p><a href="/contact/">Contact</a></p>
                 </div>
                 <div class="col-md-3">
-                  <p><a href="/">store stuff</a></p>
-                  <p><a href="/">things!</a></p>
-                  <p><a href="/">filler content</a></p>
-               </div>
-                <div class="col-md-3">
-                  <p><a href="/">more store stuff</a></p>
-                  <p><a href="/">more things!</a></p>
-                  <p><a href="/">more filler content</a></p>
-               </div>
-                <div class="col-md-3">
-                  <p><a href="/">Contact us</a></p>
+                  <p><u>Follow Us!</u></p>
+                  <p><i class="fa fa-facebook"></i>Facebook</p>
+                  <p><i class="fa fa-instagram"></i>Instagram</p>
+                  <p><i class="fa fa-twitter"></i>Twitter</p>
                 </div>
+                <div class="col-md-3"></div>
               </div>
         </footer>
 

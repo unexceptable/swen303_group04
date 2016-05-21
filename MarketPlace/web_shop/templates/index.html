@@ -61,22 +61,25 @@
   </div>
 
   <!-- categories -->
-
-  <h2 id="category_title"> Categories </h2>
-  <ul>
-    <div class="row list_centered category_item">
-  		{% for c in  categories%}
-  			<a href="/category/{{ c.name }}/" class="category_link">
-  				<div class="col-xs-6 col-md-3 col-lg-4 category_view">
-  				<div class="list_border">
-  					<img src="/media/{{ c.main_image }}" width="100%">
-  					<h3>{{ c.name }}</h3>
-  				</div>
-  			  </div>
-  			</a>
-  		{% endfor %}
-    </div>
-  </ul>
+  <div id="category_view">
+    <blockquote class="blockquote"><h2 id="category_title"> Categories </h2>
+    </blockquote>
+      
+    <ul>
+      <div class="row list_centered category_item">
+    		{% for c in  categories%}
+    			<a href="/category/{{ c.name }}/" class="category_link">
+    				<div class="col-xs-6 col-md-4 col-lg-3 category_view">
+    				<div class="list_border">
+    					<img src="/media/{{ c.main_image }}" width="100%">
+    					<h3>{{ c.name }}</h3>
+    				</div>
+    			  </div>
+    			</a>
+    		{% endfor %}
+      </div>
+    </ul>
+  </div>
 
 
 {% endblock %}

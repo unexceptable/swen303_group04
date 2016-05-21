@@ -120,14 +120,23 @@
             {% for product in product_list %}
                 <a href="/product/{{ product.pk }}" style="text-decoration: none">
                     <div class="product_list col-md-3 col-sm-6 col-xs-12">
-                    <div class="list_border">
-                         <div class="list_info">
+                    <div class="list_border">                        
+                        <div class="list_image">
+                           <img width="100%" src="/media/{{ product.thumbnail }}">
+                        </div>
+                        <div class="list_info">
+                          <div>
                             <div class="list_name"><p>{{ product.name }}</p></div>
                             <div class="list_price"><p>$ {{ product.price }}</p></div>
-                        </div>
-                        <div class="list_image">
-                             <img width="100%" src="/media/{{ product.thumbnail }}">
-                         </div>
+                          </div>  
+                          <div class="product_button">
+                            <form action="/product/{{ product.pk }}/cart" method="post">
+                             {% csrf_token %}
+                             <input id="id_quantity" min="0" name="quantity" type="hidden" value="1">
+                             <button class="btn btn-primary btn-xs" id="remove_cart">Add To Cart</button> 
+                            </form>                        
+                          </div>                        
+                        </div>                        
                     </div>
                     </div>
                 </a>

@@ -14,11 +14,12 @@ p {
 #menu {
 	min-height: 25px;
 	border-color: #1976D2;
+  background-color: #0d4f77;
 }
 
 #menu a:hover{
 	text-decoration: underline;
-    color: #777;
+    color: #fff;
 }
 
 #navbar{
@@ -65,6 +66,10 @@ p {
   padding-top: 10px;
 }
 
+.navbar-default .navbar-nav>li>a {
+    color: orange;
+}
+
 .menu-divider{
    margin-left: 10px;
    margin-right: 5px;
@@ -94,17 +99,18 @@ p {
 
 #logo a{
     text-decoration: none;
+    color: orange;
 }
 
 #logo a:hover{
     text-decoration: none;
-    color: #337ab7;
+    color: #fff;
 }
 
 #category_title{
 	font-family: sans-serif;
-	text-align: center;
-	border: 1px solid #ccc;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 
@@ -242,13 +248,15 @@ p {
 }
 
 .product h2 {
-	font-size: 25px;
-    color: #333;
+	font-size: 30px;
+  color: #333;
+  font-weight: bolder;
 }
 
 .product h3 {
 	font-size: 20px;
-    color: #333;
+  color: #333;
+  font-weight: bolder;
 }
 
 .product textarea{
@@ -294,6 +302,10 @@ p {
     opacity: 0.8;
 }
 
+.product_button{
+  text-align: center;
+}
+
 .product_list p {
     color: #333;
     margin: 0px;
@@ -305,7 +317,15 @@ p {
 
 .list_border{
     border-radius: 2px;
-    border: 1px solid #ccc;
+    border: 1px solid #808080;
+}
+
+.list_border h3{
+  border-top: 1px solid #808080;
+  font-family: sans-serif;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  padding-top: 5px;
 }
 
 .list_image{
@@ -319,6 +339,9 @@ p {
     width: 100%;
     color: #333;
     margin: 0px;
+    background-color: #fff;
+    padding-bottom: 5px;
+    border-top: 1px solid #808080;
 }
 
 .list_centered{
@@ -391,7 +414,7 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: auto;
-  background-color: #1976D2;
+  background-color: #2F4F4F;
   padding-top: 20px;
   padding-bottom: 30px;
 }
@@ -410,6 +433,7 @@ body {
 
 .centered_footer p{
 	margin: 0px;
+  color: #fff;
 }
 
 
@@ -433,6 +457,11 @@ body {
 
 
 /* Category stuff: */
+
+#category_view{
+  padding: 5px;
+  background-color: #fff;
+}
 
 .products_col_left {
 	margin-top: 5px;
@@ -488,6 +517,7 @@ body {
 	position: relative;
 	text-decoration: none;
 	text-align: center;
+  font-family: initial;
 }
 
 .sorting_bar {
@@ -554,3 +584,6 @@ body {
   text-decoration: none;
 }
 
+.dropdown-menu>li>a:hover{
+  color: black;
+}
