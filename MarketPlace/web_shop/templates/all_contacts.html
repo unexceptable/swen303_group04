@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}"All Contacts"{% endblock %}
+{% block content %}
+  {% if contacts %}
+    <form method='post' action=''>
+      <input type="submit" name="Open" value="Open"/>
+      <input type="submit" name="Close" value="Close"/>
+      {% csrf_token %}
+      <div class="table-responsive">
+      <table class="table table-hover table-striped">
+      <tr>
+        {% for entry in heading %}
+          <th>{{ entry }}</th>
+        {% endfor %}
+      </tr>
+        {% for entry in contacts %}
+          <tr>
+            <td><input type="checkbox" name="selected" value="{{entry.pk}}"></td>
+            <td>{{entry.subject}}</td>
+            <td>{{entry.message_type}}</td>
+            <td>{{entry.message}}</td>
+            <td>{{entry.email}}</td>
+            <td>{{entry.status}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      </div>
+      <input type="submit" name="Open" value="Open"/>
+      <input type="submit" name="Close" value="Close"/>
+    </form>
+  {% else %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        No matches found.
+    </div>
+  {% endif %}
+{% endblock %}
