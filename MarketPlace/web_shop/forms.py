@@ -76,7 +76,9 @@ class ContactForm(forms.Form):
 				('missing', 'Where is my stuff?'),
 				('violation', 'Report violation of Terms of Service'),
 				('phishing', 'Report a phishing incident'),
+				('general', 'Report general issue'),
 			)
-	message_type = forms.CharField(widget=form.Select(choices=types))
+	message_type = forms.CharField(widget=forms.Select(choices=types))
 	message = forms.CharField(label='Type', widget=forms.Textarea, required=True)
 	email = forms.EmailField(required=True)
+	
