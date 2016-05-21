@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^search[/]$', views.search, name='search'),
     url(r'^product/(?P<p_id>\w+)[/]$', views.product_detail),
     url(r'^product/(?P<p_id>\w+)/cart$', views.product_cart),
+    url(r'^product/(?P<p_id>\w+)/wish$', views.product_wishlist),
     url(r'^category/(?P<category_name>\w+)[/]$', views.category_view),
     url(r'^login/$', views.signin),
     url(r'^logout/$', views.logout_user),
@@ -37,5 +38,8 @@ urlpatterns = [
     url(r'^listusers/$', views.listusers),
     url(r'^listsales/$', views.listsales),
     url(r'^contact/$', views.contact),
-    url(r'^sales-details/(?P<s_id>\w+)[/]$', views.sales_details),
+    url(r'^sales-details/(?P<s_id>\w+)[/]$', views.sales_details),    
+    url(r'^wishlist[/]$', views.wishlist),
+    url(r'^wishlist/(?P<p_id>\w+)[/]$', views.wishlist_update),
+    url(r'^wishlist/(?P<p_id>\w+)/cart[/]$', views.wishlist_cart),
 ]

@@ -20,7 +20,7 @@
             {% for item in cart %}
             <tr>
                 <td><a href="/product/{{ item.product.pk }}" style="text-decoration: none">{{ item.product.name }}</a></td>
-                <td>
+                <td class="cart-update">
                     <form action="/cart/{{ item.product.pk }}/update" method="post">
                         {% csrf_token %}          
                         <input id="id_quantity" min="0" name="quantity" type="number" value="{{ item.quantity }}">
@@ -40,18 +40,18 @@
             {% endfor %}
         </table>
 
-        <h4>Total Cost: {{ cart.summary }}</h4>
-    </div>
+        <h4>Total Cost: {{ cart.summary }}</h4>        
 
-    <div class="checkout-button">
-        {% if request.user.username %}
-        <form action="/cart/checkout/" method="get">
-            {% csrf_token %}          
-            <input type="submit" value="Checkout">
-        </form>
-        {% else %}
-        <p>Please log in to checkout.</p>
-        {% endif %}
+        <div class="checkout-button">
+            {% if request.user.username %}
+            <form action="/cart/checkout/" method="get">
+                {% csrf_token %}          
+                <input type="submit" value="Checkout">
+            </form>
+            {% else %}
+            <p>Please log in to checkout.</p>
+            {% endif %}
+        </div>
     </div>
   </div>
 
