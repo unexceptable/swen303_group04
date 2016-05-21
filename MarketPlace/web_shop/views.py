@@ -3,7 +3,7 @@ from django.template import loader
 from django.shortcuts import render, redirect
 from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
-    ChatForm, MessageForm, AddressForm, SortTypeForm, ItemsPerPageForm)
+    ChatForm, MessageForm, AddressForm, SortTypeForm, ItemsPerPageForm, ContactForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact, WishList, WishListItem)
