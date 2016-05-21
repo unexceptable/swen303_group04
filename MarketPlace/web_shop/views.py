@@ -6,7 +6,7 @@ from web_shop.forms import (
     ChatForm, MessageForm, AddressForm, SortTypeForm, ItemsPerPageForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
-    OrderItem, Contact)
+    OrderItem, Contact, WishList, WishListItem)
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -60,11 +60,23 @@ def product_detail(request, p_id):
             if item.product.pk == product.pk:
                 in_cart = item.quantity
 
+        try:
+            wishlist = WishList.objects.get(user=request.user)
+            product = Product.objects.get(pk=p_id)
+            item = WishListItem.objects.get(wishlist=wishlist, object_id=product.pk)
+            if item:
+                print "here"
+                print item.product.name
+                on_wishlist = True
+        except (WishList.DoesNotExist, WishListItem.DoesNotExist):
+            on_wishlist = False
+
         context = {
             'username': request.user.username,
             'product': product,
             'images': images,
             'in_cart': in_cart,
+            'on_wishlist': on_wishlist,
             'form': form,
             'cart': Cart(request),
         }
@@ -116,6 +128,44 @@ def product_cart(request, p_id):
                 cart.add(product, product.price, form.cleaned_data['quantity'])
 
     return redirect("/product/%s" % product.pk)
+
+
+def product_wishlist(request, p_id):
+    if request.method != 'POST':
+        return redirect("/product/%s" % p_id)
+    try:
+        product = Product.objects.get(pk=p_id)
+        if not product.visible:
+            raise Product.DoesNotExist
+    except Product.DoesNotExist:
+        return render(
+            request, '404.html',
+            {
+                'username': request.user.username,
+                'errorMessage':
+                    'The product with the id ' + p_id + ' does not exist',
+                'cart': Cart(request),
+            })
+
+    if not request.user.is_authenticated():
+        return redirect("/product/%s" % p_id)
+
+    try:
+        wishlist = WishList.objects.get(user=request.user)
+    except WishList.DoesNotExist:
+        wishlist = WishList(user=request.user)
+        wishlist.save()
+
+    try:
+        wishlist = WishList.objects.get(user=request.user)
+        product = Product.objects.get(pk=p_id)
+        item = WishListItem.objects.get(wishlist=wishlist, object_id=product.pk)
+        item.delete()
+    except WishListItem.DoesNotExist:
+        item = WishListItem(wishlist=wishlist, product=product)
+        item.save()
+
+    return redirect("/product/%s" % p_id)
 
 
 def signin(request):
@@ -746,3 +796,53 @@ def contact(request):
     else:
         # Redirect to home
         return redirect("/")
+
+
+def wishlist(request):
+    if not request.user.is_authenticated():
+        return redirect("/")
+
+    try:
+        wishlist = WishList.objects.get(user=request.user)
+        context = {
+            'items': WishListItem.objects.filter(wishlist=wishlist),
+            'cart': Cart(request),
+        }
+        return render(request, "wishlist.html", context)
+    except WishList.DoesNotExist:
+        wishlist = WishList(user=request.user)
+        wishlist.save()
+
+        context = {
+            'items': [],
+            'cart': Cart(request),
+        }
+        return render(request, "wishlist.html", context)
+
+
+def wishlist_update(request, p_id):
+    if not request.user.is_authenticated():
+        return redirect("/")
+
+    try:
+        wishlist = WishList.objects.get(user=request.user)
+        product = Product.objects.get(pk=p_id)
+        item = WishListItem.objects.get(wishlist=wishlist, object_id=product.pk)
+        item.delete()
+        return redirect("/wishlist")
+    except (WishList.DoesNotExist, Product.DoesNotExist): 
+        return redirect("/wishlist")
+
+def wishlist_cart(request, p_id):
+    if not request.user.is_authenticated():
+        return redirect("/")
+
+    try:
+        wishlist = WishList.objects.get(user=request.user)
+        product = Product.objects.get(pk=p_id)
+        item = WishListItem.objects.get(wishlist=wishlist, object_id=product.pk)
+        item.delete()
+        Cart(request).add(product, product.price, 1)
+        return redirect("/cart")
+    except (WishList.DoesNotExist, Product.DoesNotExist): 
+        return redirect("/wishlist")

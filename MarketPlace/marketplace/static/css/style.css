@@ -323,7 +323,7 @@ p {
 
 /* Cart Page:*/
 .cart{
-    max-width: 700px;
+    max-width: 600px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -331,10 +331,21 @@ p {
 .cart th, td{
     padding: 5px;
 }
+.cart-update{
+    min-width: 160px;
+}
 
 .cart h4{
     text-align: center;
     margin-top: 30px;
+}
+
+.cart input[type=number]{
+  max-width: 70px;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+    opacity: 1
 }
 
 
@@ -523,3 +534,4 @@ body {
   color: black;
   text-decoration: none;
 }
+

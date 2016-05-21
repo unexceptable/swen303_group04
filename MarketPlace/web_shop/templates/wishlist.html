@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block title %} Market Place {% endblock %}
+
+{% block content %}
+
+  <div class="jumbotron">
+    <div class="cart">
+        <h2>Wishlist</h2>
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>                
+                <th></th>                
+                <th></th>
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td><a href="/product/{{ item.product.pk }}" style="text-decoration: none">{{ item.product.name }}</a></td>
+                <td>{{ item.total_price }}</td>
+                <td>
+                    <form action="/wishlist/{{ item.product.pk }}/" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Remove from Wishlist">
+                    </form>
+                </td>
+                <td>
+                    <form action="/wishlist/{{ item.product.pk }}/cart/" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Add to Cart">
+                    </form>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+  </div>
+
+{% endblock %}

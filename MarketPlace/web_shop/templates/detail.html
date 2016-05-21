@@ -28,6 +28,17 @@
           <input type="submit" value="Add to cart">
         </form>
         {% endif %}
+        {% if on_wishlist %}
+        <form action="/product/{{ product.pk }}/wish" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Remove from Wishlist">
+        </form>
+        {% else %}        
+        <form action="/product/{{ product.pk }}/wish" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Add to Wishlist">
+        </form>
+        {% endif %}
     </div>  
 {% endblock %}
 
