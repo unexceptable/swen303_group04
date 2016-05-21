@@ -3,7 +3,7 @@ from django.template import loader
 from django.shortcuts import render, redirect
 from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
-    ChatForm, MessageForm, AddressForm, DisplayTypeForm)
+    ChatForm, MessageForm, AddressForm, SortTypeForm, ItemsPerPageForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact)
@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from cart.cart import Cart
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.paginator import Paginator
 
 def index(request):
     category_list = Category.objects.all()
@@ -172,30 +173,72 @@ def category_view(request, category_name):
                 'categories': category_list,
                 'cart': Cart(request),
             }
-        #    return render(request, 'category_view.html', context})
+
         else:
-            #form = DisplayTypeForm(request.POST)
-            display_type = 'box'
-            if request.method == "POST":
-                display_type = request.POST['view']
-            # Have Django validate the form for you
-                #if form.is_valid():
-                # The "display_type" key is now guaranteed to exist and
-                # guaranteed to be "displaybox" or "locationbox"
-                    #data = form.cleaned_data
-
-                    #display_type = data["display_type"]
-                    # display_type = request.POST["display_type"]
-
             c = Category.objects.get(category=category_name)
             product_list = c.product_set.all()
             context = {
                 'category': c,
                 'product_list': product_list,
-                'cart': Cart(request),
-                #'form': form,
-                'display_type': display_type
+                'cart': Cart(request)
             }
+
+            if request.method == "GET":
+                sort_type = request.GET.get('sortBy')
+                items_per_page = request.GET.get('nItems')
+                display_type = request.GET.get('view')
+                page_num = request.GET.get('page_num')
+
+                #product view
+                if display_type:
+                    display_type = request.GET.get('view')
+                else:
+                    display_type = 'box'
+                #sort the products
+                if sort_type:
+                    if sort_type == 'AtoZ':
+                        product_list= product_list.order_by('name')
+                    elif sort_type == 'ZtoA':
+                        product_list= product_list.order_by('-name')
+                    elif sort_type == 'priceLow':
+                        product_list= product_list.order_by('price')
+                    elif sort_type == 'priceHigh':
+                        product_list= product_list.order_by('-price')
+                else:
+                    product_list= product_list.order_by('name')
+
+                # number of pages
+                if items_per_page:
+                    if page_num:
+                        p = Paginator(product_list, items_per_page)
+                        num_pages = p.num_pages
+                        current_page = p.page(page_num)
+                        product_list = current_page.object_list
+                        print(num_pages)
+                        context.update({'num_pages': num_pages})
+                        context.update({'path': request.get_full_path() })
+                        context.update({'p': p})
+                        context.update({'current_page':current_page})
+                    else:
+                        page_num = 1
+                        p = Paginator(product_list, items_per_page)
+                        num_pages = p.num_pages
+                        current_page = p.page(page_num)
+                        product_list = current_page.object_list
+                        print(num_pages)
+                        context.update({'num_pages': num_pages})
+                        context.update({'path': request.get_full_path() })
+                        context.update({'p': p})
+                        context.update({'current_page':current_page})
+
+
+                context.update({'display_type': display_type})
+                context.update({'items_per_page': items_per_page})
+                context.update({'sort_type': sort_type})
+                context.update({'product_list': product_list})
+                context.update({'display_type': display_type})
+                context.update({'page_num': page_num})
+            #elif request.method == "POST":
 
         return render(request, "category_view.html", context)
     except Category.DoesNotExist:

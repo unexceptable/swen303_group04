@@ -69,7 +69,6 @@ class AddressForm(forms.Form):
 
         return self.cleaned_data
 
-
 class ContactForm(forms.Form):
 	subject = forms.CharField(required=True)
 	types = (
@@ -86,3 +85,22 @@ class ContactForm(forms.Form):
 
 class DisplayTypeForm(forms.Form):
     display_type = forms.ChoiceField(widget=forms.RadioSelect, choices=(("box", "Box"), ("details", "Details"), ("mix", "Mix")))
+
+
+class SortTypeForm(forms.Form):
+    options = (
+        ("AtoZ", "A to Z"),
+        ("ZtoA", "Z to A"),
+        ("priceLow", "Price Low to High"),
+        ("priceHigh", "Price High to Low")
+        )
+    sortType = forms.ChoiceField(widget=forms.Select, choices=options, label="", required=False)
+
+class ItemsPerPageForm(forms.Form):
+    options = (
+        ("24", "24"),
+        ("48", "48"),
+        ("72", "72"),
+        ("all", "All")
+        )
+    itemsPerPage = forms.ChoiceField(widget=forms.Select, choices=options, label="", required=False)
