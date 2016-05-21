@@ -50,7 +50,7 @@ def search(request):
             elif sort_type=='Z-A':
                 products=products.order_by('-name')
         else:
-            products=products.ordery_by('name')
+            products=products.order_by('name')
 
         context.update({'products':products})
 
