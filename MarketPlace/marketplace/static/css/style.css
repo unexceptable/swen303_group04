@@ -3,10 +3,6 @@ p {
 	font-family: sans-serif;
 }
 
-.container{
-  background-color: #fff;
-}
-
 .container-fluid{
   max-width: 1100px;
 }
@@ -105,8 +101,6 @@ p {
     color: #337ab7;
 }
 
-
-
 #category_title{
 	font-family: sans-serif;
 	text-align: center;
@@ -186,12 +180,58 @@ p {
 }
 
 #login-form input[type="submit"]{
-    width: 80px;
     margin-top: 30px;
 }
 
+/* Edit Credentials Form: */
+#edit-details-form {
+    max-width: 200px;
+    margin: auto;
+    padding-left: auto;
+}
 
+#edit-details-form label{
+    display: block;
+    padding: 5px;
+    margin-left: auto;
+}
 
+#edit-details-form input{
+    display: block;
+    padding: 5px;
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#edit-details-form input[type="submit"]{
+    margin-top: 30px;
+}
+
+/* Edit Address Form: */
+#edit-address-form {
+    max-width: 200px;
+    margin: auto;
+    padding-left: auto;
+}
+
+#edit-address-form label{
+    display: block;
+    padding: 5px;
+    margin-left: auto;
+}
+
+#edit-address-form input{
+    display: block;
+    padding: 5px;
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#edit-address-form input[type="submit"]{
+    margin-top: 30px;
+}
 
 /*Product Detail Page:*/
 .product {
@@ -434,6 +474,7 @@ body {
 	height:48px;
 }
 
+
 /* Checkout Stuff */
 
 .address-list {
@@ -471,3 +512,8 @@ body {
   opacity: 1
 }
 
+
+#admin_actions{
+  color: black;
+  text-decoration: none;
+}

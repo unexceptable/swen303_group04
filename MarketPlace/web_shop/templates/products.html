@@ -2,6 +2,23 @@
 
 {% block content %}
 {% if products %}
+
+    <div class="panel panel-default" id="sort_search">
+        <div class="panel-body">
+            <form role="form">
+                <div class="form-group">
+                    <label for="sort">Sort by:</label>
+                    <select class="form-control">
+                        <option value="A-Z">A-Z</option>
+                        <option value="Z-A">Z-A</option>
+                        <option value="Lowest Price">Lowest Price</option>
+                        <option value="Highest Price">Highest Price</option>
+                    </select>
+                </div>  
+            </form>
+        </div>       
+    </div>
+
     <div class="row list_centered">
     {% for product in products %}       
         <a href="/product/{{ product.pk }}" style="text-decoration: none">
