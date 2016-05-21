@@ -3,10 +3,10 @@ from django.template import loader
 from django.shortcuts import render, redirect
 from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
-    ChatForm, MessageForm, AddressForm)
+    ChatForm, MessageForm, AddressForm, ContactForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
-    OrderItem)
+    OrderItem, Contact)
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -638,4 +638,53 @@ def sales_details(request, s_id):
 
     #Redirect to home
     else:
+        return redirect("/")
+
+def contact(request):
+    #Check login
+    if request.user.is_authenticated() and request.method == 'GET':
+        # if this is a GET request we need to pre-fill ContactForm
+        form = ContactForm(initial={
+            'email':request.user.email,
+            'message_type': 'general'
+            })
+        context = {'form': form}
+        return render(request, "contact.html", context)
+
+    #not logged in
+    elif (not request.user.is_authenticated() and request.method == 'GET'):
+        context = {'form': ContactForm(initial={'message_type': 'general'})}
+        return render(request, "contact.html", context)
+    
+    #process data sent
+    elif request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            Contact.objects.create(
+            subject=form.cleaned_data['subject'],
+            message_type=form.cleaned_data['message_type'],
+            message=form.cleaned_data['message'],
+            email=form.cleaned_data['email'],
+            status = 'open',
+            )
+
+            # Return ok.
+            context = {
+                'heading': 'Enquiry sent',
+                'feedback': 'We will contact you in the email  '+
+                        form.cleaned_data['email']+'. Check your inbox',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+        else:
+            # Return an error message.
+            context = {
+                'heading': 'Error',
+                'feedback': 'All fields are required and a valid email must be supplied',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+
+    else:
+        # Redirect to home
         return redirect("/")

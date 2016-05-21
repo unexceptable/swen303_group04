@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
 	Product, Category, Image, ChatHistory,
 	Address, SalesOrder, OrderItem, WishList,
-	WishListItem)
+	WishListItem, Contact)
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -12,6 +12,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 class ChatHistoryAdmin(admin.ModelAdmin):
     list_display = ('origin', 'to', 'message')
+
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('subject', 'message_type', 'message', 'email', 'status')
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('_img', 'description')
@@ -34,4 +37,4 @@ admin.site.register(SalesOrder, SalesOrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(WishList)
 admin.site.register(WishListItem)
-
+admin.site.register(Contact, ContactAdmin)

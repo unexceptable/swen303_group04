@@ -36,5 +36,6 @@ urlpatterns = [
     url(r'^chat-reload[/]$', views.chat_reload, name='chat-reload'),
     url(r'^listusers/$', views.listusers),
     url(r'^listsales/$', views.listsales),
+    url(r'^contact/$', views.contact),
     url(r'^sales-details/(?P<s_id>\w+)[/]$', views.sales_details),
 ]
