@@ -31,12 +31,12 @@
         {% if on_wishlist %}
         <form action="/product/{{ product.pk }}/wish" method="post">
           {% csrf_token %}
-          <input type="submit" value="Remove from Wishlist">
+          <input type="submit" class="btn btn-default" value="Remove from Wishlist">
         </form>
         {% else %}        
         <form action="/product/{{ product.pk }}/wish" method="post">
           {% csrf_token %}
-          <input type="submit" value="Add to Wishlist">
+          <input type="submit" class="btn btn-default" value="Add to Wishlist">
         </form>
         {% endif %}
     </div>  
