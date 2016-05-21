@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
 	Product, Category, Image, ChatHistory,
 	Address, SalesOrder, OrderItem, WishList,
-	WishListItem, Contact)
+	WishListItem, Contact, Tag)
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -30,6 +30,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category)
+admin.site.register(Tag)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(ChatHistory, ChatHistoryAdmin)
 admin.site.register(Address, AddressAdmin)

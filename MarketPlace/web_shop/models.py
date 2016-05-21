@@ -19,6 +19,7 @@ class Product(models.Model):
         'Category',
         on_delete=models.CASCADE,
     )
+    tags = models.ManyToManyField('Tag', blank=True)
     thumbnail = models.ImageField(storage=fs)
     main_image = models.ImageField(storage=fs)
 
@@ -43,12 +44,34 @@ class Product(models.Model):
 
 
 class Category(models.Model):
-    category = models.CharField(max_length=100)
     name = models.CharField(max_length=100, default='all')
-    main_image = models.ImageField(storage=fs, default='/media/hat.jpg')
+    main_image = models.ImageField(storage=fs, default='hat.jpg')
+
+    parent = models.ForeignKey("self", null=True, blank=True)
 
     def __str__(self):
-        return self.category
+        return self.name
+
+    def save(self, *args, **kwargs):
+        # Raise on circular reference
+        parent = self.parent
+        while parent is not None:
+            if parent == self:
+                raise RuntimeError, "Circular references not allowed"
+            parent = parent.parent
+
+        super(Category, self).save(*args, **kwargs)
+
+    @property
+    def children(self):
+        return self.category_set.all().order_by("name")
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Image(models.Model):

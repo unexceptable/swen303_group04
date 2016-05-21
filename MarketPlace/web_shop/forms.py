@@ -28,8 +28,8 @@ class CustomRegistrationForm(RegistrationFormUniqueEmail, RegistrationFormTermsO
     pass
 
 class EditCredentialsForm(forms.Form):
-    firstName = forms.CharField(label='First Name')
-    lastName = forms.CharField(label='Last Name')
+    firstName = forms.CharField(label='First Name', required=False)
+    lastName = forms.CharField(label='Last Name', required=False)
     email = forms.EmailField(label='Email*', required=True)
 
     oldPass = forms.CharField(label='Current Password*', required=True, widget=forms.PasswordInput())
@@ -59,15 +59,7 @@ class AddressForm(forms.Form):
     city = forms.CharField(required=True)
     region = forms.CharField(required=True)
     country = forms.CharField(required=True)
-    postcode = forms.IntegerField()
-
-    def clean(self):
-        postcode = self.cleaned_data.get('postcode')
-
-        if postcode < 1000 or postcode > 9999:
-            raise forms.ValidationError("Postcode out of range")
-
-        return self.cleaned_data
+    postcode = forms.CharField(required=True)
 
 class ContactForm(forms.Form):
 	subject = forms.CharField(required=True)

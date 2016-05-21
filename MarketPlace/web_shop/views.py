@@ -6,13 +6,15 @@ from web_shop.forms import (
     ChatForm, MessageForm, AddressForm, SortTypeForm, ItemsPerPageForm, ContactForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
-    OrderItem, Contact, WishList, WishListItem)
+    OrderItem, Contact, WishList, WishListItem, Tag)
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from cart.cart import Cart
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator
+import operator
+
 
 def index(request):
     category_list = Category.objects.all()
@@ -30,10 +32,16 @@ def search(request):
         return redirect("/")
 
     search = form.data['search']
+    keywords = search.split()
     # This is an AWFUL search... but at least something to start with.
+
+    tags = Tag.objects.filter(
+        reduce(operator.and_, (Q(name__icontains=x) for x in keywords)))
+
     products = Product.objects.filter(
-        Q(name__contains=search) | Q(description__contains=search),
-        visible=True)
+        (Q(reduce(operator.and_, (Q(name__icontains=x) for x in keywords))) | Q(tags__in=tags)),
+        visible=True).distinct()
+
     context = {
         'search': form.data["search"],
         'products': products,
@@ -86,8 +94,6 @@ def product_detail(request, p_id):
             product = Product.objects.get(pk=p_id)
             item = WishListItem.objects.get(wishlist=wishlist, object_id=product.pk)
             if item:
-                print "here"
-                print item.product.name
                 on_wishlist = True
         except (WishList.DoesNotExist, WishListItem.DoesNotExist):
             on_wishlist = False
@@ -95,6 +101,7 @@ def product_detail(request, p_id):
         context = {
             'username': request.user.username,
             'product': product,
+            'tags': product.tags.all(),
             'images': images,
             'in_cart': in_cart,
             'on_wishlist': on_wishlist,
@@ -246,7 +253,7 @@ def category_view(request, category_name):
             }
 
         else:
-            c = Category.objects.get(category=category_name)
+            c = Category.objects.get(name=category_name)
             product_list = c.product_set.all()
             context = {
                 'category': c,
@@ -619,7 +626,6 @@ def checkout(request):
 
         return render(request, 'checkout.html', context)
     if request.method == 'POST':
-        print request.POST
         address_id = request.POST.get('address', None)
 
         if not address_id:
