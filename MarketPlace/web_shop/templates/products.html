@@ -9,10 +9,10 @@
                 <div class="form-group">
                     <label for="sort">Sort by:</label>
                     <select class="form-control" name="sort_type">
-                        <option value="A-Z" {%if sort_type=="A-Z"%}selected{%endif%}>A-Z</option>
-                        <option value="Z-A" {%if sort_type=="Z-A"%}selected{%endif%}>Z-A</option>
-                        <option value="Lowest Price" {%if sort_type=="Lowest Price"%}selected{%endif%}>Lowest Price</option>
-                        <option value="Highest Price" {%if sort_type=="Highest Price"%}selected{%endif%}>Highest Price</option>
+                        <option value="A-Z" {%if sort_type =="A-Z"%}selected{%endif%}>A-Z</option>
+                        <option value="Z-A" {%if sort_type =="Z-A"%}selected{%endif%}>Z-A</option>
+                        <option value="Lowest Price" {%if sort_type =="Lowest Price"%}selected{%endif%}>Lowest Price</option>
+                        <option value="Highest Price" {%if sort_type =="Highest Price"%}selected{%endif%}>Highest Price</option>
                     </select>
                     <input type="hidden" value="{{search}}" name="search">
                     <input class="submit_search" type="submit">
