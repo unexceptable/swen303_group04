@@ -20,7 +20,7 @@ class ImageAdmin(admin.ModelAdmin):
     list_display = ('_img', 'description')
 
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'number_street','suburb', 'city','region', 'country', 'postcode')
+    list_display = ('user', 'default', 'number_street','suburb', 'city','region', 'country', 'postcode')
 
 class SalesOrderAdmin(admin.ModelAdmin):
     list_display = ('buyer', 'created_on',)

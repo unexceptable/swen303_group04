@@ -1,6 +1,7 @@
 from django import forms
 from registration.forms import RegistrationFormUniqueEmail
 from registration.forms import RegistrationFormTermsOfService
+from django.contrib.auth.models import User
 
 class ProductForm(forms.Form):
     # need to check that the name is only spaces or alpha-num or spaces
@@ -96,3 +97,20 @@ class ItemsPerPageForm(forms.Form):
         ("all", "All")
         )
     itemsPerPage = forms.ChoiceField(widget=forms.Select, choices=options, label="", required=False)
+
+class AddAddressForm(forms.Form):
+    username = forms.CharField(widget=forms.Select(choices=[ (entry, entry.username) for entry in User.objects.all() ]))
+    number_street = forms.CharField(label='House number and street name', required=True)
+    suburb = forms.CharField(required=True)
+    city = forms.CharField(required=True)
+    region = forms.CharField(required=True)
+    country = forms.CharField(required=True)
+    postcode = forms.IntegerField()
+
+    def clean(self):
+        postcode = self.cleaned_data.get('postcode')
+
+        if postcode < 1000 or postcode > 9999:
+            raise forms.ValidationError("Postcode out of range")
+
+        return self.cleaned_data

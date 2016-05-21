@@ -3,7 +3,7 @@ from django.template import loader
 from django.shortcuts import render, redirect
 from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
-    ChatForm, MessageForm, AddressForm, SortTypeForm, ItemsPerPageForm, ContactForm)
+    ChatForm, MessageForm, AddressForm, SortTypeForm, ItemsPerPageForm, ContactForm, AddAddressForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact, WishList, WishListItem, Tag)
@@ -63,7 +63,7 @@ def search(request):
             elif sort_type=="Highest Price":
                 products=products.order_by('-price')
         else:
-            products=products.order_by('name')        
+            products=products.order_by('name')
 
         context.update({'products':products})
         context.update({'sort_type':sort_type})
@@ -489,90 +489,89 @@ def chat_reload(request):
     }
     return render(request, "conversation.html", context)
 
-def edit_address(request):
+def edit_address(request,uid):
     #Check login
     if request.user.is_authenticated():
-        # if this is a GET request we need to pre-fill AddressForm
-        if request.method == 'GET':
-
-            #in DB
-            try:
-                entry = Address.objects.get(user=request.user)
-                form = AddressForm(initial={
-                'number_street':entry.number_street,
-                'suburb':entry.suburb,
-                'city':entry.city,
-                'region':entry.region,
-                'country':entry.country,
-                'postcode':entry.postcode,
-                })
-                context = {'form': form}
-                return render(request, "edit_address.html", context)
-            #not in DB
-            except Address.DoesNotExist:
-                context = {'form': AddressForm()}
-                return render(request, "edit_address.html", context)
-
-        #Process data sent
-        else:
-            form = AddressForm(request.POST)
-            if form.is_valid():
+        if Address.objects.get(pk=uid).user == request.user or request.user.is_superuser:
+            # if this is a GET request we need to pre-fill AddressForm
+            if request.method == 'GET':
                 #in DB
                 try:
-                    entry = Address.objects.get(user=request.user)
-                    entry.number_street=form.cleaned_data['number_street']
-                    entry.suburb=form.cleaned_data['suburb']
-                    entry.city=form.cleaned_data['city']
-                    entry.region=form.cleaned_data['region']
-                    entry.country=form.cleaned_data['country']
-                    entry.postcode=form.cleaned_data['postcode']
-                    entry.save()
-
-                    # Return ok.
-                    context = {
-                        'heading': 'Success',
-                        'feedback': 'Your new billing address is '+
-                                form.cleaned_data['number_street']+', '+
-                                form.cleaned_data['suburb']+' '+
-                                form.cleaned_data['city']+', '+
-                                form.cleaned_data['country']+' '+
-                                request.POST['postcode'],
-                        'cart': Cart(request),
-                    }
-                    return render(request, "feedback.html", context)
+                    entry = Address.objects.get(pk=uid)
+                    form = AddressForm(initial={
+                    'number_street':entry.number_street,
+                    'suburb':entry.suburb,
+                    'city':entry.city,
+                    'region':entry.region,
+                    'country':entry.country,
+                    'postcode':entry.postcode,
+                    })
+                    context = {'form': form}
+                    return render(request, "edit_address.html", context)
                 #not in DB
                 except Address.DoesNotExist:
-                    Address.objects.create(
-                    user=request.user,
-                    number_street=form.cleaned_data['number_street'],
-                    suburb=form.cleaned_data['suburb'],
-                    city=form.cleaned_data['city'],
-                    region=form.cleaned_data['region'],
-                    country=form.cleaned_data['country'],
-                    postcode=form.cleaned_data['postcode'],
-                    )
-
-                    # Return ok.
+                    # Return an error message.
                     context = {
-                        'heading': 'Success',
-                        'feedback': 'Your new billing address is '+
-                                form.cleaned_data['number_street']+', '+
-                                form.cleaned_data['suburb']+' '+
-                                form.cleaned_data['city']+', '+
-                                form.cleaned_data['country']+' '+
-                                request.POST['postcode'],
+                        'heading': 'Error',
+                        'feedback': 'Page does not exist',
                         'cart': Cart(request),
                     }
                     return render(request, "feedback.html", context)
-            else:
-                # Return an error message.
-                context = {
-                    'heading': 'Error',
-                    'feedback': 'All fields must be filled and postcode must be between 1000 to 9999 (inclusive)',
-                    'cart': Cart(request),
-                }
-                return render(request, "feedback.html", context)
 
+            #Process data sent
+            else:
+                form = AddressForm(request.POST)
+                if form.is_valid():
+                    #in DB
+                    try:
+                        entry = Address.objects.get(pk=uid)
+                        entry.number_street=form.cleaned_data['number_street']
+                        entry.suburb=form.cleaned_data['suburb']
+                        entry.city=form.cleaned_data['city']
+                        entry.region=form.cleaned_data['region']
+                        entry.country=form.cleaned_data['country']
+                        entry.postcode=form.cleaned_data['postcode']
+                        entry.save()
+
+                        # Return ok.
+                        context = {
+                            'heading': 'Success',
+                            'feedback': entry.user.username+' has updated billing address with ID'+
+                                    str(entry.pk)+' to '+
+                                    form.cleaned_data['number_street']+', '+
+                                    form.cleaned_data['suburb']+' '+
+                                    form.cleaned_data['city']+', '+
+                                    form.cleaned_data['country']+' '+
+                                    request.POST['postcode'],
+                            'cart': Cart(request),
+                        }
+                        return render(request, "feedback.html", context)
+                    #not in DB
+                    except Address.DoesNotExist:
+                        # Return an error message.
+                        context = {
+                            'heading': 'Error',
+                            'feedback': 'Page does not exist',
+                            'cart': Cart(request),
+                        }
+                        return render(request, "feedback.html", context)
+
+                else:
+                    # Return an error message.
+                    context = {
+                        'heading': 'Error',
+                        'feedback': 'All fields must be filled and postcode must be between 1000 to 9999 (inclusive)',
+                        'cart': Cart(request),
+                    }
+                    return render(request, "feedback.html", context)
+        else:
+            # Return an error message.
+            context = {
+                'heading': 'Error',
+                'feedback': 'Page does not exist',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
     else:
         # Redirect to home
         return redirect("/")
@@ -782,12 +781,18 @@ def contact(request):
             'email':request.user.email,
             'message_type': 'general'
             })
-        context = {'form': form}
+        context = {
+            'form': form,
+            'cart': Cart(request),
+        }
         return render(request, "contact.html", context)
 
     #not logged in
     elif not request.user.is_authenticated() and request.method == 'GET':
-        context = {'form': ContactForm(initial={'message_type': 'general'})}
+        context = {
+            'form': ContactForm(initial={'message_type': 'general'}),
+            'cart': Cart(request),
+        }
         return render(request, "contact.html", context)
 
     #process data sent
@@ -855,7 +860,7 @@ def wishlist_update(request, p_id):
         item = WishListItem.objects.get(wishlist=wishlist, object_id=product.pk)
         item.delete()
         return redirect("/wishlist")
-    except (WishList.DoesNotExist, Product.DoesNotExist): 
+    except (WishList.DoesNotExist, Product.DoesNotExist):
         return redirect("/wishlist")
 
 def wishlist_cart(request, p_id):
@@ -869,7 +874,7 @@ def wishlist_cart(request, p_id):
         item.delete()
         Cart(request).add(product, product.price, 1)
         return redirect("/cart")
-    except (WishList.DoesNotExist, Product.DoesNotExist): 
+    except (WishList.DoesNotExist, Product.DoesNotExist):
         return redirect("/wishlist")
 
 
@@ -900,6 +905,149 @@ def listcontacts(request):
             'cart': Cart(request),
         }
         return render(request, "all_contacts.html", context)
+
+    else:
+        return redirect("/")
+
+"""
+    This function handles 'delete' and display
+"""
+def listaddresses(request):
+    #Check login
+    if request.user.is_authenticated():
+        #process selected
+        if request.method=="POST":
+            entries = request.POST.getlist('selected')
+            if 'Delete' in request.POST:
+                for uid in entries:
+                    entry = Address.objects.get(pk=uid)
+                    if request.user.is_superuser or request.user == entry.user:
+                        entry.delete()
+
+        addresses = Address.objects.all()
+        if not request.user.is_superuser:
+            addresses = Address.objects.filter(user=request.user)
+
+        #show addresses
+        context = {
+            'heading': ('','User','Default','Address', 'Update', 'Set to Default'),
+            'addresses': addresses,
+            'cart': Cart(request),
+        }
+        return render(request, "all_addresses.html", context)
+
+def default_address(request,uid):
+    #Check login
+    if request.user.is_authenticated():
+        if Address.objects.get(pk=uid).user == request.user or request.user.is_superuser:
+            if request.method == 'GET':
+                entry = Address.objects.get(pk=uid)
+                addresses = Address.objects.filter(user=entry.user,default=True)
+
+                for address in addresses:
+                    address.default=False
+                    address.save()
+
+
+                entry.default = True
+                entry.save()
+                return redirect("/listaddresses")
+            else:
+                # Return an error message.
+                context = {
+                    'heading': 'Error',
+                    'feedback': 'Page does not exist',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
+        else:
+            # Return an error message.
+            context = {
+                'heading': 'Error',
+                'feedback': 'Page does not exist',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+
+    else:
+        return redirect("/")
+
+def add_address(request):
+    #Check login
+    if request.user.is_authenticated():
+        #blank form
+        if request.method == 'GET':
+            context = {
+                'form': AddAddressForm(),
+                'cart': Cart(request),
+            }
+            return render(request, "add_address.html", context)
+
+        #Process data sent
+        else:
+            form = AddAddressForm(request.POST)
+            if form.is_valid():
+                if request.user.is_superuser:
+                    #admin did it
+                    #read username field
+                    Address.objects.create(
+                    user=User.objects.get(username=form.cleaned_data['username']),
+                    default=False,
+                    number_street=form.cleaned_data['number_street'],
+                    suburb=form.cleaned_data['suburb'],
+                    city=form.cleaned_data['city'],
+                    region=form.cleaned_data['region'],
+                    country=form.cleaned_data['country'],
+                    postcode=form.cleaned_data['postcode'],
+                    )
+
+                    # Return ok.
+                    context = {
+                        'heading': 'Success',
+                        'feedback': form.cleaned_data['username']+' has new billing address '+
+                                form.cleaned_data['number_street']+', '+
+                                form.cleaned_data['suburb']+' '+
+                                form.cleaned_data['city']+', '+
+                                form.cleaned_data['country']+' '+
+                                request.POST['postcode'],
+                        'cart': Cart(request),
+                    }
+                    return render(request, "feedback.html", context)
+                else:
+                    #ordinary user did it
+                    #ignore username field
+                    #use logged in instead
+                    Address.objects.create(
+                    user=request.user,
+                    default=False,
+                    number_street=form.cleaned_data['number_street'],
+                    suburb=form.cleaned_data['suburb'],
+                    city=form.cleaned_data['city'],
+                    region=form.cleaned_data['region'],
+                    country=form.cleaned_data['country'],
+                    postcode=form.cleaned_data['postcode'],
+                    )
+
+                    # Return ok.
+                    context = {
+                        'heading': 'Success',
+                        'feedback': request.user.username+' has new billing address '+
+                                form.cleaned_data['number_street']+', '+
+                                form.cleaned_data['suburb']+' '+
+                                form.cleaned_data['city']+', '+
+                                form.cleaned_data['country']+' '+
+                                request.POST['postcode'],
+                        'cart': Cart(request),
+                    }
+                    return render(request, "feedback.html", context)
+            else:
+                # Return an error message.
+                context = {
+                    'heading': 'Error',
+                    'feedback': 'All fields must be filled and postcode must be between 1000 to 9999 (inclusive)',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
 
     else:
         return redirect("/")
