@@ -160,7 +160,7 @@ p {
 
 /* Login Form: */
 #login-form {
-    max-width: 200px;
+    max-width: 320px;
     margin: auto;
     padding-left: auto;
 }
@@ -185,7 +185,7 @@ p {
 
 /* Edit Credentials Form: */
 #edit-details-form {
-    max-width: 200px;
+    max-width: 320px;
     margin: auto;
     padding-left: auto;
 }
@@ -210,7 +210,7 @@ p {
 
 /* Edit Address Form: */
 #edit-address-form {
-    max-width: 200px;
+    max-width: 320px;
     margin: auto;
     padding-left: auto;
 }
