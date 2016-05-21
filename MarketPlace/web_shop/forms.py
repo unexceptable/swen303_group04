@@ -81,4 +81,26 @@ class ContactForm(forms.Form):
 	message_type = forms.CharField(label='Type',widget=forms.Select(choices=types))
 	message = forms.CharField(widget=forms.Textarea, required=True)
 	email = forms.EmailField(required=True)
-	
+
+
+class DisplayTypeForm(forms.Form):
+    display_type = forms.ChoiceField(widget=forms.RadioSelect, choices=(("box", "Box"), ("details", "Details"), ("mix", "Mix")))
+
+
+class SortTypeForm(forms.Form):
+    options = (
+        ("AtoZ", "A to Z"),
+        ("ZtoA", "Z to A"),
+        ("priceLow", "Price Low to High"),
+        ("priceHigh", "Price High to Low")
+        )
+    sortType = forms.ChoiceField(widget=forms.Select, choices=options, label="", required=False)
+
+class ItemsPerPageForm(forms.Form):
+    options = (
+        ("24", "24"),
+        ("48", "48"),
+        ("72", "72"),
+        ("all", "All")
+        )
+    itemsPerPage = forms.ChoiceField(widget=forms.Select, choices=options, label="", required=False)
