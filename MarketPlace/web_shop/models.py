@@ -159,3 +159,18 @@ class WishListItem(models.Model):
         self.object_id = product.pk
 
     product = property(get_product, set_product)
+
+class Contact(models.Model):
+	subject = models.CharField(required=True)
+	types = (
+				('refunds', 'Refund and Cancellation'),
+				('missing', 'Where is my stuff?'),
+				('violation', 'Report violation of Terms of Service'),
+				('phishing', 'Report a phishing incident'),
+			)
+	message_type = models.CharField(
+		max_length=20,
+        choices=types,
+        default='refunds')
+	message = models.TextField()
+	email = models.EmailField()

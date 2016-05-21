@@ -68,3 +68,15 @@ class AddressForm(forms.Form):
             raise forms.ValidationError("Postcode out of range")
 
         return self.cleaned_data
+
+class ContactForm(forms.Form):
+	subject = forms.CharField(required=True)
+	types = (
+				('refunds', 'Refund and Cancellation'),
+				('missing', 'Where is my stuff?'),
+				('violation', 'Report violation of Terms of Service'),
+				('phishing', 'Report a phishing incident'),
+			)
+	message_type = forms.CharField(widget=form.Select(choices=types))
+	message = forms.CharField(label='Type', widget=forms.Textarea, required=True)
+	email = forms.EmailField(required=True)
