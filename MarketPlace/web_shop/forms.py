@@ -1,6 +1,7 @@
 from django import forms
 from registration.forms import RegistrationFormUniqueEmail
 from registration.forms import RegistrationFormTermsOfService
+from django.contrib.auth.models import User
 
 class ProductForm(forms.Form):
     # need to check that the name is only spaces or alpha-num or spaces
@@ -53,6 +54,7 @@ class MessageForm(forms.Form):
     to = forms.CharField(widget=forms.HiddenInput())
     message = forms.CharField(widget=forms.Textarea, required=True)
 
+
 class AddressForm(forms.Form):
     number_street = forms.CharField(label='House number and street name', required=True)
     suburb = forms.CharField(required=True)
@@ -61,18 +63,19 @@ class AddressForm(forms.Form):
     country = forms.CharField(required=True)
     postcode = forms.CharField(required=True)
 
+
 class ContactForm(forms.Form):
-	subject = forms.CharField(required=True)
-	types = (
-				('refunds', 'Refund and Cancellation'),
-				('missing', 'Where is my stuff?'),
-				('violation', 'Report violation of Terms of Service'),
-				('phishing', 'Report a phishing incident'),
-				('general', 'Report general issue'),
-			)
-	message_type = forms.CharField(label='Type',widget=forms.Select(choices=types))
-	message = forms.CharField(widget=forms.Textarea, required=True)
-	email = forms.EmailField(required=True)
+    subject = forms.CharField(required=True)
+    types = (
+                ('refunds', 'Refund and Cancellation'),
+                ('missing', 'Where is my stuff?'),
+                ('violation', 'Report violation of Terms of Service'),
+                ('phishing', 'Report a phishing incident'),
+                ('general', 'Report general issue'),
+            )
+    message_type = forms.CharField(label='Type',widget=forms.Select(choices=types))
+    message = forms.CharField(widget=forms.Textarea, required=True)
+    email = forms.EmailField(required=True)
 
 
 class DisplayTypeForm(forms.Form):
