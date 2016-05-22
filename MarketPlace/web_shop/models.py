@@ -14,14 +14,14 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=20, decimal_places=2)
     visible = models.BooleanField(default=False)
-    added_on = models.DateTimeField(default=timezone.now)
     category = models.ForeignKey(
         'Category',
         on_delete=models.CASCADE,
     )
     tags = models.ManyToManyField('Tag', blank=True)
     thumbnail = models.ImageField(storage=fs)
-    main_image = models.ImageField(storage=fs)
+    main_image = models.ImageField(storage=fs)    
+    added_on = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
@@ -57,7 +57,7 @@ class Category(models.Model):
         parent = self.parent
         while parent is not None:
             if parent == self:
-                raise RuntimeError, "Circular references not allowed"
+                raise(RuntimeError, "Circular references not allowed")
             parent = parent.parent
 
         super(Category, self).save(*args, **kwargs)

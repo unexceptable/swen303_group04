@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<div id="add_product" class="product">
+      <form id="product_form" method="post" action="/addproduct/"
+          enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            {{ form.name.errors }}
+            <label for="{{ form.name.id_for_label }}">Name:</label>
+            {{ form.name }}
+        </div>
+        <div class="form-group">
+            {{ form.description.errors }}
+            <label for="{{ form.description.id_for_label }}">Description:</label>
+            {{ form.description }}
+        </div>
+        <div class="form-group">
+            {{ form.category.errors }}
+            <label for="{{ form.category.id_for_label }}">Category:</label>
+            {{ form.category }}
+        </div>
+        <div class="form-group">
+            {{ form.tags.errors }}
+            <label for="{{ form.tags.id_for_label }}">Tags (comma separated):</label>
+            {{ form.tags }}
+        </div>
+        <div class="form-group">
+            {{ form.price.errors }}
+            <label for="{{ form.price.id_for_label }}">Price:</label>
+            {{ form.price }}
+        </div>
+        <div class="form-group">
+            {{ form.visible.errors }}
+            <label for="{{ form.visible.id_for_label }}">Visible:</label>
+            {{ form.visible }}
+        </div>
+        <div id="edit-thumbnail">
+            <div class="form-group">
+                {{ form.thumbnail.errors }}
+                <label for="{{ form.thumbnail.id_for_label }}">Thumbnail:</label>
+                {{ form.thumbnail }}
+            </div>
+        </div>
+        <div id="edit-main-image">
+            <div class="form-group">
+                {{ form.main_image.errors }}
+                <label for="{{ form.main_image.id_for_label }}">Main Image:</label>
+                {{ form.main_image }}
+            </div>
+        </div>
+
+        {{ imgformset.management_form }}
+        <div class="add-image row">
+            <h4>Additional product images:</h4>
+            {% for form_ in imgformset %}
+            {% if forloop.first%}
+            <div id="image-form-{{ forloop.counter0 }}" class="image-add-list col-md-4">
+            {% else %}
+            <div id="image-form-{{ forloop.counter0 }}" class="image-add-list col-md-4" style="display: none">
+            {% endif %}        
+                {{ form_.errors }}
+                {{ form_ }}
+            </div>
+            {% if not forloop.last%}
+            {% if forloop.first%}     
+            <div id="add-form-{{ forloop.counter }}" class="col-md-4 add-image-form">
+            {% else %}
+            <div id="add-form-{{ forloop.counter }}" class="col-md-4 add-image-form" style="display: none">
+            {% endif %} 
+                <span class="glyphicon glyphicon-plus"></span>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <input type="submit" name="submit" value="Submit" />
+    </form>
+  </div>  
+{% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript">
+    {% for form_ in imgformset %}
+    {% if not forloop.last%}
+    $("#add-form-{{ forloop.counter }}").click(function(){
+        $("#image-form-{{ forloop.counter }}").show();     
+        $("#add-form-{{ forloop.counter|add:"1" }}").show();
+        $(this).hide();
+    });
+    {% endif %}
+    {% endfor %}
+</script>
+{% endblock %}

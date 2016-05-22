@@ -4,10 +4,12 @@ from django.shortcuts import render, redirect
 from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
     ChatForm, MessageForm, AddressForm, SortTypeForm,
-    ItemsPerPageForm, ContactForm)
+    ItemsPerPageForm, ContactForm, ImageForm, ProductForm,
+    EditProductForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
-    OrderItem, Contact, WishList, WishListItem, Tag, ChatNotification)
+    OrderItem, Contact, WishList, WishListItem, Tag,
+    ChatNotification, Image)
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -15,6 +17,7 @@ from cart.cart import Cart
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator
 import operator
+from django.forms import formset_factory
 
 
 def index(request):
@@ -72,6 +75,142 @@ def search(request):
     return render(request, "products.html", context)
 
 
+def add_product(request):
+    ImageFormSet = formset_factory(
+        form=ImageForm, extra=5)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        imgformset = ImageFormSet(request.POST, request.FILES)
+
+        if form.is_valid() and imgformset.is_valid():
+            tags = []
+            for tag in form.cleaned_data['tags']:
+                try:
+                    tags.append(Tag.objects.get(name=tag))
+                except Tag.DoesNotExist:
+                    _tag = Tag(name=tag)
+                    _tag.save()
+                    tags.append(_tag)
+
+            product = Product(
+                name=form.cleaned_data['name'],
+                description=form.cleaned_data['description'],
+                price=form.cleaned_data['price'],
+                visible=form.cleaned_data['visible'],
+                category=Category.objects.get(
+                    pk=form.cleaned_data['category']),
+                thumbnail=form.cleaned_data['thumbnail'],
+                main_image=form.cleaned_data['main_image'],
+            )
+            product.save()
+            product.tags.add(*tags)
+
+            for imgform in imgformset.cleaned_data:
+                try:
+                    image = imgform['image']
+                    image = Image(product=product, image=image)
+                    image.save()
+                except KeyError:
+                    pass
+            return redirect("/product/%s" % product.pk)
+        else:
+            print form.errors, imgformset.errors
+    else:
+        form = ProductForm()
+        imgformset = ImageFormSet()
+    return render(
+        request, 'product_add.html',
+        {'form': form, 'imgformset': imgformset})
+
+
+def edit_product(request, p_id):
+    try:
+        product = Product.objects.get(pk=p_id)
+        images = product.image_set.all()
+
+        ImageFormSet = formset_factory(
+            form=ImageForm, extra=5)
+
+        if request.method == 'POST':
+            form = EditProductForm(request.POST, request.FILES)
+            imgformset = ImageFormSet(request.POST, request.FILES)
+
+            if form.is_valid() and imgformset.is_valid():
+                tags = []
+                for tag in form.cleaned_data['tags']:
+                    try:
+                        tags.append(Tag.objects.get(name=tag))
+                    except Tag.DoesNotExist:
+                        _tag = Tag(name=tag)
+                        _tag.save()
+                        tags.append(_tag)
+
+                product.name = form.cleaned_data['name']
+                product.description = form.cleaned_data['description']
+                product.price = form.cleaned_data['price']
+                product.visible = form.cleaned_data['visible']
+                product.category = Category.objects.get(
+                    pk=form.cleaned_data['category'])
+                if form.cleaned_data['thumbnail']:
+                    product.thumbnail = form.cleaned_data['thumbnail']
+                if form.cleaned_data['main_image']:
+                    product.main_image = form.cleaned_data['main_image']
+                product.save()
+                product.tags.clear()
+                product.tags.add(*tags)
+
+                for imgform in imgformset.cleaned_data:
+                    try:
+                        image = imgform['image']
+                        image = Image(product=product, image=image)
+                        image.save()
+                    except KeyError:
+                        pass
+                return redirect("/product/%s" % product.pk)
+        else:
+            form = EditProductForm({
+                'name': product.name,
+                'description': product.description,
+                'price': product.price,
+                'visible': product.visible,
+                'category': product.category.pk,
+            })
+            imgformset = ImageFormSet()
+
+        context = {
+            'product': product,
+            'tags': product.tags.all(),
+            'images': images,
+            'form': form,
+            'imgformset': imgformset,
+            'cart': Cart(request),
+        }
+        return render(request, "product_edit.html", context)
+
+    except Product.DoesNotExist:
+        return render(
+            request, '404.html',
+            {
+                'username': request.user.username,
+                'errorMessage':
+                    'The product with the id ' + p_id + ' does not exist',
+                'cart': Cart(request),
+            })
+
+
+def delete_image(request, img_id):
+    if request.user.is_superuser:
+        try:
+            img = Image.objects.get(pk=img_id)
+            img.delete()
+            return HttpResponse("Image Deleted")
+        except Image.DoesNotExist:
+            return HttpResponse("Image does not exist.")
+    else:
+        return HttpResponse("nope")
+
+
 def product_detail(request, p_id):
     # here we need to get the product via the id
 
@@ -90,17 +229,19 @@ def product_detail(request, p_id):
             if item.product.pk == product.pk:
                 in_cart = item.quantity
 
-        try:
-            wishlist = WishList.objects.get(user=request.user)
-            product = Product.objects.get(pk=p_id)
-            item = WishListItem.objects.get(wishlist=wishlist, object_id=product.pk)
-            if item:
-                on_wishlist = True
-        except (WishList.DoesNotExist, WishListItem.DoesNotExist):
+        if request.user.is_authenticated():
+            try:
+                wishlist = WishList.objects.get(user=request.user)
+                product = Product.objects.get(pk=p_id)
+                item = WishListItem.objects.get(wishlist=wishlist, object_id=product.pk)
+                if item:
+                    on_wishlist = True
+            except (WishList.DoesNotExist, WishListItem.DoesNotExist):
+                on_wishlist = False
+        else:
             on_wishlist = False
 
         context = {
-            'username': request.user.username,
             'product': product,
             'tags': product.tags.all(),
             'images': images,

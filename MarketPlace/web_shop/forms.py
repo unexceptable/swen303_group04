@@ -1,14 +1,40 @@
 from django import forms
 from registration.forms import RegistrationFormUniqueEmail
 from registration.forms import RegistrationFormTermsOfService
-from django.contrib.auth.models import User
+from web_shop.models import Category, Image
+
 
 class ProductForm(forms.Form):
     # need to check that the name is only spaces or alpha-num or spaces
     name = forms.CharField(max_length=100, required=True)
-    desciption = forms.CharField(required=True)
+    description = forms.CharField(required=True, widget=forms.Textarea)
     price = forms.DecimalField(required=True, max_digits=20, decimal_places=2)
     visible = forms.BooleanField()
+    tags = forms.CharField(
+        required=False, widget=forms.Textarea,
+        label='Comma Separated Tags')
+    thumbnail = forms.ImageField(label='Thumbnail')
+    main_image = forms.ImageField(label='Main Image')
+
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.fields['category'] = forms.ChoiceField(
+            choices=[ (c.pk, c.name) for c in Category.objects.all()])
+
+    def clean_tags(self):
+        data = self.cleaned_data['tags']
+        data = data.split(',')
+        return data
+
+class EditProductForm(ProductForm):
+    thumbnail = forms.ImageField(label='Thumbnail', required=False)
+    main_image = forms.ImageField(label='Main Image', required=False)
+
+class ImageForm(forms.ModelForm):
+    image = forms.ImageField(label='Image')
+    class Meta:
+        model = Image
+        fields = ('image',)
 
 
 class SearchForm(forms.Form):

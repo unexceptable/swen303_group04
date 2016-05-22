@@ -21,9 +21,12 @@ from web_shop import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^search[/]$', views.search, name='search'),
+    url(r'^addproduct[/]$', views.add_product),
     url(r'^product/(?P<p_id>\w+)[/]$', views.product_detail),
+    url(r'^product/(?P<p_id>\w+)/edit[/]$', views.edit_product),
     url(r'^product/(?P<p_id>\w+)/cart$', views.product_cart),
     url(r'^product/(?P<p_id>\w+)/wish$', views.product_wishlist),
+    url(r'^image/(?P<img_id>\w+)/$', views.delete_image),
     url(r'^category/(?P<category_name>\w+)[/]$', views.category_view),
     url(r'^login/$', views.signin),
     url(r'^logout/$', views.logout_user),
