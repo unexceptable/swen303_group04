@@ -125,3 +125,14 @@ class ItemsPerPageForm(forms.Form):
         ("all", "All")
         )
     itemsPerPage = forms.ChoiceField(widget=forms.Select, choices=options, label="", required=False)
+
+class CategoryForm(forms.Form):
+    # need to check that the name is only spaces or alpha-num or spaces
+    name = forms.CharField(max_length=100, required=True)
+    main_image = forms.ImageField(label='Main Image')
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        choices = [(c.pk, c.name) for c in Category.objects.all()]
+        choices.insert(0, ('', '----'))
+        self.fields['parent'] = forms.ChoiceField(choices=choices)

@@ -5,7 +5,7 @@ from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
     ChatForm, MessageForm, AddressForm, SortTypeForm,
     ItemsPerPageForm, ContactForm, ImageForm, ProductForm,
-    EditProductForm)
+    EditProductForm, CategoryForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact, WishList, WishListItem, Tag,
@@ -1248,3 +1248,56 @@ def listcategories(request):
         'cart': Cart(request),
     }
     return render(request, "all_categories.html", context)
+
+def edit_category(request,uid):
+    #Check login
+    if not request.user.is_authenticated() or not request.user.is_superuser:
+        return redirect("/")
+
+    try:
+        entry = Category.objects.get(pk=uid)
+        #process selected
+        if request.method=="POST":
+            form = CategoryForm(request.POST, request.FILES)
+            if form.is_valid():
+                entry.name = form.cleaned_data['name']
+                if form.cleaned_data['main_image']:
+                    entry.main_image = form.cleaned_data['main_image']
+                entry.parent = Category.objects.get(pk=form.cleaned_data['parent'])
+                entry.save()
+                # Return ok.
+                context = {
+                    'heading': 'Success',
+                    'feedback': 'Category with ID '+entry.pk+' has now been updated to '+entry.name+' with parent '+entry.parent+' and an image of <a href="/media/'+entry.main_image+'"><img width="100" src="/media/'+entry.main_image+'"></a>',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
+            else:
+                # Return an error message.
+                context = {
+                    'heading': 'Error',
+                    'feedback': 'Invalid image or parent category',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
+        #pre-fill
+        else:
+            form = CategoryForm({
+                'name': entry.name,
+                'main_image': entry.main_image,
+                'parent': entry.parent,
+            })
+            context = {
+                'main_image':entry.main_image,
+                'form': form,
+                'cart': Cart(request),
+            }
+            return render(request, "edit_category.html", context)
+    except Category.DoesNotExist:
+        # Return an error message.
+        context = {
+            'heading': 'Error',
+            'feedback': 'Page does not exist',
+            'cart': Cart(request),
+        }
+        return render(request, "feedback.html", context)
