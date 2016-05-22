@@ -186,11 +186,13 @@ class WishListItem(models.Model):
 class Contact(models.Model):
 	subject = models.CharField(max_length=50)
 	types = (
+                ('general', 'Report general issue'),
+                ('feedback', 'Give us feedback'),
 				('refunds', 'Refund and Cancellation'),
 				('missing', 'Where is my stuff?'),
 				('violation', 'Report violation of Terms of Service'),
 				('phishing', 'Report a phishing incident'),
-				('general', 'Report general issue'),
+
 			)
 	message_type = models.CharField(
 		max_length=20,
@@ -203,3 +205,10 @@ class Contact(models.Model):
 		max_length=6,
         choices=statuses,
         default='open')
+
+class ChatNotification(models.Model):
+    to = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    origin = models.CharField(max_length=30)

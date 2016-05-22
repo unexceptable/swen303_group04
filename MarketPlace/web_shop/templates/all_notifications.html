@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}"Your Notifications"{% endblock %}
+{% block content %}
+    {% if notifications%}
+    <script language="javascript">
+      function toggle(source) {
+        checkboxes = document.getElementsByName('selected');
+        for(var i=0, n=checkboxes.length;i<n;i++) {
+          checkboxes[i].checked = source.checked;
+        }
+      }
+
+      function checkSelectAll() {
+        if(isAll()) {
+          document.getElementsByName('all')[0].checked=true;
+        } else {
+          document.getElementsByName('all')[0].checked=false;
+        }
+      }
+
+      function isAll() {
+        checkboxes = document.getElementsByName('selected');
+        for(var i=0, n=checkboxes.length;i<n;i++) {
+          if (!checkboxes[i].checked) {
+            return false;
+          }
+        }
+        return true;
+      }
+      </script>
+
+    <form method='post' action=''>
+      <input type="submit" name="Clear Selected" value="Clear Selected"/>
+      {% csrf_token %}
+      <div class="table-responsive">
+      <table class="table table-hover table-striped">
+      <tr>
+        <th><input type="checkbox" name="all" onClick="toggle(this)" /></th>
+        {% for entry in heading %}
+          <th>{{ entry }}</th>
+        {% endfor %}
+      </tr>
+        {% for entry in notifications %}
+          <tr>
+            <td><input type="checkbox" name="selected" onchange="checkSelectAll()" value="{{entry.pk}}"></td>
+            <td><a href="/chat?chat={{entry.origin}}">Go to conversation</a></td>
+            <td>You have a chat message from {{entry.origin}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      </div>
+      <input type="submit" name="Clear Selected" value="Clear Selected"/>
+    </form>
+    {% else %}
+      <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          No matches found.
+      </div>
+    {% endif %}
+{% endblock %}

@@ -7,7 +7,7 @@ from web_shop.forms import (
     ItemsPerPageForm, ContactForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
-    OrderItem, Contact, WishList, WishListItem, Tag)
+    OrderItem, Contact, WishList, WishListItem, Tag, ChatNotification)
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -452,17 +452,34 @@ def chat(request):
                 }
                 return render(request, "feedback.html", context)
 
-            context = {
-                'user': form.data["chat"],
-                'form' : MessageForm(initial={'to': form.data["chat"]})
-            }
-            return render(request, "chat.html", context)
+            if User.objects.filter(username=form.data["chat"]).exists():
+                context = {
+                    'user': form.data["chat"],
+                    'form' : MessageForm(initial={'to': form.data["chat"]})
+                }
+                return render(request, "chat.html", context)
+            else:
+                # Return an error message.
+                context = {
+                    'heading': 'Error',
+                    'feedback': 'User does not exist',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
+
         #Process data sent
         else:
             form = MessageForm(request.POST)
             if form.is_valid():
                 if User.objects.filter(username=request.POST['to']).exists():
+                    #create message
                     ChatHistory.objects.create(origin=request.user.username, to= request.POST['to'], message=request.POST['message'])
+                    #create notif if not exist
+                    if not ChatNotification.objects.filter(to = User.objects.get(username=request.POST['to']), origin = request.user.username):
+                        ChatNotification.objects.create(
+                            to = User.objects.get(username=request.POST['to']),
+                            origin = request.user.username,
+                            )
                     return HttpResponseRedirect("?chat="+request.POST["to"])
                 else:
                     # if user does not exist
@@ -1024,3 +1041,26 @@ def add_address(request):
                 'cart': Cart(request),
             }
             return render(request, "feedback.html", context)
+
+def listnotifications(request):
+    #Check login
+    if not request.user.is_authenticated():
+        return redirect("/")
+
+    #process selected
+    if request.method=="POST":
+        entries = request.POST.getlist('selected')
+        if 'Clear Selected' in request.POST:
+            for uid in entries:
+                entry = ChatNotification.objects.get(pk=uid)
+                if request.user == entry.to:
+                    entry.delete()
+
+    #show notifs
+    #Notifications variable passed in globally,do not fetch
+    #heading has 'select all checkbox'
+    context = {
+        'heading': ('Conversation','Description'),
+        'cart': Cart(request),
+    }
+    return render(request, "all_notifications.html", context)
