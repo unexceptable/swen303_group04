@@ -292,6 +292,55 @@ p {
 }
 
 
+/* Add/edit product pages */
+
+#add_product{
+  margin: auto;
+  max-width: 800px;
+}
+
+#product_form{
+  margin: 10px;
+}
+
+.add-image{
+  margin-bottom: 40px;
+}
+
+.image-add-list, .add-image-form{
+  background-color: lightgreen;
+  border: 1px solid #333;
+  padding: 5px;
+  margin: 5px;
+  max-width: 31%;
+}
+
+.image-add-list input[type=file] {
+  max-width: 100%;
+}
+
+.add-image-form{
+  max-width: 25px;
+  padding: 5px;
+  margin: 10px;
+}
+
+.product-images-edit{
+  background-color: lightgreen;
+  border: 1px solid #333;
+  padding: 5px;
+  margin: 5px;
+}
+
+.image-delete{
+  width: 100%;
+}
+
+.errorlist{
+  color: red;
+}
+
+
 /*Product List Page:*/
 
 .product_list {
