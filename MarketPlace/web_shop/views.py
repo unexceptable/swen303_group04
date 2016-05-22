@@ -396,12 +396,20 @@ def category_view(request, category_name):
 
         else:
             c = Category.objects.get(name=category_name)
+            sub_cat_list = c.children
             product_list = c.product_set.all()
             context = {
                 'category': c,
+                'subcategories': sub_cat_list,
                 'product_list': product_list,
                 'cart': Cart(request)
+
             }
+
+            #initial sorting values
+            display_type = 'box'
+            sort_type = 'AtoZ'
+            items_per_page = '24'
 
             if request.method == "GET":
                 sort_type = request.GET.get('sortBy')
@@ -429,6 +437,11 @@ def category_view(request, category_name):
 
                 # number of pages
                 if items_per_page:
+                    print(items_per_page)
+                    if items_per_page == 'all':
+                        items_per_page = len(product_list)
+                        print(len(product_list))
+
                     if page_num:
                         p = Paginator(product_list, items_per_page)
                         num_pages = p.num_pages
