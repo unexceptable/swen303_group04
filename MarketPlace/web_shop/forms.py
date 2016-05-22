@@ -54,6 +54,7 @@ class MessageForm(forms.Form):
     to = forms.CharField(widget=forms.HiddenInput())
     message = forms.CharField(widget=forms.Textarea, required=True)
 
+
 class AddressForm(forms.Form):
     number_street = forms.CharField(label='House number and street name', required=True)
     suburb = forms.CharField(required=True)
@@ -62,18 +63,19 @@ class AddressForm(forms.Form):
     country = forms.CharField(required=True)
     postcode = forms.CharField(required=True)
 
+
 class ContactForm(forms.Form):
-	subject = forms.CharField(required=True)
-	types = (
-				('refunds', 'Refund and Cancellation'),
-				('missing', 'Where is my stuff?'),
-				('violation', 'Report violation of Terms of Service'),
-				('phishing', 'Report a phishing incident'),
-				('general', 'Report general issue'),
-			)
-	message_type = forms.CharField(label='Type',widget=forms.Select(choices=types))
-	message = forms.CharField(widget=forms.Textarea, required=True)
-	email = forms.EmailField(required=True)
+    subject = forms.CharField(required=True)
+    types = (
+                ('refunds', 'Refund and Cancellation'),
+                ('missing', 'Where is my stuff?'),
+                ('violation', 'Report violation of Terms of Service'),
+                ('phishing', 'Report a phishing incident'),
+                ('general', 'Report general issue'),
+            )
+    message_type = forms.CharField(label='Type',widget=forms.Select(choices=types))
+    message = forms.CharField(widget=forms.Textarea, required=True)
+    email = forms.EmailField(required=True)
 
 
 class DisplayTypeForm(forms.Form):
@@ -97,20 +99,3 @@ class ItemsPerPageForm(forms.Form):
         ("all", "All")
         )
     itemsPerPage = forms.ChoiceField(widget=forms.Select, choices=options, label="", required=False)
-
-class AddAddressForm(forms.Form):
-    username = forms.CharField(widget=forms.Select(choices=[ (entry, entry.username) for entry in User.objects.all() ]))
-    number_street = forms.CharField(label='House number and street name', required=True)
-    suburb = forms.CharField(required=True)
-    city = forms.CharField(required=True)
-    region = forms.CharField(required=True)
-    country = forms.CharField(required=True)
-    postcode = forms.IntegerField()
-
-    def clean(self):
-        postcode = self.cleaned_data.get('postcode')
-
-        if postcode < 1000 or postcode > 9999:
-            raise forms.ValidationError("Postcode out of range")
-
-        return self.cleaned_data

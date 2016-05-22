@@ -64,22 +64,12 @@
                          </li> -->
                          <li role="separator" class="divider"></li>
                          {% endif %}
-
-                         <!-- ORDINARY USER  -->
-                         {% if not request.user.is_superuser %}
-                           <li><a href="/wishlist/">Your Wishlist</a></li>
-                           <li><a href="/listsales/">Your Sales Orders</a></li>
-                           <li><a href="/listaddresses/">Your Addresses</a></li>
-                           <li role="separator" class="divider"></li>
-                         {% endif %}
-
+                         <li><a href="/wishlist/">Your Wishlist</a></li>
+                         <li><a href="/listsales/">Your Sales Orders</a></li>
+                         <li><a href="/listaddresses/">Your Addresses</a></li>
+                         <li role="separator" class="divider"></li>
                          <li><a href="/editdetails/">Edit Credentials</a></li>
-
-                         <!-- ORDINARY USER  -->
-                         {% if not request.user.is_superuser %}
-                          <li><a href="/addaddress/">Add Billing Address</a></li>
-                         {% endif %}
-                         
+                         <li><a href="/addaddress/">Add Billing Address</a></li>
                          <li role="separator" class="divider"></li>
                          <li><a href="/contact/">Contact/Complain</a></li>
                          <!--  FOR ORDINARY USER CHAT uncooment following code -->

@@ -113,7 +113,7 @@ class Address(models.Model):
     city = models.CharField(max_length=30)
     region = models.CharField(max_length=30)
     country = models.CharField(max_length=30)
-    postcode = models.IntegerField()
+    postcode = models.CharField(max_length=30)
 
     def __unicode__(self):
         return self.number_street+' '+self.suburb+', '+self.city+' '+self.region+', '+self.country+' '+str(self.postcode)

@@ -4,13 +4,7 @@
 <div id="edit-address-form">
   <form method='post' action=''>
     {% csrf_token %}
-      {% if request.user.is_superuser %}
-        <div class="form-group">
-          {{ form.username.label_tag }}
-          {{ form.username }}
-        </div>
-      {% endif %}
-    	<div class="form-group">
+      <div class="form-group">
     		{{ form.number_street.label_tag }}
     		{{ form.number_street }}
     	</div>
