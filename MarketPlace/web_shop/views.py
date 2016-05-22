@@ -1226,3 +1226,25 @@ def listnotifications(request):
         'cart': Cart(request),
     }
     return render(request, "all_notifications.html", context)
+
+def listcategories(request):
+    #Check login
+    if not request.user.is_authenticated() or not request.user.is_superuser:
+        return redirect("/")
+
+    #process selected
+    if request.method=="POST":
+        entries = request.POST.getlist('selected')
+        if 'Delete' in request.POST:
+            for uid in entries:
+                entry = Category.objects.get(pk=uid)
+                entry.delete()
+
+    categories = Category.objects.all()
+    #show addresses
+    context = {
+        'heading': ('','Name','Image','Main Category', 'Children', 'Update'),
+        'categories': categories,
+        'cart': Cart(request),
+    }
+    return render(request, "all_categories.html", context)

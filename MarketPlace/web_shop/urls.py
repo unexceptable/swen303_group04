@@ -50,4 +50,5 @@ urlpatterns = [
     url(r'^defaultaddress/(?P<uid>\w+)[/]$', views.default_address),
     url(r'^addaddress/$', views.add_address),
     url(r'^notifications/$', views.listnotifications),
+    url(r'^listcategories/$', views.listcategories),
 ]
