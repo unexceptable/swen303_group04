@@ -2,12 +2,31 @@
 
 {% block content %}
 	<div class="product">
+    <div>
         <img width="100%" src="/media/{{ product.main_image }}">
-		<h2>{{ product.name }}</h2>
-		<h3>Price: {{ product.price }}</h3>
-		<p>{{ product.description }}</p>
+    </div>
+		<div>
+        <h2>{{ product.name }}</h2>
+    </div>
+    <div>
+		    <h3>Price: {{ product.price }}</h3>
+    </div>
+    <div>
+		    <p>{{ product.description }}</p>
+    </div>
+    <div>
+		  <h4>Category: {{ product.category }}</h4>
+    </div>
+    <div id="product-tags">
+    <h4>Tags:</h4>
+    {% for tag in  tags%}
+        <div class="tag">
+          <p>{{ tag.name }}</p>
+        </div>
+      {% endfor %}
+    </div>
 
-		<h4>Category: {{ product.category }}</h4>
+    <div id="product-cart">
         {% if in_cart %}
         <form action="/product/{{ product.pk }}/cart" method="post">
             {% csrf_token %}          
@@ -39,7 +58,8 @@
           <input type="submit" value="Add to Wishlist">
         </form>
         {% endif %}
-    </div>  
+    </div>
+  </div>  
 {% endblock %}
 
 {% block scripts %}
