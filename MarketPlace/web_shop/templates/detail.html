@@ -14,7 +14,7 @@
             <label for="id_quantity">Quantity:</label>
             <input id="id_quantity" min="0" name="quantity" type="number" value="{{ in_cart }}">
             <input id="id_update" name="update" type="hidden" value="true">
-            <input class="btn btn-defualt" type="submit" value="Update">
+            <input class="btn btn-default" type="submit" value="Update">
         </form>      
         <form action="/product/{{ product.pk }}/cart" method="post">
           {% csrf_token %}
