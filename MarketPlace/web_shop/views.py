@@ -368,13 +368,10 @@ def register(request):
             )
             user.save()
 
-            print user.is_anonymous()
-            print user.is_authenticated()
-
-            user = authenticate(
+            authenticate(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1'])
-            print "here!!!"
+
             login(request, user)
             # Redirect to home
             print next
