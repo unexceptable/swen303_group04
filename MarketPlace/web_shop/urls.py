@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^category/(?P<category_name>\w+)[/]$', views.category_view),
     url(r'^login/$', views.signin),
     url(r'^logout/$', views.logout_user),
-    url(r'^register/$', RegistrationView.as_view(form_class=CustomRegistrationForm), name='registrationr'),
+    url(r'^register/$', views.register),
     url(r'^editdetails/$', views.edit_details),
     url(r'^cart[/]$', views.cart_view),
     url(r'^cart/checkout[/]$', views.checkout),

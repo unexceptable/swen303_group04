@@ -29,6 +29,10 @@
         {{ form.tos.label_tag }}
         {{ form.tos }}
     </div>
+
+    {% if next %}
+    <input name="next" type="hidden" value="{{ next }}">
+    {% endif %}
     <input class="btn btn-default" type="submit" value="Register and Login"/>
   </form>
 </div>
