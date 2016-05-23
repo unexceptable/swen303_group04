@@ -364,6 +364,8 @@ p {
 
 .image-delete{
   width: 100%;
+  border: 1px solid black;
+  margin-top: 10px;
 }
 
 .errorlist{

@@ -42,7 +42,7 @@
         <div id="edit-thumbnail">
             <div class="form-group">
                 <div>
-                    <img max-width="100%" src="/media/{{ product.thumbnail }}">
+                    <img width="100%" src="/media/{{ product.thumbnail }}">
                 </div>
                 {{ form.thumbnail.errors }}
                 <label for="{{ form.thumbnail.id_for_label }}">New thumbnail:</label>
@@ -52,7 +52,7 @@
         <div id="edit-main-image">
             <div class="form-group">
                 <div>
-                    <img max-width="100%" src="/media/{{ product.main_image }}">
+                    <img width="100%" src="/media/{{ product.main_image }}">
                 </div>
                 {{ form.main_image.errors }}
                 <label for="{{ form.main_image.id_for_label }}">New main Image:</label>
@@ -64,7 +64,7 @@
             {% for image in images %}
             <div id="product-image-{{ forloop.counter }}" class="product-images-edit col-md-3">
                 <img width="100%" src="/media/{{ image.image }}">
-                <div id="image-delete-{{ forloop.counter }}" class="btn btn-default image-delete">delete</div>
+                <div id="image-delete-{{ forloop.counter }}" class="btn btn-default image-delete">Delete</div>
             </div>
             {% endfor %}
         </div>
@@ -94,7 +94,7 @@
             {% endfor %}
         </div>
 
-        <input type="submit" name="submit" value="Submit" />
+        <input class="btn btn-default" type="submit" name="submit" value="Submit" />
     </form>
   </div>  
 {% endblock %}
