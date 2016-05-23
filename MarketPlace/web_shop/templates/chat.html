@@ -1,39 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<script type="text/javascript">
-		function notEmpty(){
-			var text = document.forms['form'].message.value.trim();
-			if(text === "" || text === null) {
-				return false;
+	<div id="chat_pos">
+		<script type="text/javascript">
+			function notEmpty(){
+				var text = document.forms['form'].message.value.trim();
+				if(text === "" || text === null) {
+					return false;
+				}
+				return true;
 			}
-			return true;
-		}
 
-		function refreshPage() {
-			$.ajax({
-				url:'/chat-reload?chat={{user}}',
-				dataType: 'html',
-				success: function(data) {$('.output_box').html(data);},
-				complete: function() {window.setTimeout(refreshPage, 1000);}
-			});
-		}
-		window.setTimeout(refreshPage, 1000);
+			function refreshPage() {
+				$.ajax({
+					url:'/chat-reload?chat={{user}}',
+					dataType: 'html',
+					success: function(data) {$('.output_box').html(data);},
+					complete: function() {window.setTimeout(refreshPage, 1000);}
+				});
+			}
+			window.setTimeout(refreshPage, 1000);
 
-	</script>
-	<h1>Chat history with {{ user }}</h1>
-	<div class="panel panel-default">
-		<div class="panel-heading">Conversation</div>
-		<div class="panel-body output_box">
+		</script>
+		<h1>Chat history with {{ user }}</h1>
+		<div id="chat_panel" class="panel panel-default">
+			<div class="panel-heading">Conversation</div>
+			<div class="panel-body output_box">
+			</div>
 		</div>
-	</div>
-
-		<table>
-      <form name = 'form' method='post' action=''>
-        {% csrf_token %}
-        {{ form }}
-        <td><input type="submit" onclick="return notEmpty()" value="Send"/></td>
-      </form>
-    </table>
-
+		<div id="chat-form">
+	      <form name = 'form' method='post' action=''>
+	        {% csrf_token %}
+	        <div class="form-group">
+	    		{{ form.message.label_tag }}
+	    		{{ form.message }}
+	    	</div>
+	        <input class="btn btn-default" type="submit" onclick="return notEmpty()" value="Send"/>
+	      </form>
+	  	</div>
+  	</div>
 {% endblock %}

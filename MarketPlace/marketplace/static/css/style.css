@@ -189,6 +189,31 @@ p {
     border-width: 1px;
 }
 
+/* Contact Form: */
+#contact-form {
+    max-width: 320px;
+    margin-left: 25%;
+    padding-left: auto;
+}
+
+#contact-form label{
+    display: block;
+    padding: 5px;
+    margin-left: auto;
+}
+
+#contact-form input{
+    display: block;
+    padding: 5px;
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#contact-form input[type="submit"]{
+    margin-top: 30px;
+}
+
 /* Registration Form: */
 #reg-form {
     max-width: 320px;
@@ -208,10 +233,6 @@ p {
     border-radius: 2px;
     border-style: solid;
     border-width: 1px;
-}
-
-#reg-form input[type="submit"]{
-    margin-top: 30px;
 }
 
 #reg-form input[type="submit"]{
@@ -861,4 +882,37 @@ body {
 .credit-group{
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+/* Chat Form: */
+#chat-form {
+    max-width: 320px;
+    padding-left: auto;
+}
+
+#chat-form label{
+    display: block;
+    padding: 5px;
+    margin-left: auto;
+}
+
+#chat-form input{
+    display: block;
+    padding: 5px;
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#chat-form input[type="submit"]{
+    margin-top: 30px;
+}
+
+#chat_panel{
+  width: 85%
+}
+
+#chat_pos{
+  width: 800px;
+  margin: auto;
 }
