@@ -151,7 +151,7 @@ p {
 
 .jumbotron a {
     text-decoration: none;
-    color: #91a23c;
+    color: #337ab7;
     margin: 0px;
     padding: 0px;
 }
@@ -329,12 +329,16 @@ p {
   margin: 10px;
 }
 
+#id_category{
+  width: 20%
+}
+
 .add-image{
   margin-bottom: 40px;
 }
 
 .image-add-list, .add-image-form{
-  background-color: lightgreen;
+  background-color: #B0BEC5;
   border: 1px solid #333;
   padding: 5px;
   margin: 5px;

@@ -8,8 +8,8 @@
 
   <div class="jumbotron">
     <div class="cart">
-        <h2>Cart</h2>
-        <table>
+        <h2>Your Shopping Cart</h2>
+        <table class="table table-striped">
             <tr>
                 <th>Product</th>
                 <th>Quantity</th>
@@ -25,13 +25,15 @@
                         {% csrf_token %}          
                         <input id="id_quantity" min="0" name="quantity" type="number" value="{{ item.quantity }}">
                         <input id="id_update" name="update" type="hidden" value="true">
-                        <input type="submit" value="Update">
+                        <input class="btn btn-default" type="submit" value="Update">
                     </form>
                 </td>
                 <td>
                     <form action="/cart/{{ item.product.pk }}/update" method="post">
                       {% csrf_token %}
-                      <input type="submit" value="Remove from cart">
+                      <button type="submit" class="btn btn-default" id="remove_cart">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Remove From Cart</button>
+                      <!-- <input type="submit" value="Remove from cart"> -->
                     </form>
                 </td>
                 <td></td>
@@ -45,8 +47,10 @@
         <div class="checkout-button">
             {% if request.user.username %}
             <form action="/cart/checkout/" method="get">
-                {% csrf_token %}          
-                <input type="submit" value="Checkout">
+                {% csrf_token %}   
+                <button type="submit" class="btn btn-default" id="remove_cart">
+                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span>Checkout</button>       
+                <!-- <input type="submit" value="Checkout"> -->
             </form>
             {% else %}
             <p>Please log in to checkout.</p>
