@@ -432,7 +432,7 @@ def signin(request):
                     login(request, user)
                     # Redirect to home
                     print next
-                    if next:
+                    if next and next != "/login/":
                         return redirect(next)
                     else:
                         return redirect("/")
