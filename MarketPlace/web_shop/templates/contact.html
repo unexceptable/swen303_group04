@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block title %}"Update profile"{% endblock %}
 {% block content %}
-<table>
+<div>
   <form method='post' action=''>
     {% csrf_token %}
     {{ form }}
-    <td><input class="btn btn-default" type="submit" name="submit" value="Submit Enquiry" /></td>
+    <input class="btn btn-default" type="submit" name="submit" value="Submit Enquiry" />
   </form>
-</table>
+</div>
 {% endblock %}
