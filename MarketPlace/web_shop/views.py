@@ -361,15 +361,14 @@ def register(request):
         if form.is_valid():
             # process the data in form.cleaned_data as required      
 
-            user = User(
+            user = User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1'],
-                email=form.cleaned_data['email'],
+                email=form.cleaned_data['email']
             )
             user.save()
-
-            authenticate(
-                username=form.cleaned_data['username'],
+            user = authenticate(
+                username=user.username,
                 password=form.cleaned_data['password1'])
 
             login(request, user)
