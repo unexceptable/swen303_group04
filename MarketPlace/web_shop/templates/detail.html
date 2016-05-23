@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<div class="product">
+  {% if product.visible %}  
+  <div class="product">
+  {% else %}
+  <div class="product p-list-not-visible">
+  {% endif %}
     <div>
         <img width="100%" src="/media/{{ product.main_image }}">
     </div>
