@@ -28,15 +28,13 @@
 		</div>
 	</div>
 
-		<table>
       <form name = 'form' method='post' action=''>
         {% csrf_token %}
         <div class="form-group">
     		{{ form.chat.label_tag }}
     		{{ form.chat }}
     	</div>
-        <td><input class="btn btn-default" type="submit" onclick="return notEmpty()" value="Send"/></td>
+        <input class="btn btn-default" type="submit" onclick="return notEmpty()" value="Send"/>
       </form>
-    </table>
 
 {% endblock %}
