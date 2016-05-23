@@ -368,7 +368,6 @@ def register(request):
             )
             user.save()
 
-            user.authenticate()
             login(request, user)
             # Redirect to home
             print next
