@@ -1,82 +1,80 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<div class="row product">
-    <div class="row">
-      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 product_image_col">
-          <img width="100%" src="/media/{{ product.main_image }}">
+	<div class="row product">   
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 product_image_col">
+        <img width="90%" src="/media/{{ product.main_image }}">
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 product_details_col">
+  		<div>
+          <h2>{{ product.name }}</h2>
       </div>
-      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 product_details_col">
-    		<div>
-            <h2>{{ product.name }}</h2>
-        </div>
-        <div>
-    		    <h3>Price: {{ product.price }}</h3>
-        </div>
-        <div>
-    		    <p>{{ product.description }}</p>
-        </div>
-        <div>
-    		  <h4>Category: {{ product.category }}</h4>
-        </div>
-        <div id="product-tags">
-        <h4>Tags:</h4>
-        {% for tag in  tags%}
-            <div class="tag">
-              <p>{{ tag.name }}</p>
-            </div>
-          {% endfor %}
-        </div>
+      <div>
+  		    <h3>Price: {{ product.price }}</h3>
+      </div>
+      <div>
+  		    <p>{{ product.description }}</p>
+      </div>
+      <div>
+  		  <h4>Category: {{ product.category }}</h4>
+      </div>
+      <div id="product-tags">
+      <h4>Tags:</h4>
+      {% for tag in  tags%}
+          <div class="tag">
+            <p>{{ tag.name }}</p>
+          </div>
+        {% endfor %}
+      </div>
 
-        <div id="product-cart">
-            {% if in_cart %}
-            <form action="/product/{{ product.pk }}/cart" method="post">
-                {% csrf_token %}          
-                <label for="id_quantity">Quantity:</label>
-                <input id="id_quantity" min="0" name="quantity" type="number" value="{{ in_cart }}">
-                <input id="id_update" name="update" type="hidden" value="true">
-                <input class="btn btn-default" type="submit" value="Update">
-            </form>      
-            <form action="/product/{{ product.pk }}/cart" method="post">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-default" id="remove_cart">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Remove From Cart</button>
-              <!--<input type="submit" value="Remove from cart">-->
-            </form>
-            {% else %}
-            <form action="/product/{{ product.pk }}/cart" method="post">
-              {% csrf_token %}
-              {{ form.quantity.label_tag }}
-              {{ form.quantity }}
-              <input class="btn btn-default" type="submit" value="Add to cart">
-            </form>
-            {% endif %}
-            {% if request.user.username %}
-            {% if on_wishlist %}
-            <form action="/product/{{ product.pk }}/wish" method="post">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-default" id="remove_wish">
-                <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>Remove From Wishlist</button>
-              <!--<input type="submit" class="btn btn-default" value="Remove from Wishlist">-->
-            </form>
-            {% else %}        
-            <form action="/product/{{ product.pk }}/wish" method="post">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-default" id="add_wish">
-                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>Add To Wishlist</button>
-              <!--<input type="submit" class="btn btn-default" value="Add to Wishlist">-->
-            </form>
-            {% endif %}
-            {% endif %}
+      <div id="product-cart">
+          {% if in_cart %}
+          <form action="/product/{{ product.pk }}/cart" method="post">
+              {% csrf_token %}          
+              <label for="id_quantity">Quantity:</label>
+              <input id="id_quantity" min="0" name="quantity" type="number" value="{{ in_cart }}">
+              <input id="id_update" name="update" type="hidden" value="true">
+              <input class="btn btn-default" type="submit" value="Update">
+          </form>      
+          <form action="/product/{{ product.pk }}/cart" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-default" id="remove_cart">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Remove From Cart</button>
+            <!--<input type="submit" value="Remove from cart">-->
+          </form>
+          {% else %}
+          <form action="/product/{{ product.pk }}/cart" method="post">
+            {% csrf_token %}
+            {{ form.quantity.label_tag }}
+            {{ form.quantity }}
+            <input class="btn btn-default" type="submit" value="Add to cart">
+          </form>
+          {% endif %}
+          {% if request.user.username %}
+          {% if on_wishlist %}
+          <form action="/product/{{ product.pk }}/wish" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-default" id="remove_wish">
+              <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>Remove From Wishlist</button>
+            <!--<input type="submit" class="btn btn-default" value="Remove from Wishlist">-->
+          </form>
+          {% else %}        
+          <form action="/product/{{ product.pk }}/wish" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-default" id="add_wish">
+              <span class="glyphicon glyphicon-star" aria-hidden="true"></span>Add To Wishlist</button>
+            <!--<input type="submit" class="btn btn-default" value="Add to Wishlist">-->
+          </form>
+          {% endif %}
+          {% endif %}
 
-            {% if request.user.is_superuser %}
-            <div>
-              <a href="/product/{{ product.pk }}/edit">
-                <input class="btn btn-default" type="submit" value="Edit Product">
-              </a>
-            </div>
-            {% endif %}
-        </div>
+          {% if request.user.is_superuser %}
+          <div>
+            <a href="/product/{{ product.pk }}/edit">
+              <input class="btn btn-default" type="submit" value="Edit Product">
+            </a>
+          </div>
+          {% endif %}
       </div>
     </div>
   </div>  

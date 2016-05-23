@@ -272,12 +272,20 @@ p {
 	border-top: 1px solid #91a23c;
 }
 
+.product_image_col{
+  padding-top: 19px;
+}
+
 #product-cart{
   margin-top: 30px;
 }
 
 #product-tags{
   margin-top: 20px;
+}
+
+#id_quantity{
+  width: 70%;
 }
 
 .tag{
