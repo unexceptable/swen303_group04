@@ -22,7 +22,7 @@ from itertools import chain
 
 
 def index(request):
-    category_list = Category.objects.all()
+    category_list = Category.objects.filter(parent=None)
     context = {
         'cart': Cart(request),
         'categories': category_list,
@@ -391,7 +391,7 @@ def signin(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = LoginForm()
-        next = request.GET.get('next', None)    
+        next = request.GET.get('next', None)
 
     return render(
         request, 'login.html',
@@ -840,7 +840,7 @@ def listusers(request):
 
 def checkout(request):
     if request.method == 'GET':
-        cart = Cart(request)        
+        cart = Cart(request)
 
         if not cart.count():
             return redirect("/cart")
@@ -859,7 +859,7 @@ def checkout(request):
 
         return render(request, 'checkout.html', context)
     if request.method == 'POST':
-        address_id = request.POST.get('address', None)       
+        address_id = request.POST.get('address', None)
 
         try:
             address = request.user.address_set.get(pk=address_id)
@@ -884,7 +884,7 @@ def checkout(request):
 
         order = SalesOrder(buyer=request.user, address=address)
         order.save()
-        
+
         #create notif if not exist
         if not Notification.objects.filter(to = User.objects.get(username='admin'), notif = 'Sales order from '+request.user.username):
             Notification.objects.create(
@@ -1064,7 +1064,7 @@ def contact(request):
             email=form.cleaned_data['email'],
             status = 'open',
             )
-            
+
             #create notif if not exist
             if not Notification.objects.filter(to = User.objects.get(username='admin'), notif = 'Support ticket from '+request.user.username):
                 Notification.objects.create(
@@ -1329,8 +1329,8 @@ def listcategories(request):
                 entry.delete()
 
         elif 'Add New Category' in request.POST:
-            return redirect('/addcategory/') 
-            
+            return redirect('/addcategory/')
+
     categories = Category.objects.all()
     #show addresses
     context = {

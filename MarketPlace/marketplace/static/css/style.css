@@ -410,11 +410,21 @@ p {
 
 /*Product List Page:*/
 
+#product_div {
+	margin-left: 2px;
+ 	margin-right: 2px;
+ }
+
+ #product_row {
+ 	padding-left: 0px;
+ 	padding-right: 0px;
+ }
+
 .product_list {
     max-width: 300px;
     max-width: 300px;
     padding: 0px;
-    padding: 10px;
+    padding: 9px;
     opacity: 1;
 }
 
