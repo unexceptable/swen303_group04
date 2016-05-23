@@ -1,41 +1,71 @@
 {% extends 'base.html' %}
-
+{% load bootstrap3 %}
 {% block content %}
 
 {% if category == 'all' %}
-  <h2 id="category_title"> Categories </h2>
-  <ul>
-    <div class="row list_centered category_item">
-      {% for c in  categories%}
-        <a href="/category/{{ c.name }}/" class="category_link">
-          <div class="col-xs-6 col-md-4 col-lg-2 category_view">
-          <div class="list_border">
-            <img src="/media/{{ c.main_image }}" width="100%">
-            <h3>{{ c.name }}</h3>
+  <div id="category_view">
+    <h2 id="category_title"> Shop by Category </h2>
+    <br>
+    <ul>
+      <div class="row list_centered category_item">
+        {% for c in  categories%}
+          <div class="col-xs-6 col-md-4 col-lg-3 ">
+            <a href="/category/{{ c.name }}/" class="category_link">
+              <div class="category_view">
+                <img src="/media/{{ c.main_image }}" width="100%">
+                <h3>{{ c.name }}</h3>
+              </div>
+            </a>
           </div>
-          </div>
-        </a>
-      {% endfor %}
-    </div>
-  </ul>
+        {% endfor %}
+      </div>
+    </ul>
+  </div>
 {% elif product_list %}
 
-  <div class="row">
+  <!-- subcategories -->
+  {% if subcategories %}
+    <div id="category_view">
+      <h2 id="category_title"> Subcategories</h2>
+      <br>
+      <div>
+        <ul>
+          <div class="subcategories row category_item">
+            {% for sub_cat in subcategories %}
+              <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 ">
+                <a href="/category/{{ sub_cat }}/">
+                  <div class="category_view">
+                    <img src="/media/{{ sub_cat.main_image }}" width="100%">
+                    <h3>{{ sub_cat.name }}</h3>
+                  </div>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="row product_div">
     <!-- Filter bar -->
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 products_col_left">
-      <div>
+      <div class="filter_section">
         <h3>Filters</h3>
       </div>
-      <div>
+      <div class="filter_div"></div>
+      <div class="filter_section">
         <p>Price</p>
       </div>
-      <div>
+      <div class="filter_div"></div>
+      <div class="filter_section">
         <p>Category</p>
       </div>
-      <div>
+      <div class="filter_div"></div>
+      <div class="filter_section">
         <div class="row">
-          <button>Clear</button>
-          <button>Apply</button>
+          <button class="btn btn-primary btn-sm">Clear</button>
+          <button class="btn btn-primary btn-sm">Apply</button>
         </div>
       </div>
 
@@ -56,7 +86,7 @@
       <!--sorting bar -->
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section_right">
 
-        <form action="" method="get">
+        <form action="" method="get" id="sort_form">
           <ul class="sorting_bar row">
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
             <li class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
@@ -65,11 +95,32 @@
                 <div class="section_title">
                   <p>View mode</p>
                 </div>
-                <div class="section_body">
-                  <input type="radio" name="view" value="box" {% if display_type == 'box' %}checked{% endif %}> Box<br>
-                  <input type="radio" name="view" value="details" {% if display_type == 'details' %}checked{% endif %}> Details<br>
-                  <input type="radio" name="view" value="mix" {% if display_type == 'mix' %}checked{% endif %}> Mix
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-default {% if display_type == 'box' %}active{% endif %}">
+                    <span class="glyphicon glyphicon-th">
+                      <input type="radio" name="view" value="box" {% if display_type == 'box' %}checked{% endif %}>
+                    </span>
+                  </label>
+                  <label class="btn btn-default {% if display_type == 'details' %}active{% endif %}">
+                    <span class="glyphicon glyphicon-align-justify">
+                      <input type="radio" name="view" value="details" {% if display_type == 'details' %}checked{% endif %}>
+                    </span>
+                  </label>
+                  <label class="btn btn-default {% if display_type == 'mix' %}active{% endif %}">
+                    <span class="glyphicon glyphicon-list">
+                      <input type="radio" name="view" value="mix" {% if display_type == 'mix' %}checked{% endif %}>
+                    </span>
+                  </label>
                 </div>
+
+                <script type="text/javascript">
+                  $(document).ready(function() {
+                    $("input[name='view']").change(function(){
+                      //alert(this.value);
+                      document.getElementById("sort_form").submit();
+                    });
+                  });
+                </script>
               </div>
             </li>
             <li class="sort_divider col-lg-1 col-md-1 col-sm-1 col-xs-1"><div></div></li>
@@ -79,14 +130,18 @@
                 <div class="section_title">
                   <p>Sort By</p>
                 </div>
-                <div class="section_body">
-                  <select class="form-control" name="sortBy">
-                    <option value="AtoZ" {% if sort_type == 'AtoZ' %}selected{% endif %}>A to Z</option>
-                    <option value="ZtoA" {% if sort_type == 'ZtoA' %}selected{% endif %}>Z to A</option>
-                    <option value="priceLow" {% if sort_type == 'priceLow' %}selected{% endif %}>Price - Low to High</option>
-                    <option value="priceHigh" {% if sort_type == 'priceHigh' %}selected{% endif %}>Price - High to Low</option>
-                  </select>
-                  <input type="submit">
+                <div class="section_body row">
+                  <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <select class="form-control input-sm" name="sortBy" id="sort_choice">
+                      <option value="AtoZ" {% if sort_type == 'AtoZ' %}selected{% endif %}>A to Z</option>
+                      <option value="ZtoA" {% if sort_type == 'ZtoA' %}selected{% endif %}>Z to A</option>
+                      <option value="priceLow" {% if sort_type == 'priceLow' %}selected{% endif %}>Price - Low to High</option>
+                      <option value="priceHigh" {% if sort_type == 'priceHigh' %}selected{% endif %}>Price - High to Low</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                    <button type="submit" class="btn btn-primary btn-sm">Go</button>
+                  </div>
                 </div>
               </div>
             </li>
@@ -97,15 +152,19 @@
                 <div class="section_title">
                   <p>Items per page</p>
                 </div>
-                <div class="section_body">
-                  <select name="nItems" class="form-control">
-                    <option value="all" {% if items_per_page == 'all' %}selected{% endif %}>All</option>
-                    <option value="2" {% if items_per_page == '2' %}selected{% endif %}>2</option>
-                    <option value="24" {% if items_per_page == '24' %}selected{% endif %}>24</option>
-                    <option value="48" {% if items_per_page == '48' %}selected{% endif %}>48</option>
-                    <option value="72" {% if items_per_page == '72' %}selected{% endif %}>72</option>
-                  </select>
-                  <input type="submit">
+                <div class="section_body row">
+                  <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                    <select name="nItems" class="form-control">
+                      <option value="all" {% if items_per_page == 'all' %}selected{% endif %}>All</option>
+                      <option value="2" {% if items_per_page == '2' %}selected{% endif %}>2</option>
+                      <option value="24" {% if items_per_page == '24' %}selected{% endif %}>24</option>
+                      <option value="48" {% if items_per_page == '48' %}selected{% endif %}>48</option>
+                      <option value="72" {% if items_per_page == '72' %}selected{% endif %}>72</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                    <button type="submit" class="btn btn-primary btn-sm">Go</button>
+                  </div>
                 </div>
               </div>
             </li>
@@ -120,7 +179,7 @@
             {% for product in product_list %}
                 <a href="/product/{{ product.pk }}" style="text-decoration: none">
                     <div class="product_list col-md-3 col-sm-6 col-xs-12">
-                    <div class="list_border">                        
+                    <div class="list_border">
                         <div class="list_image">
                            <img width="100%" src="/media/{{ product.thumbnail }}">
                         </div>
@@ -128,15 +187,15 @@
                           <div>
                             <div class="list_name"><p>{{ product.name }}</p></div>
                             <div class="list_price"><p>$ {{ product.price }}</p></div>
-                          </div>  
+                          </div>
                           <div class="product_button">
                             <form action="/product/{{ product.pk }}/cart" method="post">
                              {% csrf_token %}
                              <input id="id_quantity" min="0" name="quantity" type="hidden" value="1">
-                             <button class="btn btn-primary btn-xs" id="remove_cart">Add To Cart</button> 
-                            </form>                        
-                          </div>                        
-                        </div>                        
+                             <button class="btn btn-primary btn-xs" id="remove_cart">Add To Cart</button>
+                            </form>
+                          </div>
+                        </div>
                     </div>
                     </div>
                 </a>
