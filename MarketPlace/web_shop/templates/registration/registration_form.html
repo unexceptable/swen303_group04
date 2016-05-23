@@ -2,11 +2,11 @@
 {% load i18n %}
 {% block title %}"Register for an account"{% endblock %}
 {% block content %}
-<table>
+<div id="reg_form">
   <form method='post' action=''>
     {% csrf_token %}
     {{ form }}
-    <td><input type="submit" value="Register and Login"/></td>
+    <input class="btn btn-default" type="submit" value="Register and Login"/>
   </form>
-</table>
+</div>
 {% endblock %}
