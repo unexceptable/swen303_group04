@@ -9,7 +9,7 @@ class ProductForm(forms.Form):
     name = forms.CharField(max_length=100, required=True)
     description = forms.CharField(required=True, widget=forms.Textarea)
     price = forms.DecimalField(required=True, max_digits=20, decimal_places=2)
-    visible = forms.BooleanField()
+    visible = forms.BooleanField(initial=False, required=False)
     tags = forms.CharField(
         required=False, widget=forms.Textarea,
         label='Comma Separated Tags')

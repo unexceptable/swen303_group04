@@ -42,9 +42,14 @@ def search(request):
     tags = Tag.objects.filter(
         reduce(operator.and_, (Q(name__icontains=x) for x in keywords)))
 
-    products = Product.objects.filter(
-        (Q(reduce(operator.and_, (Q(name__icontains=x) for x in keywords))) | Q(tags__in=tags)),
-        visible=True).distinct()
+    if request.user.is_superuser:
+        products = Product.objects.filter(
+            (Q(reduce(operator.and_, (Q(name__icontains=x) for x in keywords))) | Q(tags__in=tags)),
+        ).distinct()
+    else:
+        products = Product.objects.filter(
+            (Q(reduce(operator.and_, (Q(name__icontains=x) for x in keywords))) | Q(tags__in=tags)),
+            visible=True).distinct()
 
     context = {
         'search': form.data["search"],
@@ -216,7 +221,7 @@ def product_detail(request, p_id):
 
     try:
         product = Product.objects.get(pk=p_id)
-        if not product.visible:
+        if not product.visible and not request.user.is_superuser:
             raise Product.DoesNotExist
 
         form = CartForm()
@@ -397,7 +402,10 @@ def category_view(request, category_name):
         else:
             c = Category.objects.get(name=category_name)
             sub_cat_list = c.children
-            product_list = c.product_set.all()
+            if request.user.is_superuser:
+                product_list = c.product_set.all()
+            else:
+                product_list = c.product_set.filter(visible=True)
             context = {
                 'category': c,
                 'subcategories': sub_cat_list,
