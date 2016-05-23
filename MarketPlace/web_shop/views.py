@@ -100,11 +100,13 @@ def add_product(request):
                     _tag.save()
                     tags.append(_tag)
 
+            c = Category.objects.get(pk=form.cleaned_data['category'])
             try:
+                
                 tags.append(Tag.objects.get(
-                    name=form.cleaned_data['category']))
+                    name=c.name))
             except Tag.DoesNotExist:
-                _tag = Tag(name=form.cleaned_data['category'])
+                _tag = Tag(name=c.name)
                 _tag.save()
                 tags.append(_tag)
 
@@ -161,11 +163,13 @@ def edit_product(request, p_id):
                         _tag.save()
                         tags.append(_tag)
 
+                c = Category.objects.get(pk=form.cleaned_data['category'])
                 try:
+                    
                     tags.append(Tag.objects.get(
-                        name=form.cleaned_data['category']))
+                        name=c.name))
                 except Tag.DoesNotExist:
-                    _tag = Tag(name=form.cleaned_data['category'])
+                    _tag = Tag(name=c.name)
                     _tag.save()
                     tags.append(_tag)
 
