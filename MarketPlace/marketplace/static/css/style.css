@@ -101,6 +101,12 @@ p {
     padding-bottom: 6px;
 }
 
+#logo{
+  font-family: Georgia;
+  font-style: normal;
+  font-weight: bold;
+  font-variant: small-caps;
+}
 
 #logo a{
     text-decoration: none;
