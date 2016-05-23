@@ -5,7 +5,7 @@ from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
     ChatForm, MessageForm, AddressForm, SortTypeForm,
     ItemsPerPageForm, ContactForm, ImageForm, ProductForm,
-    EditProductForm, CategoryForm)
+    EditProductForm, CategoryForm, EditCategoryForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact, WishList, WishListItem, Tag,
@@ -1258,17 +1258,22 @@ def edit_category(request,uid):
         entry = Category.objects.get(pk=uid)
         #process selected
         if request.method=="POST":
-            form = CategoryForm(request.POST, request.FILES)
+            form = EditCategoryForm(request.POST, request.FILES)
             if form.is_valid():
                 entry.name = form.cleaned_data['name']
-                if form.cleaned_data['main_image']:
-                    entry.main_image = form.cleaned_data['main_image']
-                entry.parent = Category.objects.get(pk=form.cleaned_data['parent'])
+                if request.FILES['main_image']:
+                    entry.main_image = request.FILES['main_image']
+
+                if form.cleaned_data['parent']:
+                    entry.parent = Category.objects.get(name=form.cleaned_data['parent'])
+                else:
+                    entry.parent = None
+
                 entry.save()
                 # Return ok.
                 context = {
                     'heading': 'Success',
-                    'feedback': 'Category with ID '+entry.pk+' has now been updated to '+entry.name+' with parent '+entry.parent+' and an image of <a href="/media/'+entry.main_image+'"><img width="100" src="/media/'+entry.main_image+'"></a>',
+                    'feedback': 'Category with ID '+str(entry.pk)+' has now been updated to '+entry.name+' with parent '+str(entry.parent),
                     'cart': Cart(request),
                 }
                 return render(request, "feedback.html", context)
@@ -1282,7 +1287,7 @@ def edit_category(request,uid):
                 return render(request, "feedback.html", context)
         #pre-fill
         else:
-            form = CategoryForm({
+            form = EditCategoryForm({
                 'name': entry.name,
                 'main_image': entry.main_image,
                 'parent': entry.parent,
@@ -1301,3 +1306,48 @@ def edit_category(request,uid):
             'cart': Cart(request),
         }
         return render(request, "feedback.html", context)
+
+def add_category(request):
+    #Check login
+    if not request.user.is_authenticated() or not request.user.is_superuser:
+        return redirect("/")
+
+    #process selected
+    if request.method=="POST":
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            parent = None
+            if form.cleaned_data['parent'] and Category.objects.filter(name=form.cleaned_data['parent']).exists():
+                parent = Category.objects.get(name=form.cleaned_data['parent'])
+
+            Category.objects.create(
+            name=form.cleaned_data['name'],
+            main_image=request.FILES['main_image'],
+            parent=parent,
+            )
+
+            # Return ok.
+            context = {
+                'heading': 'Success',
+                'feedback': 'New category '+form.cleaned_data['name']+' with parent(s) '+str(parent),
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+        else:
+            # Return an error message.
+            context = {
+                'heading': 'Error',
+                'feedback': 'Image field and name field must be filled',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+
+    #display form
+    else:
+        form = CategoryForm()
+        context = {
+            'form': form,
+            'cart': Cart(request),
+        }
+        return render(request, "add_category.html", context)

@@ -52,4 +52,5 @@ urlpatterns = [
     url(r'^notifications/$', views.listnotifications),
     url(r'^listcategories/$', views.listcategories),
     url(r'^editcategory/(?P<uid>\w+)[/]$', views.edit_category),
+    url(r'^addcategory/$', views.add_category)
 ]

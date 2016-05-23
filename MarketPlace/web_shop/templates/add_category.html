@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}"Update category"{% endblock %}
+{% block title %}"Add category"{% endblock %}
 {% block content %}
 <div id="edit-address-form">
   <form method='post' action='' enctype='multipart/form-data'>
@@ -10,14 +10,13 @@
     	</div>
     	<div class="form-group">
     		{{ form.main_image.label_tag }}
-        <p><a href="/media/{{main_image}}"><img width="250" src="/media/{{main_image}}"></a></p>
     		{{ form.main_image }}
     	</div>
     	<div class="form-group">
     		{{ form.parent.label_tag }}
     		{{ form.parent }}
     	</div>
-    <input class="btn btn-default" type="submit" value="Update Category">
+    <input class="btn btn-default" type="submit" value="Add Category">
   </form>
 </div>
 {% endblock %}
