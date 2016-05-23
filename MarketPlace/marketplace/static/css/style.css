@@ -192,7 +192,7 @@ p {
 /* Contact Form: */
 #contact-form {
     max-width: 320px;
-    margin: auto;
+    margin-left: 25%;
     padding-left: auto;
 }
 
