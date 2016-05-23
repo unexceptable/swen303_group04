@@ -918,6 +918,10 @@ body {
     margin-top: 30px;
 }
 
+#id_message{
+  width: 100%;
+}
+
 #chat_panel{
   width: 85%
 }
