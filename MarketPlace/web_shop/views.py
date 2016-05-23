@@ -312,6 +312,8 @@ def product_cart(request, p_id):
         if item.product.pk == product.pk:
             in_cart = True
 
+    next = request.POST.get('next')
+
     form = CartForm(request.POST)
     if form.is_valid():
         if in_cart:
@@ -319,12 +321,11 @@ def product_cart(request, p_id):
                     form.cleaned_data['quantity'] > 0):
                 cart.update(
                     product, form.cleaned_data['quantity'], product.price)
-            else:
+            elif not next:
                 cart.remove(product)
         else:
                 cart.add(product, product.price, form.cleaned_data['quantity'])
 
-    next = request.POST.get('next')
     if next:
         return redirect(next)
     else:
