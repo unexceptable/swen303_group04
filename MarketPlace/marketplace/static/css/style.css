@@ -101,12 +101,6 @@ p {
     padding-bottom: 6px;
 }
 
-#logo{
-  font-family: Georgia;
-  font-style: normal;
-  font-weight: bold;
-  font-variant: small-caps;
-}
 
 #logo a{
     text-decoration: none;
@@ -189,37 +183,8 @@ p {
     border-width: 1px;
 }
 
-/* Registration Form: */
-#reg-form {
-    max-width: 320px;
-    margin: auto;
-    padding-left: auto;
-}
-
-#reg-form label{
-    display: block;
-    padding: 5px;
-    margin-left: auto;
-}
-
-#reg-form input{
-    display: block;
-    padding: 5px;
-    border-radius: 2px;
-    border-style: solid;
-    border-width: 1px;
-}
-
-#reg-form input[type="submit"]{
+#login-form input[type="submit"]{
     margin-top: 30px;
-}
-
-#reg-form input[type="submit"]{
-    margin-top: 30px;
-}
-
-#id_tos{
-  margin-left: 20px;
 }
 
 /* Edit Credentials Form: */
@@ -373,7 +338,7 @@ p {
 }
 
 .image-add-list, .add-image-form{
-  background-color: lightgrey;
+  background-color: #B0BEC5;
   border: 1px solid #333;
   padding: 5px;
   margin: 5px;
@@ -391,7 +356,7 @@ p {
 }
 
 .product-images-edit{
-  background-color: lightgrey;
+  background-color: lightgreen;
   border: 1px solid #333;
   padding: 5px;
   margin: 5px;
@@ -399,8 +364,6 @@ p {
 
 .image-delete{
   width: 100%;
-  border: 1px solid black;
-  margin-top: 10px;
 }
 
 .errorlist{
@@ -410,11 +373,20 @@ p {
 
 /*Product List Page:*/
 
+#product_div {
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+#product_row {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
 .product_list {
     max-width: 300px;
     max-width: 300px;
-    padding: 0px;
-    padding: 10px;
+    padding: 9px;
     opacity: 1;
 }
 
@@ -484,7 +456,7 @@ p {
 
 /* Cart Page:*/
 .cart{
-    max-width: 800px;
+    max-width: 600px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -810,9 +782,7 @@ body {
 }
 
 .selected-address{
-  border: 1px solid black;
   background-color: #A2D652;
-  padding-bottom: 8px;
 }
 
 .select-address{
@@ -820,7 +790,6 @@ body {
 }
 
 #add-address{
-  border: 1px solid black;
   background-color: #A2D652;
   padding: 15px;
   margin: 15px;

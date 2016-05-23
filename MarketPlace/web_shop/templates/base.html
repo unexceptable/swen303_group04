@@ -48,29 +48,29 @@
                    <li><a href="/category/all/">Browse</a></li>
                    <li><a href="/contact/">Support</a></li>
                    <li class="dropdown">
-                       <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ request.user.username }} 
+                       <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ request.user.username }}
                        <span class="caret"></span></a>
                        <ul class="dropdown-menu" id="menu_dropdown">
                          {% if request.user.is_superuser %}
                          <li id="admin_actions"><p>Admin actions:</p></li>
                          <li><a href="/addproduct/">Add Product</a></li>
-                         <li><a href="/listusers/">All Users</a></li>
-                         <li><a href="/listcategories/">All Categories</a></li>
-                         <li><a href="/listaddresses/">All Addresses</a></li>
-                         <li><a href="/listsales/">All Sales Orders</a></li>
-                         <li><a href="/listcontacts/">All Complaints</a></li>
+                         <li><a href="/listusers/">Users</a></li>
+                         <li><a href="/listcategories/">Categories</a></li>
+                         <li><a href="/listaddresses/">Addresses</a></li>
+                         <li><a href="/listsales/">Sale Orders</a></li>
+                         <li><a href="/listcontacts/">Complaints</a></li>
                          <li role="separator" class="divider"></li>
                          {% endif %}
                          <li><a href="/notifications/">Notifications: {{ notifications|length }}</a></li>
-                         <li><a href="/wishlist/">Your Wishlist</a></li>
-                         <li><a href="/listsales/">Your Sales Orders</a></li>
-                         <li><a href="/listaddresses/">Your Addresses</a></li>
+                         <li><a href="/wishlist/">Wishlist</a></li>
+                         <li><a href="/listsales/">Sale Orders</a></li>
+                         <li><a href="/listaddresses/">Addresses</a></li>
                          <li role="separator" class="divider"></li>
                          <li><a href="/editdetails/">Edit Credentials</a></li>
                          <li role="separator" class="divider"></li>
                          <li><a href="/contact/">Support</a></li>
                          {% if not request.user.is_superuser %}
-                         <li><a href="/chat?chat=admin">Chat with customer support</a></li>
+                         <li><a href="/chat?chat=admin">Live chat</a></li>
                          {% endif %}
                          <li role="separator" class="divider"></li>
                          <li><a href="/logout/">Logout</a></li>
