@@ -23,52 +23,80 @@
   </div>
 {% elif product_list %}
 
-  <!-- subcategories -->
-  {% if subcategories %}
-    <div id="category_view">
-      <h2 id="category_title"> Subcategories</h2>
-      <br>
-      <div>
-        <ul>
-          <div class="subcategories row category_item">
-            {% for sub_cat in subcategories %}
-              <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 ">
-                <a href="/category/{{ sub_cat }}/">
-                  <div class="category_view">
-                    <img src="/media/{{ sub_cat.main_image }}" width="100%">
-                    <h3>{{ sub_cat.name }}</h3>
-                  </div>
-                </a>
-              </div>
-            {% endfor %}
-          </div>
-        </ul>
-      </div>
-    </div>
-  {% endif %}
 
   <div class="row product_div">
     <!-- Filter bar -->
     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 products_col_left">
-      <div class="filter_section">
-        <h3>Filters</h3>
-      </div>
-      <div class="filter_div"></div>
-      <div class="filter_section">
-        <p>Price</p>
-      </div>
-      <div class="filter_div"></div>
-      <div class="filter_section">
-        <p>Category</p>
-      </div>
-      <div class="filter_div"></div>
-      <div class="filter_section">
-        <div class="row">
-          <button class="btn btn-primary btn-sm">Clear</button>
-          <button class="btn btn-primary btn-sm">Apply</button>
-        </div>
+      <div>
+        <form action="" method="get">
+          <!-- hidden values for sort form -->
+
+          <input type="hidden" name="view" {% if display_type %}value="{{ display_type }}"{% else %}value='box'{% endif %}>
+          <input type="hidden" name="sortBy" {% if sort_type %}value="{{ sort_type }}"{% else %}value='AtoZ'{% endif %}>
+          <input type="hidden" name="nItems" {% if items_per_page %}value="{{ items_per_page }}"{% else %}value='all'{% endif %}>
+
+          <div class="filter_section">
+            <h3 id="category_title">Filters</h3>
+          </div>
+          <div class="filter_section">
+            <p style="text-align:left;"><b>Price</b></p>
+            <div class="row">
+              <div>
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                  <input {% if min_price %}value="{{ min_price }}"{% else %}value="0"{% endif %}
+                    type="range" name="minPrice" min="0" id="min_price_slider" onChange="printValue('min_price_slider', 'minPrice')">
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                  <input {% if min_price %}value="{{ min_price }}"{% else %}value="0"{% endif %} type="text" id='minPrice'>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                  <input {% if max_price %} value="{{ max_price }}"{% else %} value="100"{% endif %}
+                    type="range" name="maxPrice" min="0" id="max_price_slider" onChange="printValue('max_price_slider', 'maxPrice')">
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                  <input {% if max_price %}value="{{ max_price }}"{% else %}value="100"{% endif %} type="text" id='maxPrice'>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter_section">
+            <div class="row">
+              <button class="btn btn-primary btn-sm">Reset</button>
+              <button class="btn btn-primary btn-sm">Apply</button>
+            </div>
+          </div>
+          <div class="filter_div"></div>
+        </form>
       </div>
 
+    <!-- subcategories -->
+    {% if subcategories %}
+      <div id="category_view2">
+        <h3 id="category_title"> Subcategories</h3>
+        <br>
+        <div>
+          <ul>
+            <div class="subcategories row category_item">
+              {% for sub_cat in subcategories %}
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
+                  <a href="/category/{{ sub_cat }}/">
+                    <div class="category_view">
+                      <img src="/media/{{ sub_cat.main_image }}" width="100%">
+                      <h5>{{ sub_cat.name }}</h5>
+                    </div>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          </ul>
+        </div>
+      </div>
+    {% endif %}
     </div>
 
     <!-- sorting bar and products -->
@@ -79,7 +107,13 @@
         <ol class="breadcrumb">
           <li><a href="/">Home</a></li>
           <li><a href="/category/all/">All Categories</a></li>
-          <li class="active">{{ category }}</li>
+          {% for temp in  parent_path %}
+            {% if temp == last_cat %}
+              <li class="active">{{ temp }}</li>
+            {% else %}
+              <li><a href="/category/{{ temp }}/">{{ temp }}</a></li>
+            {% endif %}
+          {% endfor %}
         </ol>
       </div>
 
@@ -87,6 +121,10 @@
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section_right">
 
         <form action="" method="get" id="sort_form">
+          <!-- hidden values for price filter -->
+          <input type="hidden" {% if min_price %}name="minPrice" value="{{ min_price }}"{% endif %}>
+          <input type="hidden" {% if max_price %}name="maxPrice" value="{{ max_price }}"{% endif %}>
+
           <ul class="sorting_bar row">
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
             <li class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
@@ -112,15 +150,6 @@
                     </span>
                   </label>
                 </div>
-
-                <script type="text/javascript">
-                  $(document).ready(function() {
-                    $("input[name='view']").change(function(){
-                      //alert(this.value);
-                      document.getElementById("sort_form").submit();
-                    });
-                  });
-                </script>
               </div>
             </li>
             <li class="sort_divider col-lg-1 col-md-1 col-sm-1 col-xs-1"><div></div></li>
@@ -189,7 +218,7 @@
                         </div>
                         <div class="list_info">
                           <div>
-                            <div class="list_name"><p>{{ product.name }}</p></div>
+                            <div class="list_name"><p><b>{{ product.name }}</b></p></div>
                             <div class="list_price"><p>$ {{ product.price }}</p></div>
                           </div>
                           <div class="product_button">
@@ -205,27 +234,68 @@
                 </a>
             {% endfor %}
           {% elif display_type == 'details' %}
-            <h3>Details view</h3>
             {% for product in product_list %}
-                <a href="/product/{{ product.pk }}" style="text-decoration: none">
-
-                    {% if product.visible %}
-                    <div class="list_border">
-                    {% else %}
-                    <div class="list_border p-list-not-visible">
-                    {% endif %}
-                         <div class="list_info">
-                            <div class="list_name"><p>{{ product.name }}</p></div>
-                            <div class="list_price"><p>$ {{ product.price }}</p></div>
-                        </div>
-                        <div class="list_image">
-                             <img width="100%" src="/media/{{ product.thumbnail }}">
-                         </div>
-                    </div>s
-                </a>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="detail_item">
+                {% if product.visible %}
+                <div class="list_border">
+                {% else %}
+                <div class="list_border p-list-not-visible">
+                {% endif %}
+                  <div class="row">
+                    <a href="/product/{{ product.pk }}" style="text-decoration: none">
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" id="details_detail">
+                         <div class="list_name"><p><b>{{ product.name }}</b></p></div>
+                         <div class="lsit_price"><p>$ {{ product.price }}</p></div>
+                     </div>
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" id="details_about">
+                        <div class="list_name"><p><i>{{ product.description }}</i></p></div>
+                    </div>
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                       <div class="product_button" id="details_button">
+                         <form action="/product/{{ product.pk }}/cart" method="post">
+                          {% csrf_token %}
+                          <input id="id_quantity" min="0" name="quantity" type="hidden" value="1">
+                          <button class="btn btn-primary btn-xs" id="remove_cart">Add To Cart</button>
+                         </form>
+                       </div>
+                     </div>
+                   </a>
+                  </div>
+                </div>
+              </div>
             {% endfor %}
           {% elif display_type == 'mix' %}
-            <h3>Mix view</h3>
+            {% for product in product_list %}
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="detail_item">
+                <div class="list_border">
+                  <div class="row">
+                    <a href="/product/{{ product.pk }}" style="text-decoration: none">
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
+                         <div class="list_image">
+                           <img width="100%" src="/media/{{ product.thumbnail }}">
+                         </div>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3" id="details_detail">
+                         <div class="list_name"><p><b>{{ product.name }}</b></p></div>
+                         <div class="lsit_price"><p>$ {{ product.price }}</p></div>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3" id="details_about">
+                        <div class="list_name"><p><i>{{ product.description }}</i></p></div>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
+                       <div class="product_button" id="details_button">
+                         <form action="/product/{{ product.pk }}/cart" method="post">
+                          {% csrf_token %}
+                          <input id="id_quantity" min="0" name="quantity" type="hidden" value="1">
+                          <button class="btn btn-primary btn-xs" id="remove_cart">Add To Cart</button>
+                         </form>
+                       </div>
+                     </div>
+                   </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
           {% endif %}
         </div>
         <!-- put page number stuff -->
@@ -256,5 +326,37 @@
 	    No matches found.
 	</div>
 {% endif %}
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("input[name='view']").change(function(){
+      //alert(this.value);
+      document.getElementById("sort_form").submit();
+    });
+  });
 
+  function printValue(slider_, textbox_) {
+    var slider = document.getElementById(slider_);
+    var textbox = document.getElementById(textbox_);
+    textbox.value = slider.value
+
+    if(slider_ == 'min_price_slider') {
+      sliderMax = document.getElementById('max_price_slider');
+      textboxMax = document.getElementById('maxPrice');
+
+      if(slider.value > sliderMax.value){
+        sliderMax.value = slider.value;
+        textboxMax.value = slider.value;
+      }
+    }
+    else if(slider_ == 'max_price_slider') {
+      sliderMin = document.getElementById('min_price_slider');
+      textboxMin = document.getElementById('minPrice');
+
+      if(slider.value < sliderMin.value){
+        sliderMin.value = slider.value;
+        textboxMin.value = slider.value;
+      }
+    }
+  }
+</script>
 {% endblock %}

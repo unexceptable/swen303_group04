@@ -18,6 +18,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.paginator import Paginator
 import operator
 from django.forms import formset_factory
+from itertools import chain
 
 
 def index(request):
@@ -120,7 +121,7 @@ def add_product(request):
                     pass
             return redirect("/product/%s" % product.pk)
         else:
-            print form.errors, imgformset.errors
+            print (form.errors, imgformset.errors)
     else:
         form = ProductForm()
         imgformset = ImageFormSet()
@@ -392,7 +393,7 @@ def signin(request):
 def category_view(request, category_name):
     try:
         if(category_name == 'all'):
-            category_list = Category.objects.all()
+            category_list = Category.objects.filter(parent=None)
             context = {
                 'category': category_name,
                 'categories': category_list,
@@ -410,9 +411,12 @@ def category_view(request, category_name):
                 'category': c,
                 'subcategories': sub_cat_list,
                 'product_list': product_list,
-                'cart': Cart(request)
-
+                'cart': Cart(request),
+                'parent_path': c.get_parent_path,
+                'last_cat': c.get_parent_path[-1]
             }
+
+
 
             #initial sorting values
             display_type = 'box'
@@ -424,24 +428,42 @@ def category_view(request, category_name):
                 items_per_page = request.GET.get('nItems')
                 display_type = request.GET.get('view')
                 page_num = request.GET.get('page_num')
+                min_price = request.GET.get('minPrice')
+                max_price = request.GET.get('maxPrice')
 
                 #product view
                 if display_type:
                     display_type = request.GET.get('view')
                 else:
                     display_type = 'box'
+
+                #get products of children categories
+                product_list = get_all_products(sub_cat_list, product_list)
                 #sort the products
                 if sort_type:
                     if sort_type == 'AtoZ':
-                        product_list= product_list.order_by('name')
+                        #product_list.sort()
+                        product_list= product_list.extra(select={'case_insensitive_name': 'lower(name)'}).order_by('case_insensitive_name')
                     elif sort_type == 'ZtoA':
-                        product_list= product_list.order_by('-name')
+                        product_list= product_list.extra(select={'case_insensitive_name': 'lower(name)'}).order_by('-case_insensitive_name')
                     elif sort_type == 'priceLow':
                         product_list= product_list.order_by('price')
                     elif sort_type == 'priceHigh':
                         product_list= product_list.order_by('-price')
                 else:
-                    product_list= product_list.order_by('name')
+                    product_list= product_list.extra(select={'case_insensitive_name': 'lower(name)'}).order_by('case_insensitive_name')
+
+                #highest cost item
+                highest_price = product_list.order_by('-price')[0].price
+
+                #if min_price and max_price:
+                    #filter out all products below
+                #    product_list = product_list.filter(price__lt=min_price, price__gt=max_price)
+                if max_price:
+                    #filter out all products above
+                    product_list = product_list.filter(price__lt=max_price)
+                if min_price:
+                    product_list = product_list.filter(price__gt=min_price)
 
                 # number of pages
                 if items_per_page:
@@ -473,12 +495,16 @@ def category_view(request, category_name):
                         context.update({'current_page':current_page})
 
 
+
+                context.update({'highest_price': highest_price})
                 context.update({'display_type': display_type})
                 context.update({'items_per_page': items_per_page})
                 context.update({'sort_type': sort_type})
                 context.update({'product_list': product_list})
                 context.update({'display_type': display_type})
                 context.update({'page_num': page_num})
+                context.update({'min_price': min_price})
+                context.update({'max_price': max_price})
             #elif request.method == "POST":
 
         return render(request, "category_view.html", context)
@@ -491,6 +517,15 @@ def category_view(request, category_name):
                 'cart': Cart(request),
             })
 
+def get_all_products(subcat_list, product_list):
+    if subcat_list:
+        res = []
+        for category in subcat_list:
+            #product_list = list(chain(get_all_products(category.children, product_list), category.product_set.all()))
+            product_list = get_all_products(category.children, product_list) | category.product_set.all()
+        return product_list
+    else:
+        return product_list
 
 def logout_user(request):
     logout(request)
