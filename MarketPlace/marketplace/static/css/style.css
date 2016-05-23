@@ -909,5 +909,9 @@ body {
 }
 
 #chat_panel{
-  width: 82%
+  width: 87%
+}
+
+#chat_pos{
+  width: 800px;
 }
