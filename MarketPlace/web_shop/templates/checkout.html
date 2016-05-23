@@ -11,12 +11,10 @@
     <p>Please double check and confirm your order:</p>
 
     <div class="cart">
-        <table>
+        <table class="table table-striped">
             <tr>
                 <th>Product</th>
                 <th>Quantity</th>
-                <th></th>
-                <th></th>
                 <th>Total Price</th>
             </tr>
             {% for item in cart %}
@@ -35,7 +33,8 @@
         <legend>Your Addresses</legend>
         {% if addresses %}
             {% if address_error %}
-            <ul class="errorlist"><li>You must select an address.</li></ul>
+            <div class="alert alert-danger" role="alert">You must select an address
+            </div>
             {% endif %}
             {% for address in addresses %}
             <div class="col-md-4 address-list-padding">
