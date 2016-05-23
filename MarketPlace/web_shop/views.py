@@ -371,7 +371,9 @@ def register(request):
             user = authenticate(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password1'])
-            print user
+            print "here!!!"
+            print user.is_anonymous()
+            print user.is_authenticated()
             login(request, user)
             # Redirect to home
             print next
