@@ -363,7 +363,7 @@ def register(request):
 
             user = User(
                 username=form.cleaned_data['username'],
-                password=form.cleaned_data['password'],
+                password=form.cleaned_data['password1'],
                 email=form.cleaned_data['email'],
             )
             user.save()
