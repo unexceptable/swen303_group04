@@ -791,8 +791,12 @@ def listusers(request):
 
 def checkout(request):
     if request.method == 'GET':
-        cart = Cart(request)
-        addresses = request.user.address_set.all()
+        cart = Cart(request)        
+
+        if not cart.count():
+            return redirect("/cart")
+
+        addresses = request.user.address_set.filter(visible=True)
         try:
             default = request.user.address_set.get(default=True)
         except Address.DoesNotExist:
@@ -806,15 +810,26 @@ def checkout(request):
 
         return render(request, 'checkout.html', context)
     if request.method == 'POST':
-        address_id = request.POST.get('address', None)
-
-        if not address_id:
-            return redirect("/")
+        address_id = request.POST.get('address', None)       
 
         try:
             address = request.user.address_set.get(pk=address_id)
-        except Address.DoesNotExist:
-            return redirect("/")
+        except (Address.DoesNotExist, ValueError):
+            cart = Cart(request)
+            addresses = request.user.address_set.filter(visible=True)
+            try:
+                default = request.user.address_set.get(default=True)
+            except Address.DoesNotExist:
+                default = None
+
+            context = {
+                'address_error': True,
+                'cart': cart,
+                'addresses': addresses,
+                'default': default,
+            }
+
+            return render(request, 'checkout.html', context)
 
         cart = Cart(request)
 
@@ -827,7 +842,12 @@ def checkout(request):
                 unit_price=item.unit_price, product=item.product)
             order_item.save()
 
-        return render(request, 'checkedout.html')
+        cart.clear()
+
+        return render(
+            request, 'checkedout.html',
+            {'order': order})
+
 
 def listsales(request):
     #Check login superuser
@@ -1104,13 +1124,13 @@ def listaddresses(request):
             for uid in entries:
                 entry = Address.objects.get(pk=uid)
                 if request.user.is_superuser or request.user == entry.user:
-                    entry.delete()
+                    entry.visible = False
+                    entry.default = False
+                    entry.save()
         elif 'Add New Address' in request.POST:
-            return redirect('/addaddress/') 
+            return redirect('/addaddress/')
 
-    addresses = Address.objects.all()
-    if not request.user.is_superuser:
-        addresses = Address.objects.filter(user=request.user)
+    addresses = Address.objects.filter(user=request.user, visible=True)
 
     #show addresses
     context = {
@@ -1174,9 +1194,15 @@ def add_address(request):
     else:
         form = AddressForm(request.POST)
         if form.is_valid():
+            addresses = Address.objects.filter(user=request.user, visible=True)
+
+            default = True
+            if addresses:
+                default= False
+
             Address.objects.create(
             user=request.user,
-            default=False,
+            default=default,
             number_street=form.cleaned_data['number_street'],
             suburb=form.cleaned_data['suburb'],
             city=form.cleaned_data['city'],

@@ -680,12 +680,22 @@ body {
 
 /* Checkout Stuff */
 
+#checkout_page{
+  max-width: 800px;
+  margin: auto;
+}
+
 .address-list {
     padding: 10px;
-    margin: 10px;
+    margin-bottom: 10px;
     opacity: 0.8;
     background-color: #D2D2D2;
     border-radius: 5px;
+}
+
+.address-list-padding{
+  padding-left: 5px;
+  padding-right: 5px; 
 }
 
 .selected-address{
@@ -719,4 +729,22 @@ body {
 #admin_actions{
   color: black;
   text-decoration: none;
+}
+
+#checkout-button{
+  margin-top: 20px;
+}
+
+.credit-no-float{
+  float: none;
+}
+
+.credit-padding{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.credit-group{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
