@@ -402,7 +402,10 @@ def category_view(request, category_name):
         else:
             c = Category.objects.get(name=category_name)
             sub_cat_list = c.children
-            product_list = c.product_set.all()
+            if request.user.is_superuser:
+                product_list = c.product_set.all()
+            else:
+                product_list = c.product_set.filter(visible=True)
             context = {
                 'category': c,
                 'subcategories': sub_cat_list,
