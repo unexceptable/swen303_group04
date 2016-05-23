@@ -276,6 +276,10 @@ p {
   padding-top: 19px;
 }
 
+.product_image_col img{
+  border: 1px solid #ccc;
+}
+
 .prod_det {
   border-radius: 2px;
   border: 1px solid #ccc;
