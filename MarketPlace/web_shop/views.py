@@ -5,7 +5,8 @@ from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
     ChatForm, MessageForm, AddressForm, SortTypeForm,
     ItemsPerPageForm, ContactForm, ImageForm, ProductForm,
-    EditProductForm, CategoryForm, EditCategoryForm)
+    EditProductForm, CategoryForm, EditCategoryForm,
+    CustomRegistrationForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact, WishList, WishListItem, Tag,
@@ -346,6 +347,50 @@ def product_wishlist(request, p_id):
         item.save()
 
     return redirect("/product/%s" % p_id)
+
+
+def register(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = CustomRegistrationForm(request.POST)
+        # check whether it's valid:
+
+        next = request.POST.get('next', None)
+
+        if form.is_valid():
+            # process the data in form.cleaned_data as required      
+
+            user = User.objects.create_user(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password1'],
+                email=form.cleaned_data['email']
+            )
+            user.save()
+            user = authenticate(
+                username=user.username,
+                password=form.cleaned_data['password1'])
+
+            login(request, user)
+            # Redirect to home
+            print next
+            if next and next != "/register/":
+                return redirect(next)
+            else:
+                return redirect("/")
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = CustomRegistrationForm()
+        next = request.GET.get('next', None)    
+
+    return render(
+        request, 'registration_form.html',
+        {
+            'next': next,
+            'form': form,
+            'cart': Cart(request),
+        })
 
 
 def signin(request):
