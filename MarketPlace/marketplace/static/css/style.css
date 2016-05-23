@@ -887,7 +887,6 @@ body {
 /* Chat Form: */
 #chat-form {
     max-width: 320px;
-    margin: auto;
     padding-left: auto;
 }
 
@@ -910,5 +909,5 @@ body {
 }
 
 #chat_panel{
-  width: 83%
+  width: 82%
 }
