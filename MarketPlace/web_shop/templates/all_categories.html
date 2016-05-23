@@ -3,6 +3,7 @@
 {% block content %}
     {% if categories%}
     <form method='post' action=''>
+	  <input type="submit" name="Add New Category" value="Add New Category"/>
       <input type="submit" name="Delete" value="Delete"/>
       {% csrf_token %}
       <div class="table-responsive">
@@ -24,9 +25,15 @@
         {% endfor %}
       </table>
       </div>
+      <input type="submit" name="Add New Category" value="Add New Category"/>
       <input type="submit" name="Delete" value="Delete"/>
     </form>
     {% else %}
+      <form method='post' action=''>
+	  <input type="submit" name="Add New Category" value="Add New Category"/>
+	  {% csrf_token %}
+	  
+	  </form>
       <div class="alert alert-danger" role="alert">
           <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
           <span class="sr-only">Error:</span>
