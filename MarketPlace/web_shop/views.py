@@ -221,7 +221,7 @@ def product_detail(request, p_id):
 
     try:
         product = Product.objects.get(pk=p_id)
-        if not product.visible:
+        if not product.visible and not request.user.is_superuser:
             raise Product.DoesNotExist
 
         form = CartForm()
