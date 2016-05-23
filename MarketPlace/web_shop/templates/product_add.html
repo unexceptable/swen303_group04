@@ -20,13 +20,12 @@
         </div>
         <div class="form-group">
             {{ form.category.errors }}
-            <label for="{{ form.category.id_for_label }}">Category:</label>
-            <select class="form-control input-sm" id="id_category" name="category">
+            <label for="{{ form.category.id_for_label }}">Category: <select class="form-control input-sm" id="id_category" name="category">
                 <option value="1">Shoes</option>
                 <option value="2">Shirts</option>
                 <option value="3">Pants</option>
                 <option value="4">Hats</option>
-            </select>
+            </select></label>            
         </div>
         <div class="form-group">
             {{ form.tags.errors }}
