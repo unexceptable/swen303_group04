@@ -9,6 +9,9 @@
     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 product_image_col">
         <img id="main_image" width="90%" src="/media/{{ product.main_image }}">
         <div class="other_images">
+          <div id="product-image-0" class="prod_img col-md-3">
+            <img width="100%" src="/media/{{ product.main_image }}">
+          </div>
           {% for image in images %}
             <div id="product-image-{{ forloop.counter }}" class="prod_img col-md-3">
               <img width="100%" src="/media/{{ image.image }}">
@@ -99,6 +102,13 @@
 
 {% block scripts %}
 <script type="text/javascript">
+    $("#product-image-0 img").click(function(){
+      var thmb = this;
+      var src = this.src;
+      $('#main_image').fadeOut(200,function(){
+          $(this).fadeIn(200)[0].src = src;
+      });
+    });
     {% for image in images %}
     $("#product-image-{{ forloop.counter }} img").click(function(){
       var thmb = this;
