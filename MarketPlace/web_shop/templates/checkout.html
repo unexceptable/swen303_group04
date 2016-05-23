@@ -33,7 +33,10 @@
         <legend>Your Addresses</legend>
         {% if addresses %}
             {% if address_error %}
-            <ul class="errorlist"><li>You must select an address.</li></ul>
+            <ul class="errorlist">
+                <div class="alert alert-danger" role="alert">You must select an address
+                </div>
+            </ul>
             {% endif %}
             {% for address in addresses %}
             <div class="col-md-4 address-list-padding">
