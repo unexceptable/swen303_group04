@@ -20,7 +20,7 @@ class Product(models.Model):
     )
     tags = models.ManyToManyField('Tag', blank=True)
     thumbnail = models.ImageField(storage=fs)
-    main_image = models.ImageField(storage=fs)    
+    main_image = models.ImageField(storage=fs)
     added_on = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -66,6 +66,14 @@ class Category(models.Model):
     def children(self):
         return self.category_set.all().order_by("name")
 
+    @property
+    def get_parent_path(self):
+        path = [self.name]
+        parent = self.parent
+        while parent is not None:
+            path.append(parent.name)
+            parent = parent.parent
+        return path[::-1]
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
