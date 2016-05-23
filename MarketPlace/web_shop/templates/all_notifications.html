@@ -43,8 +43,8 @@
         {% for entry in notifications %}
           <tr>
             <td><input type="checkbox" name="selected" onchange="checkSelectAll()" value="{{entry.pk}}"></td>
-            <td><a href="/chat?chat={{entry.origin}}">Go to conversation</a></td>
-            <td>You have a chat message from {{entry.origin}}</td>
+            <td>{{entry.notif}}</td>
+            <td><a href="{{entry.link}}">Go to page</a></td>
           </tr>
         {% endfor %}
       </table>
