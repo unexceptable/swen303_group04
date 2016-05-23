@@ -7,7 +7,7 @@
   <div class="row product p-list-not-visible">
   {% endif %} 
     <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 product_image_col">
-        <img width="90%" src="/media/{{ product.main_image }}">
+        <img id="main_image" width="90%" src="/media/{{ product.main_image }}">
         <div class="other_images">
           {% for image in images %}
             <div id="product-image-{{ forloop.counter }}" class="prod_img col-md-3">
@@ -98,4 +98,16 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript">
+    {% for image in images %}
+    $("#product-image-{{ forloop.counter }} img").click(function(){
+      var thmb = this;
+      var src = this.src;
+      $('#main_image').fadeOut(200,function(){
+          thmb.src = this.src;
+          $(this).fadeIn(200)[0].src = src;
+      });
+    });
+    {% endfor %}
+</script>
 {% endblock %}
