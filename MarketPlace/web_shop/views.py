@@ -372,7 +372,7 @@ def register(request):
             login(request, user)
             # Redirect to home
             print next
-            if next:
+            if next and next != "/register/":
                 return redirect(next)
             else:
                 return redirect("/")
