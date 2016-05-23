@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block title %}"Register for an account"{% endblock %}
 {% block content %}
-<div id="reg_form">
+<div id="reg-form">
   <form method='post' action=''>
     {% csrf_token %}
     {{ form }}
