@@ -189,8 +189,37 @@ p {
     border-width: 1px;
 }
 
-#login-form input[type="submit"]{
+/* Registration Form: */
+#reg-form {
+    max-width: 320px;
+    margin: auto;
+    padding-left: auto;
+}
+
+#reg-form label{
+    display: block;
+    padding: 5px;
+    margin-left: auto;
+}
+
+#reg-form input{
+    display: block;
+    padding: 5px;
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#reg-form input[type="submit"]{
     margin-top: 30px;
+}
+
+#reg-form input[type="submit"]{
+    margin-top: 30px;
+}
+
+#id_tos{
+  margin-left: 20px;
 }
 
 /* Edit Credentials Form: */
