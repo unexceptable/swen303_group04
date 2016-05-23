@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}"Add category"{% endblock %}
+{% block content %}
+<div id="edit-address-form">
+  <form method='post' action='' enctype='multipart/form-data'>
+    {% csrf_token %}
+    	<div class="form-group">
+    		{{ form.name.label_tag }}
+    		{{ form.name }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.main_image.label_tag }}
+    		{{ form.main_image }}
+    	</div>
+    	<div class="form-group">
+    		{{ form.parent.label_tag }}
+    		{{ form.parent }}
+    	</div>
+    <input class="btn btn-default" type="submit" value="Add Category">
+  </form>
+</div>
+{% endblock %}

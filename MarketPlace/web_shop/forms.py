@@ -125,3 +125,25 @@ class ItemsPerPageForm(forms.Form):
         ("all", "All")
         )
     itemsPerPage = forms.ChoiceField(widget=forms.Select, choices=options, label="", required=False)
+
+class CategoryForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True)
+    main_image = forms.ImageField(label='Main Image', required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        choices = [(c.name, c.name) for c in Category.objects.all()]
+        choices.insert(0, ('', '----'))
+        self.fields['parent'] = forms.ChoiceField(choices=choices, required=False)
+
+    def clean(self):
+        name = self.cleaned_data.get('name')
+        parent = self.cleaned_data.get('parent')
+
+        if name == parent:
+            raise forms.ValidationError("No circular reference allowed")
+
+        return self.cleaned_data
+
+class EditCategoryForm(CategoryForm):
+    main_image = forms.ImageField(label='Main Image', required=False)

@@ -5,7 +5,7 @@ from web_shop.forms import (
     SearchForm, LoginForm, EditCredentialsForm, CartForm,
     ChatForm, MessageForm, AddressForm, SortTypeForm,
     ItemsPerPageForm, ContactForm, ImageForm, ProductForm,
-    EditProductForm)
+    EditProductForm, CategoryForm, EditCategoryForm)
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact, WishList, WishListItem, Tag,
@@ -1226,3 +1226,128 @@ def listnotifications(request):
         'cart': Cart(request),
     }
     return render(request, "all_notifications.html", context)
+
+def listcategories(request):
+    #Check login
+    if not request.user.is_authenticated() or not request.user.is_superuser:
+        return redirect("/")
+
+    #process selected
+    if request.method=="POST":
+        entries = request.POST.getlist('selected')
+        if 'Delete' in request.POST:
+            for uid in entries:
+                entry = Category.objects.get(pk=uid)
+                entry.delete()
+
+    categories = Category.objects.all()
+    #show addresses
+    context = {
+        'heading': ('','Name','Image','Main Category', 'Children', 'Update'),
+        'categories': categories,
+        'cart': Cart(request),
+    }
+    return render(request, "all_categories.html", context)
+
+def edit_category(request,uid):
+    #Check login
+    if not request.user.is_authenticated() or not request.user.is_superuser:
+        return redirect("/")
+
+    try:
+        entry = Category.objects.get(pk=uid)
+        #process selected
+        if request.method=="POST":
+            form = EditCategoryForm(request.POST, request.FILES)
+            if form.is_valid():
+                entry.name = form.cleaned_data['name']
+                if request.FILES['main_image']:
+                    entry.main_image = request.FILES['main_image']
+
+                if form.cleaned_data['parent']:
+                    entry.parent = Category.objects.get(name=form.cleaned_data['parent'])
+                else:
+                    entry.parent = None
+
+                entry.save()
+                # Return ok.
+                context = {
+                    'heading': 'Success',
+                    'feedback': 'Category with ID '+str(entry.pk)+' has now been updated to '+entry.name+' with parent '+str(entry.parent),
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
+            else:
+                # Return an error message.
+                context = {
+                    'heading': 'Error',
+                    'feedback': 'Invalid image or parent category',
+                    'cart': Cart(request),
+                }
+                return render(request, "feedback.html", context)
+        #pre-fill
+        else:
+            form = EditCategoryForm({
+                'name': entry.name,
+                'main_image': entry.main_image,
+                'parent': entry.parent,
+            })
+            context = {
+                'main_image':entry.main_image,
+                'form': form,
+                'cart': Cart(request),
+            }
+            return render(request, "edit_category.html", context)
+    except Category.DoesNotExist:
+        # Return an error message.
+        context = {
+            'heading': 'Error',
+            'feedback': 'Page does not exist',
+            'cart': Cart(request),
+        }
+        return render(request, "feedback.html", context)
+
+def add_category(request):
+    #Check login
+    if not request.user.is_authenticated() or not request.user.is_superuser:
+        return redirect("/")
+
+    #process selected
+    if request.method=="POST":
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            parent = None
+            if form.cleaned_data['parent'] and Category.objects.filter(name=form.cleaned_data['parent']).exists():
+                parent = Category.objects.get(name=form.cleaned_data['parent'])
+
+            Category.objects.create(
+            name=form.cleaned_data['name'],
+            main_image=request.FILES['main_image'],
+            parent=parent,
+            )
+
+            # Return ok.
+            context = {
+                'heading': 'Success',
+                'feedback': 'New category '+form.cleaned_data['name']+' with parent(s) '+str(parent),
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+        else:
+            # Return an error message.
+            context = {
+                'heading': 'Error',
+                'feedback': 'Image field and name field must be filled',
+                'cart': Cart(request),
+            }
+            return render(request, "feedback.html", context)
+
+    #display form
+    else:
+        form = CategoryForm()
+        context = {
+            'form': form,
+            'cart': Cart(request),
+        }
+        return render(request, "add_category.html", context)

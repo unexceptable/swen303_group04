@@ -31,8 +31,11 @@ class OrderItemAdmin(admin.ModelAdmin):
 class ChatNotificationAdmin(admin.ModelAdmin):
     list_display = ('origin', 'to')
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'main_image', 'parent')
+
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(ChatHistory, ChatHistoryAdmin)

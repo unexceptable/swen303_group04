@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}"All Addresses"{% endblock %}
+{% block content %}
+    {% if categories%}
+    <form method='post' action=''>
+      <input type="submit" name="Delete" value="Delete"/>
+      {% csrf_token %}
+      <div class="table-responsive">
+      <table class="table table-hover table-striped">
+      <tr>
+        {% for entry in heading %}
+          <th>{{ entry }}</th>
+        {% endfor %}
+      </tr>
+        {% for entry in categories %}
+          <tr>
+            <td><input type="checkbox" name="selected" value="{{entry.pk}}"></td>
+            <td>{{entry.name}}</td>
+            <td><a href="/media/{{entry.main_image}}"><img width="100" src="/media/{{entry.main_image}}"></a></td>
+            <td>{{entry.parent}}</td>
+            <td>{{entry.children}}</td>
+            <td><a href="/editcategory/{{entry.pk}}">Update Category</a></td>
+          </tr>
+        {% endfor %}
+      </table>
+      </div>
+      <input type="submit" name="Delete" value="Delete"/>
+    </form>
+    {% else %}
+      <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          No matches found.
+      </div>
+    {% endif %}
+{% endblock %}
