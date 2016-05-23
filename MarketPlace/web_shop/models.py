@@ -107,6 +107,7 @@ class Address(models.Model):
     )
     # will make sense with more than one address:
     default = models.BooleanField(default=True)
+    visible = models.BooleanField(default=True)
 
     number_street = models.CharField(max_length=92)
     suburb = models.CharField(max_length=30)
