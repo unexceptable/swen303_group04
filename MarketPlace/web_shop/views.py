@@ -383,7 +383,7 @@ def register(request):
         next = request.GET.get('next', None)    
 
     return render(
-        request, 'login.html',
+        request, 'registration_form.html',
         {
             'next': next,
             'form': form,
