@@ -193,10 +193,11 @@
                             <div class="list_price"><p>$ {{ product.price }}</p></div>
                           </div>
                           <div class="product_button">
-                            <form action="/product/{{ product.pk }}/cart" method="post">
+                            <form class="category_cart_form" action="/product/{{ product.pk }}/cart" method="post">
                              {% csrf_token %}
+                             <input name="next" type="hidden" value="/cart">
                              <input id="id_quantity" min="0" name="quantity" type="hidden" value="1">
-                             <button class="btn btn-primary btn-xs" id="remove_cart">Add To Cart</button>
+                             <button class="btn btn-primary btn-xs remove_cart">Add To Cart</button>
                             </form>
                           </div>
                         </div>
