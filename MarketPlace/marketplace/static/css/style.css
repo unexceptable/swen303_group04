@@ -282,6 +282,12 @@ p {
   padding: 10px 30px;
 }
 
+.prod_img{
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin: 5px;
+}
+
 #product-cart{
   margin-top: 30px;
 }
