@@ -78,7 +78,7 @@ class ChatForm(forms.Form):
 
 class MessageForm(forms.Form):
     to = forms.CharField(widget=forms.HiddenInput())
-    message = forms.CharField(widget=forms.Textarea, required=True)
+    message = forms.CharField(required=True)
 
 
 class AddressForm(forms.Form):
