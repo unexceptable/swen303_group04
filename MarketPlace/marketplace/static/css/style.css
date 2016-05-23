@@ -728,6 +728,16 @@ body {
 }
 
 
+.remove_cart{
+  width: 90%;
+  margin-top: 3px;
+}
+
+.category_cart_form{
+  margin-bottom: 0px;
+}
+
+
 /* Checkout Stuff */
 
 #checkout_page{

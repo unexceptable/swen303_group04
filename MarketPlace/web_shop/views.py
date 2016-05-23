@@ -303,7 +303,11 @@ def product_cart(request, p_id):
         else:
                 cart.add(product, product.price, form.cleaned_data['quantity'])
 
-    return redirect("/product/%s" % product.pk)
+    next = request.POST.get('next')
+    if next:
+        return redirect(next)
+    else:
+        return redirect("/product/%s" % product.pk)
 
 
 def product_wishlist(request, p_id):
@@ -350,6 +354,9 @@ def signin(request):
         # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
         # check whether it's valid:
+
+        next = request.POST.get('next', None)
+
         if form.is_valid():
             # process the data in form.cleaned_data as required
             username = form.cleaned_data['username']
@@ -359,7 +366,11 @@ def signin(request):
                 if user.is_active:
                     login(request, user)
                     # Redirect to home
-                    return redirect("/")
+                    print next
+                    if next:
+                        return redirect(next)
+                    else:
+                        return redirect("/")
                 else:
                     # Return a 'disabled account' error message
                     context = {
@@ -380,10 +391,12 @@ def signin(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = LoginForm()
+        next = request.GET.get('next', None)    
 
     return render(
         request, 'login.html',
         {
+            'next': next,
             'username': request.user.username,
             'form': form,
             'cart': Cart(request),
@@ -1219,7 +1232,9 @@ def add_address(request):
 
     #blank form
     if request.method == 'GET':
+        next = request.GET.get('next', None)
         context = {
+            'next': next,
             'form': AddressForm(),
             'cart': Cart(request),
         }
@@ -1245,22 +1260,15 @@ def add_address(request):
             country=form.cleaned_data['country'],
             postcode=form.cleaned_data['postcode'],
             )
-
-            # Return ok.
-            context = {
-                'heading': 'Success',
-                'feedback': request.user.username+' has new billing address '+
-                        form.cleaned_data['number_street']+', '+
-                        form.cleaned_data['suburb']+' '+
-                        form.cleaned_data['city']+', '+
-                        form.cleaned_data['country']+' '+
-                        request.POST['postcode'],
-                'cart': Cart(request),
-            }
-            return render(request, "feedback.html", context)
+            next = request.POST.get('next', None)
+            if next:
+                return redirect(next)
+            else:
+                return redirect("/listaddresses")
         else:
-            # Return an error message.
+            next = request.POST.get('next', None)
             context = {
+                'next': next,
                 'heading': 'Error',
                 'feedback': 'All fields must be filled and postcode must be between 1000 to 9999 (inclusive)',
                 'cart': Cart(request),

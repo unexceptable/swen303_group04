@@ -28,6 +28,9 @@
     		{{ form.postcode.label_tag }}
     		{{ form.postcode }}
     	</div>
+    {% if next %}
+    <input name="next" type="hidden" value="{{ next }}">
+    {% endif %}
     <input class="btn btn-default" type="submit" value="Add Address">
   </form>
 </div>
