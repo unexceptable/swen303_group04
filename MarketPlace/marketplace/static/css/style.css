@@ -101,6 +101,12 @@ p {
     padding-bottom: 6px;
 }
 
+#logo{
+  font-family: Georgia;
+  font-style: normal;
+  font-weight: bold;
+  font-variant: small-caps;
+}
 
 #logo a{
     text-decoration: none;
@@ -338,7 +344,7 @@ p {
 }
 
 .image-add-list, .add-image-form{
-  background-color: #B0BEC5;
+  background-color: lightgrey;
   border: 1px solid #333;
   padding: 5px;
   margin: 5px;
@@ -356,7 +362,7 @@ p {
 }
 
 .product-images-edit{
-  background-color: lightgreen;
+  background-color: lightgrey;
   border: 1px solid #333;
   padding: 5px;
   margin: 5px;
@@ -364,6 +370,8 @@ p {
 
 .image-delete{
   width: 100%;
+  border: 1px solid black;
+  margin-top: 10px;
 }
 
 .errorlist{
@@ -447,7 +455,7 @@ p {
 
 /* Cart Page:*/
 .cart{
-    max-width: 600px;
+    max-width: 800px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -759,7 +767,9 @@ body {
 }
 
 .selected-address{
+  border: 1px solid black;
   background-color: #A2D652;
+  padding-bottom: 8px;
 }
 
 .select-address{
@@ -767,6 +777,7 @@ body {
 }
 
 #add-address{
+  border: 1px solid black;
   background-color: #A2D652;
   padding: 15px;
   margin: 15px;
