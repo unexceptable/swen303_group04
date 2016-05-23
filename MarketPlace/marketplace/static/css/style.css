@@ -218,6 +218,10 @@ p {
     margin-top: 30px;
 }
 
+#id_tos{
+  margin-left: 20px;
+}
+
 /* Edit Credentials Form: */
 #edit-details-form {
     max-width: 320px;
