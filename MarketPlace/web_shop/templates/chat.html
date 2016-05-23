@@ -31,6 +31,7 @@
 		<div id="chat-form">
 	      <form name = 'form' method='post' action=''>
 	        {% csrf_token %}
+	        {{ form.to }}
 	        <div class="form-group">
 	    		{{ form.message.label_tag }}
 	    		{{ form.message }}
