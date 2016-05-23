@@ -5,7 +5,9 @@
   <form method='post' action=''>
     {% csrf_token %}
     {{ form }}
-    <td><input class="btn btn-default" type="submit" name="submit" value="Submit Enquiry" /></td>
+    <div>
+    	<input class="btn btn-default" type="submit" name="submit" value="Submit Enquiry" />
+    </div>
   </form>
 </table>
 {% endblock %}
