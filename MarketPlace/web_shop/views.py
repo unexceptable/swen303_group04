@@ -1105,6 +1105,8 @@ def listaddresses(request):
                 entry = Address.objects.get(pk=uid)
                 if request.user.is_superuser or request.user == entry.user:
                     entry.delete()
+        elif 'Add New Address' in request.POST:
+            return redirect('/addaddress/') 
 
     addresses = Address.objects.all()
     if not request.user.is_superuser:
@@ -1240,6 +1242,9 @@ def listcategories(request):
                 entry = Category.objects.get(pk=uid)
                 entry.delete()
 
+        elif 'Add New Category' in request.POST:
+            return redirect('/addcategory/') 
+            
     categories = Category.objects.all()
     #show addresses
     context = {
