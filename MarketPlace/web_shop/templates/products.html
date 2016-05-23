@@ -25,15 +25,19 @@
     {% for product in products %}       
         <a href="/product/{{ product.pk }}" style="text-decoration: none">
             <div class="product_list col-md-3">
-            <div class="list_border">
-                 <div class="list_info">
-                    <div class="list_name"><p>{{ product.name }}</p></div>
-                    <div class="list_price"><p>$ {{ product.price }}</p></div>
+                {% if product.visible %}
+                <div class="list_border">
+                {% else %}
+                <div class="list_border p-list-not-visible">
+                {% endif %}
+                     <div class="list_info">
+                        <div class="list_name"><p>{{ product.name }}</p></div>
+                        <div class="list_price"><p>$ {{ product.price }}</p></div>
+                    </div>
+                    <div class="list_image">
+                         <img width="100%" src="/media/{{ product.thumbnail }}">
+                     </div>
                 </div>
-                <div class="list_image">
-                     <img width="100%" src="/media/{{ product.thumbnail }}">
-                 </div>
-            </div>
             </div>
         </a>
     {%endfor%}

@@ -388,7 +388,6 @@ p {
     margin: 0px;
     background-color: #fff;
     padding-bottom: 5px;
-    border-top: 1px solid #808080;
 }
 
 .list_centered{
@@ -407,6 +406,10 @@ p {
     text-align: right;
     padding-right: 5px;
     margin: 0px;
+}
+
+.p-list-not-visible{
+  border: 3px solid #F31818;
 }
 
 
