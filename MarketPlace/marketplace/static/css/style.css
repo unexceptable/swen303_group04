@@ -191,8 +191,8 @@ p {
 
 /* Contact Form: */
 #contact-form {
-    max-width: 320px;
-    margin-left: 25%;
+    max-width: 800px;
+    margin: auto;
     padding-left: auto;
 }
 
