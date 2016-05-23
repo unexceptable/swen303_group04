@@ -9,7 +9,7 @@ from web_shop.forms import (
 from .models import (
     Product, Category, ChatHistory, Address, SalesOrder,
     OrderItem, Contact, WishList, WishListItem, Tag,
-    ChatNotification, Image)
+    Notification, Image)
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -637,10 +637,11 @@ def chat(request):
                     #create message
                     ChatHistory.objects.create(origin=request.user.username, to= request.POST['to'], message=request.POST['message'])
                     #create notif if not exist
-                    if not ChatNotification.objects.filter(to = User.objects.get(username=request.POST['to']), origin = request.user.username):
-                        ChatNotification.objects.create(
+                    if not Notification.objects.filter(to = User.objects.get(username=request.POST['to']), notif = 'Message from '+request.user.username):
+                        Notification.objects.create(
                             to = User.objects.get(username=request.POST['to']),
-                            origin = request.user.username,
+                            notif = 'Message from '+request.user.username,
+                            link = '/chat?chat='+request.user.username
                             )
                     return HttpResponseRedirect("?chat="+request.POST["to"])
                 else:
@@ -835,6 +836,14 @@ def checkout(request):
 
         order = SalesOrder(buyer=request.user, address=address)
         order.save()
+        
+        #create notif if not exist
+        if not Notification.objects.filter(to = User.objects.get(username='admin'), notif = 'Sales order from '+request.user.username):
+            Notification.objects.create(
+                to = User.objects.get(username='admin'),
+                notif = 'Sales order from '+request.user.username,
+                link = '/sales-details/'+str(order.pk)
+                )
 
         for item in cart:
             order_item = OrderItem(
@@ -1000,13 +1009,21 @@ def contact(request):
     elif request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            Contact.objects.create(
+            newInstance = Contact.objects.create(
             subject=form.cleaned_data['subject'],
             message_type=form.cleaned_data['message_type'],
             message=form.cleaned_data['message'],
             email=form.cleaned_data['email'],
             status = 'open',
             )
+            
+            #create notif if not exist
+            if not Notification.objects.filter(to = User.objects.get(username='admin'), notif = 'Support ticket from '+request.user.username):
+                Notification.objects.create(
+                    to = User.objects.get(username='admin'),
+                    notif = 'Support ticket from '+request.user.username,
+                    link = '/listcontacts/'
+                    )
 
             # Return ok.
             context = {
@@ -1242,7 +1259,7 @@ def listnotifications(request):
         entries = request.POST.getlist('selected')
         if 'Clear Selected' in request.POST:
             for uid in entries:
-                entry = ChatNotification.objects.get(pk=uid)
+                entry = Notification.objects.get(pk=uid)
                 if request.user == entry.to:
                     entry.delete()
 
@@ -1250,7 +1267,7 @@ def listnotifications(request):
     #Notifications variable passed in globally,do not fetch
     #heading has 'select all checkbox'
     context = {
-        'heading': ('Conversation','Description'),
+        'heading': ('Description','Link'),
         'cart': Cart(request),
     }
     return render(request, "all_notifications.html", context)

@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
 	Product, Category, Image, ChatHistory,
 	Address, SalesOrder, OrderItem, WishList,
-	WishListItem, Contact, Tag, ChatNotification)
+	WishListItem, Contact, Tag, Notification)
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -28,8 +28,8 @@ class SalesOrderAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('order', 'quantity', 'unit_price', 'product')
 
-class ChatNotificationAdmin(admin.ModelAdmin):
-    list_display = ('origin', 'to')
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('to', 'notif', 'link')
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'main_image', 'parent')
@@ -45,4 +45,4 @@ admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(WishList)
 admin.site.register(WishListItem)
 admin.site.register(Contact, ContactAdmin)
-admin.site.register(ChatNotification, ChatNotificationAdmin)
+admin.site.register(Notification, NotificationAdmin)

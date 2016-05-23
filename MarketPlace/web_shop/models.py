@@ -207,9 +207,10 @@ class Contact(models.Model):
         choices=statuses,
         default='open')
 
-class ChatNotification(models.Model):
+class Notification(models.Model):
     to = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
-    origin = models.CharField(max_length=30)
+    notif = models.CharField(max_length=30)
+    link = models.CharField(max_length=100)
