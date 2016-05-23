@@ -27,7 +27,7 @@
 		<div class="panel-body output_box">
 		</div>
 	</div>
-
+	<div id="chat-form">
       <form name = 'form' method='post' action=''>
         {% csrf_token %}
         <div class="form-group">
@@ -36,5 +36,5 @@
     	</div>
         <input class="btn btn-default" type="submit" onclick="return notEmpty()" value="Send"/>
       </form>
-
+  	</div>
 {% endblock %}
