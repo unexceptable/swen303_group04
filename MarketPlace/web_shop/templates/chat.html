@@ -22,7 +22,7 @@
 
 	</script>
 	<h1>Chat history with {{ user }}</h1>
-	<div class="panel panel-default">
+	<div id="chat_panel" class="panel panel-default">
 		<div class="panel-heading">Conversation</div>
 		<div class="panel-body output_box">
 		</div>
@@ -31,8 +31,11 @@
 		<table>
       <form name = 'form' method='post' action=''>
         {% csrf_token %}
-        {{ form }}
-        <td><input type="submit" onclick="return notEmpty()" value="Send"/></td>
+        <div class="form-group">
+    		{{ form.chat.label_tag }}
+    		{{ form.chat }}
+    	</div>
+        <td><input class="btn btn-default" type="submit" onclick="return notEmpty()" value="Send"/></td>
       </form>
     </table>
 
