@@ -966,9 +966,7 @@ def checkout(request):
 
         cart.clear()
 
-        return render(
-            request, 'checkedout.html',
-            {'order': order})
+        return redirect('/sales-details/'+str(order.pk))
 
 
 def listsales(request):
