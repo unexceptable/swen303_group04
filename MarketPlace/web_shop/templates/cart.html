@@ -47,8 +47,10 @@
         <div class="checkout-button">
             {% if request.user.username %}
             <form action="/cart/checkout/" method="get">
-                {% csrf_token %}          
-                <input type="submit" value="Checkout">
+                {% csrf_token %}   
+                <button type="submit" class="btn btn-default" id="remove_cart">
+                        <span class="glyphicon glyphicon-check" aria-hidden="true"></span>Checkout</button>       
+                <!-- <input type="submit" value="Checkout"> -->
             </form>
             {% else %}
             <p>Please log in to checkout.</p>
