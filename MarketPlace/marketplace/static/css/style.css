@@ -349,6 +349,10 @@ p {
     opacity: 0.8;
 }
 
+.p-list-not-visible{
+  border: 3px solid #F31818;
+}
+
 .product_button{
   text-align: center;
 }

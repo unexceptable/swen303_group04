@@ -42,9 +42,14 @@ def search(request):
     tags = Tag.objects.filter(
         reduce(operator.and_, (Q(name__icontains=x) for x in keywords)))
 
-    products = Product.objects.filter(
-        (Q(reduce(operator.and_, (Q(name__icontains=x) for x in keywords))) | Q(tags__in=tags)),
-        visible=True).distinct()
+    if request.user.is_superuser:
+        products = Product.objects.filter(
+            (Q(reduce(operator.and_, (Q(name__icontains=x) for x in keywords))) | Q(tags__in=tags)),
+        ).distinct()
+    else:
+        products = Product.objects.filter(
+            (Q(reduce(operator.and_, (Q(name__icontains=x) for x in keywords))) | Q(tags__in=tags)),
+            visible=True).distinct()
 
     context = {
         'search': form.data["search"],
