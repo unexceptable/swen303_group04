@@ -329,6 +329,10 @@ p {
   margin: 10px;
 }
 
+#id_category{
+  width: 20%
+}
+
 .add-image{
   margin-bottom: 40px;
 }
